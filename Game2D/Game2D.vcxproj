@@ -169,7 +169,8 @@
     <Image Include="res\sprites\Diamondblock.bmp" />
     <Image Include="res\sprites\Iceblock.bmp" />
     <Image Include="res\sprites\Pengo00.bmp" />
-    <Image Include="res\sprites\Wall.bmp" />
+    <Image Include="res\sprites\Wall_BT.bmp" />
+    <Image Include="res\sprites\Wall_LR.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

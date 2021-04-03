@@ -16,7 +16,8 @@ class GameObject
 {
 public:
     // object state
-    std::array<float,2>   Position, Size, Velocity;
+    std::array<float,2>   Position, Velocity;
+    std::array<float, 4> Size;
     std::array<float,3>   Color;
     bool        IsSolid;
     bool        Destroyed;
@@ -24,7 +25,7 @@ public:
     Texture2D   Sprite;
     // constructor(s)
     GameObject();
-    GameObject(std::array<float, 2> pos, std::array<float, 2> size, Texture2D sprite, std::array<float, 3> color = { 1.0f, 1.0f, 1.0f }, std::array<float, 2> velocity = { 0.0f, 0.0f });
+    GameObject(std::array<float, 2> pos, std::array<float, 4> size, Texture2D sprite, std::array<float, 3> color = { 1.0f, 1.0f, 1.0f }, std::array<float, 2> velocity = { 0.0f, 0.0f });
     // draw sprite
     virtual void Draw(SpriteRenderer& renderer);
 };

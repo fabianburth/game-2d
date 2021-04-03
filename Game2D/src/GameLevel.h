@@ -24,6 +24,7 @@ class GameLevel
 {
 public:
     // level state
+    std::vector<GameObject> Walls;
     std::vector<GameObject> Bricks;
     // constructor
     GameLevel() { }

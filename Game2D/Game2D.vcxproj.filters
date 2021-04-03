@@ -72,13 +72,16 @@
     <Image Include="res\sprites\Pengo00.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\sprites\Wall.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\sprites\Iceblock.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\sprites\Diamondblock.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_BT.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_LR.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

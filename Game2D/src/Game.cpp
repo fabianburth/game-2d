@@ -31,6 +31,8 @@ void Game::Init()
     // load textures
     ResourceManager::LoadTexture("res/sprites/Iceblock.bmp", "iceblock");
     ResourceManager::LoadTexture("res/sprites/Diamondblock.bmp", "diamondblock");
+    ResourceManager::LoadTexture("res/sprites/Wall_LR.bmp", "wallLR");
+    ResourceManager::LoadTexture("res/sprites/Wall_BT.bmp", "wallBT");
 
     GameLevel one;
     one.Load("res/levels/level0.lvl", 448, 576);

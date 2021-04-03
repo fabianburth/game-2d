@@ -11,11 +11,12 @@ SpriteRenderer::~SpriteRenderer()
     glDeleteVertexArrays(1, &this->quadVAO);
 }
 
-void SpriteRenderer::DrawSprite(Texture2D& texture, std::array<float, 2> position, std::array<float, 2> size, std::array<float, 3> color)
+void SpriteRenderer::DrawSprite(Texture2D& texture, std::array<float, 2> position, std::array<float, 4> size, std::array<float, 3> color)
 {
     // prepare transformations
     this->shader.Use();
 
+    this->shader.SetVector4f("size", size[0], size[1], size[2], size[3]);
     this->shader.SetVector2f("position", position[0], position[1]);
     // render textured quad
     this->shader.SetVector3f("spriteColor", color[0], color[1], color[2]);
@@ -49,7 +50,6 @@ void SpriteRenderer::initRenderData()
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
     glBindVertexArray(this->quadVAO);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);

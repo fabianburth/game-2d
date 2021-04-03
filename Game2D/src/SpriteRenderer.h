@@ -21,7 +21,7 @@ public:
     // Destructor
     ~SpriteRenderer();
     // Renders a defined quad textured with given sprite
-    void DrawSprite(Texture2D& texture, std::array<float, 2> position, std::array<float, 2> size = { ((2.0f / 448) * 32.0f), ((2.0f / 288.0f) * 32.0f) }, std::array<float, 3> color = { 1.0f,1.0f,1.0f });
+    void DrawSprite(Texture2D& texture, std::array<float, 2> position, std::array<float, 4> size, std::array<float, 3> color = { 1.0f,1.0f,1.0f });
 private:
     // Render state
     Shader       shader;
