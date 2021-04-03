@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include "GameLevel.h"
+#include "Player.h"
 
 // Represents the current state of the game
 enum class GameState {

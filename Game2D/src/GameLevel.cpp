@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-
 void GameLevel::Load(const char* file, unsigned int levelWidth, unsigned int levelHeight)
 {
     // clear old data
@@ -37,6 +36,8 @@ void GameLevel::Draw(SpriteRenderer& renderer)
     for (GameObject& tile : this->Bricks)
         if (!tile.Destroyed)
             tile.Draw(renderer);
+
+    P->Draw(renderer);
 }
 
 bool GameLevel::IsCompleted() // NOT INTENTED TO WORK LIKE THAT FOR PENGO
@@ -106,6 +107,12 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
                 std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f };
                 this->Bricks.push_back(GameObject(pos, size, ResourceManager::GetTexture("diamondblock"), { 0.8f, 0.8f, 0.7f }));
+            }
+            else if (tileData[y][x] == 4)
+            {
+                std::array<float, 2> pos = { unit_width * x, unit_height * y };
+                std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f };
+                P = new Player(pos, size, ResourceManager::GetTexture("pengo"));
             }
         }
     }

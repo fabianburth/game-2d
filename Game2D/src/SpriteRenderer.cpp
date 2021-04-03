@@ -16,6 +16,8 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, std::array<float, 2> positio
     // prepare transformations
     this->shader.Use();
 
+    // the first 2 elements of size are the scaling values for x and y
+    // the other 2 elements are the values to correct the position when scaling
     this->shader.SetVector4f("size", size[0], size[1], size[2], size[3]);
     this->shader.SetVector2f("position", position[0], position[1]);
     // render textured quad

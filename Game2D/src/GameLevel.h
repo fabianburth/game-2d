@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 
 #include "gameobject.h"
+#include "Player.h"
 #include "spriterenderer.h"
 #include "resourcemanager.h"
 
@@ -24,6 +25,7 @@ class GameLevel
 {
 public:
     // level state
+    Player* P;
     std::vector<GameObject> Walls;
     std::vector<GameObject> Bricks;
     // constructor
