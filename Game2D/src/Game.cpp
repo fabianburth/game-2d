@@ -3,6 +3,7 @@
 #include "SpriteRenderer.h"
 #include <array>
 
+#include <iostream>
 // Game-related State data
 SpriteRenderer* Renderer;
 Player* P;
@@ -52,63 +53,34 @@ void Game::ProcessInput(float dt)
 {
     if (this->State == GameState::GAME_ACTIVE)
     {
-        float velocityLR = WIDTH_UNIT * dt * 4;
-        float velocityUD = HEIGHT_UNIT * dt * 4;
+        P->move({ WIDTH_UNIT * dt * 4, HEIGHT_UNIT * dt * 4 });
         // move playerboard
         //Movement to the right
-        if (P->Position[0] < P->newPosition[0])
-        {
-            if (P->newPosition[0] - P->Position[0] <= velocityLR)
-                P->Position[0] = P->newPosition[0];
-            else
-                P->Position[0] += velocityLR;
-        }
-        //Movement to the left
-        if (P->Position[0] > P->newPosition[0])
-        {
-            if (P->newPosition[0] - P->Position[0] >= -velocityLR)
-                P->Position[0] = P->newPosition[0];
-            else
-                P->Position[0] -= velocityLR;
-        }
-        //Movement up
-        if (P->Position[1] < P->newPosition[1])
-        {
-            if (P->newPosition[1] - P->Position[1] <= velocityUD)
-                P->Position[1] = P->newPosition[1];
-            else
-                P->Position[1] += velocityUD;
-        }
-        //Movement down
-        if (P->Position[1] > P->newPosition[1])
-        {
-            if (P->newPosition[1] - P->Position[1] >= -velocityUD)
-                P->Position[1] = P->newPosition[1];
-            else
-                P->Position[1] -= velocityUD;
-        }
-        
-        if (P->Position[0] == P->newPosition[0] && P->Position[1] == P->newPosition[1])
+        if (P->ready)
         {
             if (this->Keys[GLFW_KEY_D])
             {
-                if ((-1.0f + 0.5f * WIDTH_UNIT) + P->Position[0] + WIDTH_UNIT < 1.0f - 0.5f * WIDTH_UNIT)
-                    P->newPosition[0] = P->Position[0] + WIDTH_UNIT;
+                if (!checkCollisions(Direction::RIGHT))
+                P->calcMoveRight();
+                return;
             }
             if (this->Keys[GLFW_KEY_A])
             {
-                if ((-1.0f + 0.5f * WIDTH_UNIT) + P->Position[0] - WIDTH_UNIT >= -1.0f + 0.5f * WIDTH_UNIT)
-                    P->newPosition[0] = P->Position[0] - WIDTH_UNIT;
+                if (!checkCollisions(Direction::LEFT))
+                P->calcMoveLeft();
+                return;
             }
             if (this->Keys[GLFW_KEY_W])
             {
-                if ((-1.0f + 0.5f * HEIGHT_UNIT) + P->Position[1] + HEIGHT_UNIT < 1.0f - 2 * HEIGHT_UNIT - 0.5f * HEIGHT_UNIT)
-                    P->newPosition[1] = P->Position[1] + HEIGHT_UNIT;
+                if (!checkCollisions(Direction::UP))
+                P->calcMoveUp();
+                return;
             }
             if (this->Keys[GLFW_KEY_S])
             {
-                if ((-1.0f + 0.5f * HEIGHT_UNIT) + P->Position[1] - HEIGHT_UNIT >= -1.0f + 0.5f * HEIGHT_UNIT)
-                    P->newPosition[1] = P->Position[1] - HEIGHT_UNIT;
+                if (!checkCollisions(Direction::DOWN))
+                P->calcMoveDown();
+                return;
             }
         }
 
@@ -129,6 +101,102 @@ void Game::Render()
         this->Levels[this->Level].Draw(*Renderer);
     }
 
-    //Texture2D texture = ResourceManager::GetTexture("pengo");
-    //Renderer->DrawSprite(texture, { 6.0f * WIDTH_UNIT, 8.0f * HEIGHT_UNIT });
+    // Texture2D texture = ResourceManager::GetTexture("pengo");
+    // Renderer->DrawSprite(texture, { 6.0f * WIDTH_UNIT, 8.0f * HEIGHT_UNIT });
+}
+
+bool Game::checkCollisionRight(GameObject& one, GameObject& two)
+{
+    //collision with right wall
+    if (!((-1.0f + 0.5f * WIDTH_UNIT) + P->Position[0] + WIDTH_UNIT < 1.0f - 0.5f * WIDTH_UNIT))
+    {
+        return true;
+    }
+    else
+    {
+        // collision x-axis
+        bool collisionX = ((one.Position[0] + 2 * WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - (one.Position[0] + WIDTH_UNIT)) > EPSILON;
+        // collision y-axis
+        bool collisionY = ((one.Position[1] + HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - one.Position[1]) > EPSILON;
+        // collision only if on both axes
+        return collisionX && collisionY;
+    }
+}
+
+bool Game::checkCollisionLeft(GameObject& one, GameObject& two)
+{
+    //collision with left wall
+    if (!((-1.0f + 0.5f * WIDTH_UNIT) + P->Position[0] - WIDTH_UNIT >= -1.0f + 0.5f * WIDTH_UNIT))
+    {
+        return true;
+    }
+    else
+    {
+        // collision x-axis
+        bool collisionX = ((one.Position[0] + WIDTH_UNIT - WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - (one.Position[0] - WIDTH_UNIT)) > EPSILON;
+        // collision y-axis
+        bool collisionY = ((one.Position[1] + HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - one.Position[1]) > EPSILON;
+
+        //DEBUGGING
+        //if (collisionX && collisionY)
+        //    std::cout << " 2 Right: " << two.Position[0] + WIDTH_UNIT << " | 1 Left: " << one.Position[0] - WIDTH_UNIT << " | 1 Right: " << one.Position[0] << " | 2 Left: " << two.Position[0] << std::endl;
+
+        // collision only if on both axes
+        return collisionX && collisionY;
+    }
+}
+
+bool Game::checkCollisionUp(GameObject& one, GameObject& two)
+{
+    // collision with top wall
+    if (!((-1.0f + 0.5f * HEIGHT_UNIT) + P->Position[1] + HEIGHT_UNIT < 1.0f - 2 * HEIGHT_UNIT - 0.5f * HEIGHT_UNIT))
+    {
+        return true;
+    }
+    else
+    {
+        // collision x-axis
+        bool collisionX = ((one.Position[0] + WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - one.Position[0]) > EPSILON;
+        // collision y-axis
+        bool collisionY = ((one.Position[1] + 2 * HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - (one.Position[1] + HEIGHT_UNIT)) > EPSILON;
+        // collision only if on both axes
+        return collisionX && collisionY;
+    }
+}
+
+bool Game::checkCollisionDown(GameObject& one, GameObject& two)
+{
+    // collision bottom wall
+    if (!((-1.0f + 0.5f * HEIGHT_UNIT) + P->Position[1] - HEIGHT_UNIT >= -1.0f + 0.5f * HEIGHT_UNIT)) 
+    {
+        return true;
+    }
+    else
+    {
+        // collision x-axis
+        bool collisionX = ((one.Position[0] + WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - one.Position[0]) > EPSILON;
+        // collision y-axis
+        bool collisionY = ((one.Position[1] + HEIGHT_UNIT - HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - (one.Position[1] - HEIGHT_UNIT)) > EPSILON;
+        // collision only if on both axes
+        return collisionX && collisionY;
+    }
+}
+
+
+bool Game::checkCollisions(Direction d)
+{
+    for (GameObject& block : this->Levels[this->Level].Bricks)
+    {
+        if (!block.Destroyed)
+        {
+            if (d == Direction::RIGHT && checkCollisionRight(*P, block)
+                || d == Direction::LEFT && checkCollisionLeft(*P, block)
+                || d == Direction::UP && checkCollisionUp(*P, block)
+                || d == Direction::DOWN && checkCollisionDown(*P, block))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }

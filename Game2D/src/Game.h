@@ -10,11 +10,22 @@
 #include "Player.h"
 
 // Represents the current state of the game
-enum class GameState {
+enum class GameState 
+{
     GAME_ACTIVE,
     GAME_MENU,
     GAME_WIN
 };
+
+enum class Direction 
+{
+    RIGHT,
+    LEFT,
+    UP,
+    DOWN
+};
+
+const float EPSILON = 0.0001;
 
 
 // Game holds all game-related state and functionality.
@@ -38,6 +49,13 @@ public:
     void ProcessInput(float dt);
     void Update(float dt);
     void Render();
+    bool checkCollisions(Direction d);
+
+private:
+    bool checkCollisionRight(GameObject& one, GameObject& two);
+    bool checkCollisionLeft(GameObject& one, GameObject& two);
+    bool checkCollisionUp(GameObject& one, GameObject& two);
+    bool checkCollisionDown(GameObject& one, GameObject& two);
 };
 
 #endif
