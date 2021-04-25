@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     glewExperimental = true;
     if (glewInit() != GLEW_OK)
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "Failed to initialize GLEW" << std::endl;
         return -1;
     }
 

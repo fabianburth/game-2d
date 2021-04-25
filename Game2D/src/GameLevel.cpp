@@ -112,7 +112,9 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
                 std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f };
-                P = new Player(pos, size, ResourceManager::GetTexture("pengo"));
+                // initial Pengo texture to be loaded
+                // to change the texture, P.Sprite has to be changed between rendering
+                P = new Player(pos, size, ResourceManager::GetTexture("pengoRight"));
             }
         }
     }

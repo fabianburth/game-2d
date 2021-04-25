@@ -17,15 +17,7 @@ enum class GameState
     GAME_WIN
 };
 
-enum class Direction 
-{
-    RIGHT,
-    LEFT,
-    UP,
-    DOWN
-};
-
-const float EPSILON = 0.0001;
+const float EPSILON = 0.01;
 
 
 // Game holds all game-related state and functionality.

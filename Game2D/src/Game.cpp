@@ -35,7 +35,16 @@ void Game::Init()
     ResourceManager::LoadTexture("res/sprites/Diamondblock.bmp", "diamondblock");
     ResourceManager::LoadTexture("res/sprites/Wall_LR.bmp", "wallLR");
     ResourceManager::LoadTexture("res/sprites/Wall_BT.bmp", "wallBT");
-    ResourceManager::LoadTexture("res/sprites/Pengo00.bmp", "pengo");
+
+    //Load all Pengo Textures
+    ResourceManager::LoadTexture("res/sprites/PengoRight.bmp", "pengoRight");
+    ResourceManager::LoadTexture("res/sprites/PengoLeft.bmp", "pengoLeft");
+    ResourceManager::LoadTexture("res/sprites/PengoMoveRight.bmp", "pengoMoveRight");
+    ResourceManager::LoadTexture("res/sprites/PengoMoveLeft.bmp", "pengoMoveLeft");
+    ResourceManager::LoadTexture("res/sprites/PengoDown.bmp", "pengoDown");
+    ResourceManager::LoadTexture("res/sprites/PengoMoveDown.bmp", "pengoMoveDown");
+    ResourceManager::LoadTexture("res/sprites/PengoUp.bmp", "pengoUp");
+    ResourceManager::LoadTexture("res/sprites/PengoMoveUp.bmp", "pengoMoveUp");
 
     GameLevel one;
     one.Load("res/levels/level0.lvl", 448, 576);
@@ -53,6 +62,7 @@ void Game::ProcessInput(float dt)
 {
     if (this->State == GameState::GAME_ACTIVE)
     {
+        Direction directionBeforeProcessing = P->direction;
         P->move({ WIDTH_UNIT * dt * 4, HEIGHT_UNIT * dt * 4 });
         // move playerboard
         //Movement to the right
@@ -60,26 +70,58 @@ void Game::ProcessInput(float dt)
         {
             if (this->Keys[GLFW_KEY_D])
             {
+                P->setDirection(Direction::RIGHT);
                 if (!checkCollisions(Direction::RIGHT))
-                P->calcMoveRight();
+                {
+                    P->calculateMovement();
+                    P->swapSprite();
+                }
+                else if (P->direction != directionBeforeProcessing)
+                {
+                    P->swapSprite();
+                }
                 return;
             }
             if (this->Keys[GLFW_KEY_A])
             {
+                P->setDirection(Direction::LEFT);
                 if (!checkCollisions(Direction::LEFT))
-                P->calcMoveLeft();
+                {
+                    P->calculateMovement();
+                    P->swapSprite();
+                }
+                else if (P->direction != directionBeforeProcessing)
+                {
+                    P->swapSprite();
+                }
                 return;
             }
             if (this->Keys[GLFW_KEY_W])
             {
+                P->setDirection(Direction::UP);
                 if (!checkCollisions(Direction::UP))
-                P->calcMoveUp();
+                {
+                    P->calculateMovement();
+                    P->swapSprite();
+                }
+                else if (P->direction != directionBeforeProcessing)
+                {
+                    P->swapSprite();
+                }
                 return;
             }
             if (this->Keys[GLFW_KEY_S])
             {
+                P->setDirection(Direction::DOWN);
                 if (!checkCollisions(Direction::DOWN))
-                P->calcMoveDown();
+                {
+                    P->calculateMovement();
+                    P->swapSprite();
+                }
+                else if (P->direction != directionBeforeProcessing)
+                {
+                    P->swapSprite();
+                }
                 return;
             }
         }

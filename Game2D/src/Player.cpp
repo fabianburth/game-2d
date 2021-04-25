@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "ResourceManager.h"
 
 Player::Player()
 {
@@ -7,6 +8,14 @@ Player::Player()
 Player::Player(std::array<float, 2> pos, std::array<float, 4> size, Texture2D sprite)
     :GameObject{ pos, size, sprite }, ready{ true }, newPosition{ pos[0], pos[1] }
 {
+}
+
+void Player::setDirection(Direction direction)
+{
+    if (this->direction != direction)
+    {
+        this->direction = direction;
+    }
 }
 
 void Player::move(std::array<float, 2> velocity)
@@ -56,40 +65,42 @@ void Player::move(std::array<float, 2> velocity)
         }
 }
 
-void Player::calcMoveRight()
+void Player::swapSprite()
 {
-    // if ((-1.0f + 0.5f * WIDTH_UNIT) + this->Position[0] + WIDTH_UNIT < 1.0f - 0.5f * WIDTH_UNIT)
+    if (toggleSprite)
     {
+        toggleSprite = false;
+        this->Sprite = ResourceManager::GetTexture("pengo" + stringDirection(this->direction));
+    }
+    else
+    {
+        toggleSprite = true;
+        this->Sprite = ResourceManager::GetTexture("pengoMove" + stringDirection(this->direction));
+    }
+}
+
+void Player::calculateMovement()
+{
+    switch (this->direction)
+    {
+    case Direction::RIGHT:
         this->newPosition[0] = this->Position[0] + WIDTH_UNIT;
         this->ready = false;
-    }
-
-}
-
-void Player::calcMoveLeft()
-{
-    //if ((-1.0f + 0.5f * WIDTH_UNIT) + this->Position[0] - WIDTH_UNIT >= -1.0f + 0.5f * WIDTH_UNIT) 
-    {
+        break;
+    case Direction::LEFT:
         this->newPosition[0] = this->Position[0] - WIDTH_UNIT;
         this->ready = false;
-    }
-}
-
-void Player::calcMoveUp()
-{
-    //if ((-1.0f + 0.5f * HEIGHT_UNIT) + this->Position[1] + HEIGHT_UNIT < 1.0f - 2 * HEIGHT_UNIT - 0.5f * HEIGHT_UNIT) 
-    {
+        break;
+    case Direction::UP:
         this->newPosition[1] = this->Position[1] + HEIGHT_UNIT;
         this->ready = false;
-    }
-}
-
-void Player::calcMoveDown()
-{
-    //if ((-1.0f + 0.5f * HEIGHT_UNIT) + this->Position[1] - HEIGHT_UNIT >= -1.0f + 0.5f * HEIGHT_UNIT) 
-    {
+        break;
+    case Direction::DOWN:
         this->newPosition[1] = this->Position[1] - HEIGHT_UNIT;
         this->ready = false;
+        break;
+    default:
+        break;
     }
 }
 
