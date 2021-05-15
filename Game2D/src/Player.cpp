@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "ResourceManager.h"
+#include "Animator.h"
 
 Player::Player()
 {
@@ -15,6 +16,16 @@ void Player::setDirection(Direction direction)
     if (this->direction != direction)
     {
         this->direction = direction;
+        notify();
+    }
+}
+
+void Player::setState(PengoState state)
+{
+    if (this->state != state)
+    {
+        this->state = state;
+        notify();
     }
 }
 
@@ -25,6 +36,7 @@ void Player::move(std::array<float, 2> velocity)
             if (this->newPosition[0] - this->Position[0] <= velocity[0]) 
             {
                 this->Position[0] = this->newPosition[0];
+                setState(PengoState::STAND);
                 this->ready = true;
             }
             else
@@ -36,6 +48,7 @@ void Player::move(std::array<float, 2> velocity)
             if (this->newPosition[0] - this->Position[0] >= -velocity[0]) 
             {
                 this->Position[0] = this->newPosition[0];
+                setState(PengoState::STAND);
                 this->ready = true;
             }
             else
@@ -47,6 +60,7 @@ void Player::move(std::array<float, 2> velocity)
             if (this->newPosition[1] - this->Position[1] <= velocity[1])
             {
                 this->Position[1] = this->newPosition[1];
+                setState(PengoState::STAND);
                 this->ready = true;
             }
             else
@@ -58,6 +72,7 @@ void Player::move(std::array<float, 2> velocity)
             if (this->newPosition[1] - this->Position[1] >= -velocity[1])
             {
                 this->Position[1] = this->newPosition[1];
+                setState(PengoState::STAND);
                 this->ready = true;
             }
             else
@@ -104,3 +119,23 @@ void Player::calculateMovement()
     }
 }
 
+void Player::addObserver(const std::shared_ptr<Observer<Player*>>& observer)
+{
+    observers.push_back(observer);
+}
+
+void Player::removeObserver(const std::shared_ptr<Observer<Player*>>& observer)
+{
+    observers.erase(std::remove_if(observers.begin(), observers.end(),
+        [&](const std::shared_ptr<Observer<Player*>>& vergleich) {
+            return vergleich == observer;
+        }));
+}
+
+void Player::notify()
+{
+    for (auto& observer : observers)
+    {
+        observer->update(this);
+    }
+}

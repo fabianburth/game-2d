@@ -27,7 +27,7 @@ class Game
 {
 public:
     // game state
-    GameState    State;
+    GameState    PengoState;
     bool         Keys[1024];
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;
@@ -42,6 +42,7 @@ public:
     void Update(float dt);
     void Render();
     bool checkCollisions(Direction d);
+    bool doCollision(Direction d);
 
 private:
     bool checkCollisionRight(GameObject& one, GameObject& two);

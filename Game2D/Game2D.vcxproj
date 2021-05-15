@@ -142,6 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BlockAnimator.cpp" />
+    <ClCompile Include="src\PengoAnimator.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameLevel.cpp" />
@@ -153,13 +155,18 @@
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animator.h" />
+    <ClInclude Include="src\BlockAnimator.h" />
+    <ClInclude Include="src\PengoAnimator.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameLevel.h" />
     <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\Observer.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\SpriteRenderer.h" />
     <ClInclude Include="src\ResourceManager.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Subject.h" />
     <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>
