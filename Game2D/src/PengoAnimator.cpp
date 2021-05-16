@@ -23,7 +23,11 @@ void PengoAnimator::update(Player* p)
 		break;
 	case(PengoState::PUSH):
 		currentAnimationDuration = 0.0f;
-		push();
+		currentAnimation = &PengoAnimator::pushBlock;
+		break;
+	case(PengoState::BREAK):
+		currentAnimationDuration = 0.0f;
+		currentAnimation = &PengoAnimator::breakBlock;
 		break;
 	}
 }
@@ -45,19 +49,7 @@ void PengoAnimator::walk()
 	}
 }
 
-void PengoAnimator::push()
-{
-	if (pengo->direction == Direction::LEFT || pengo->direction == Direction::RIGHT)
-	{
-		currentAnimation = &PengoAnimator::pushHorizontally;
-	}
-	else if (pengo->direction == Direction::UP || pengo->direction == Direction::DOWN)
-	{
-		currentAnimation = &PengoAnimator::pushVertically;
-	}
-}
-
-void PengoAnimator::pushHorizontally()
+void PengoAnimator::pushBlock()
 {
 	pengo->ready = false;
 	pengo->Sprite = ResourceManager::GetTexture("pengoPush" + stringDirection(pengo->direction));
@@ -69,16 +61,16 @@ void PengoAnimator::pushHorizontally()
 	}
 }
 
-void PengoAnimator::pushVertically()
+void PengoAnimator::breakBlock()
 {
 	pengo->ready = false;
-	if (currentAnimationDuration == 0 )
+	if (currentAnimationDuration == 0)
 	{
 		pengo->Sprite = ResourceManager::GetTexture("pengoPush" + stringDirection(pengo->direction));
 	}
 	else if (currentAnimationDuration >= (1.0f / 3.0f) * PUSH_DURATION && currentAnimationDuration < (2.0f / 3.0f) * PUSH_DURATION)
 	{
-		pengo->Sprite = ResourceManager::GetTexture("pengoPush" + stringDirection(pengo->direction) + "Move");
+		pengo->Sprite = ResourceManager::GetTexture("pengoPostPush" + stringDirection(pengo->direction));
 	}
 	else if (currentAnimationDuration >= (2.0f / 3.0f) * PUSH_DURATION && currentAnimationDuration < PUSH_DURATION)
 	{
@@ -86,7 +78,7 @@ void PengoAnimator::pushVertically()
 	}
 	else if (currentAnimationDuration >= PUSH_DURATION)
 	{
-		pengo->Sprite = ResourceManager::GetTexture("pengo" + stringDirection(pengo->direction));
+		pengo->Sprite = ResourceManager::GetTexture("pengoPostPush" + stringDirection(pengo->direction));
 		pengo->state = PengoState::STAND;
 		pengo->ready = true;
 	}

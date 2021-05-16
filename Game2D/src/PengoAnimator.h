@@ -17,7 +17,6 @@ public:
 	void animate(float dt);
 	void stand();
 	void walk();
-	void push();
-	void pushHorizontally();
-	void pushVertically();
+	void pushBlock();
+	void breakBlock();
 };

@@ -41,14 +41,44 @@ public:
     void ProcessInput(float dt);
     void Update(float dt);
     void Render();
-    bool checkCollisions(Direction d);
-    bool doCollision(Direction d);
 
 private:
-    bool checkCollisionRight(GameObject& one, GameObject& two);
-    bool checkCollisionLeft(GameObject& one, GameObject& two);
-    bool checkCollisionUp(GameObject& one, GameObject& two);
-    bool checkCollisionDown(GameObject& one, GameObject& two);
+    // Checks whether the given gameObject is colliding with another brick or a wall when moving one unit to the given direction
+    // @param gameObject: The GameObject to check the collision for
+    // @param direction: The Direction in which collision has to be checked
+    // @return true, if there is a collision, false otherwise
+    bool checkCollisions(GameObject& gameObject, Direction d);
+
+    // Checks whether the given gameObject is colliding with another brick or a wall when moving one unit to the given direction AND
+    // initiates a corresponding action 
+    // @param gameObject: The GameObject to check the collision for
+    // @param direction: The Direction in which collision has to be checked
+    // @return true, if there is a collision, false otherwise
+    bool doCollision(GameObject& gameObject, Direction d);
+
+    // Return the Block with which the given GameObject is colliding
+    // @param gameObject: The GameObject to check the collision for
+    // @param direction: The Direction in which collision has to be checked
+    // @return a pointer to the gameObject with which the given GameObject is colliding or nullptr otherwise
+    GameObject* getCollisionBlock(GameObject& gameObject, Direction d);
+
+    // Calculates how many units the given GameObject could move until colliding with another block or the wall (step range)
+    // @param gameObject: The GameObject the step range has to be calculated for
+    // @param direction: The Direction in which the step range has to be checked
+    int  calculateStepRange(GameObject& block, Direction d);
+
+    // Auxialiary method for checkCollisions and doCollisions - checks whether GameObject one collides with GameObject two if it is moved
+    // one unit in the given Direction
+    // @param one: The GameObject to be moved
+    // @param two: The GameObject with which collision will be checked
+    // @param d: The Direction to which it would be moved
+    bool checkBlockCollision(GameObject& one, GameObject& two, Direction d);
+
+    // Auxialiary method for checkCollisions and doCollisions - checks whether GameObject one collides with the Wall if it is moved on unit
+    // in the given Direction
+    // @param one: The GameObject to be moved
+    // @param d: The Direction to which it would be moved
+    bool checkWallCollision(GameObject& one, Direction d);
 };
 
 #endif
