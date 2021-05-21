@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Block.h"
 #include "resourcemanager.h"
+#include "Wall.h"
 
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
@@ -28,9 +29,13 @@ public:
     // level state
     Player Pengo;
     std::vector<GameObject> Walls;
+    Wall LeftWall;
+    Wall RightWall;
+    Wall TopWall;
+    Wall BottomWall;
     std::vector<Block> Bricks;
     // constructor
-    GameLevel() { }
+    GameLevel();
     ~GameLevel();
     // loads level from file
     void Load(const char* file, unsigned int levelWidth, unsigned int levelHeight);

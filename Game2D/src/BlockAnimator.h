@@ -6,7 +6,7 @@
 #include "ResourceManager.h"
 #include <any>
 
-class BlockAnimator : public Animator
+class BlockAnimator : public Animator<GameObject>
 {
 public:
 	Block* brick = 0;

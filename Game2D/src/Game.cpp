@@ -38,7 +38,11 @@ void Game::Init()
 
 	// Load Wall Textures
 	ResourceManager::LoadTexture("res/sprites/Wall_LR.bmp", "wallLR");
+	ResourceManager::LoadTexture("res/sprites/Wall_LR_00.bmp", "wallLR_00");
+	ResourceManager::LoadTexture("res/sprites/Wall_LR_01.bmp", "wallLR_01");
 	ResourceManager::LoadTexture("res/sprites/Wall_BT.bmp", "wallBT");
+	ResourceManager::LoadTexture("res/sprites/Wall_BT_00.bmp", "wallBT_00");
+	ResourceManager::LoadTexture("res/sprites/Wall_BT_01.bmp", "wallBT_01");
 
 	// Load all Pengo Textures
 	ResourceManager::LoadTexture("res/sprites/PengoRight.bmp", "pengoRight");
@@ -67,6 +71,7 @@ void Game::Init()
 
 	this->pengoAnimator = new PengoAnimator(&this->Levels[this->Level].Pengo, 0.5f, 0.25f);
 	this->blockAnimator = new BlockAnimator(0.5f, &this->Levels[this->Level].Bricks);
+	this->wallAnimator = new WallAnimator(&this->Levels[this->Level].BottomWall, &this->Levels[this->Level].TopWall, &this->Levels[this->Level].LeftWall, &this->Levels[this->Level].RightWall, 0.5f);
 	//this->Pengo->registerObserver(pengoAnimator);
 
 	//for (Block& tile : this->Levels[this->Level].Bricks)
@@ -84,6 +89,7 @@ void Game::Update(float dt)
 	this->Pengo->move(dt);
 	pengoAnimator->animate(dt);
 	blockAnimator->animate(dt);
+	wallAnimator->animate(dt);
 }
 
 void Game::ProcessInput(float dt)
@@ -130,6 +136,16 @@ void Game::ProcessInput(float dt)
 					else //if(checkWallCollision(*P, P->direction))
 					{
 						Pengo->setState(PengoState::BREAK);
+
+						if(Pengo->direction == Direction::UP)
+							this->Levels[this->Level].BottomWall.setState(WallState::WOBBLY);
+						else if(Pengo->direction == Direction::DOWN)
+							this->Levels[this->Level].TopWall.setState(WallState::WOBBLY);
+						else if(Pengo->direction == Direction::LEFT)
+							this->Levels[this->Level].LeftWall.setState(WallState::WOBBLY);
+						else if(Pengo->direction == Direction::RIGHT)
+							this->Levels[this->Level].RightWall.setState(WallState::WOBBLY);
+
 						return;
 					}
 				}

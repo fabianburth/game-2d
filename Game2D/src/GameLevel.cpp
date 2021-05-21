@@ -3,6 +3,10 @@
 #include <fstream>
 #include <sstream>
 
+GameLevel::GameLevel()
+{
+}
+
 GameLevel::~GameLevel()
 {
 }
@@ -59,6 +63,10 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
     unsigned int height = tileData.size();
     unsigned int width = tileData[0].size(); // note we can index vector at [0] since this function is only called if height > 0
     float unit_width = Constants::WIDTH_UNIT, unit_height = Constants::HEIGHT_UNIT;
+    LeftWall = Wall(WallSide::LEFT);
+    RightWall = Wall(WallSide::RIGHT);
+    BottomWall = Wall(WallSide::BOTTOM);
+    TopWall = Wall(WallSide::TOP);
     //initialize level wall (same for every level)
     //Left and Right Wall
     for (unsigned int x = 0; x < height + 1; ++x) 
@@ -69,12 +77,14 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
         GameObject objL(posL, ResourceManager::GetTexture("wallLR"), sizeL);
         //objL.isUnbreakable = true;
         this->Walls.push_back(objL);
+        this->LeftWall.addWallComponent(objL);
         //Right Wall
         std::array<float, 2> posR = { width * unit_width, -0.5f * unit_height + unit_height * x };
         std::array<float, 4> sizeR = { 0.5f, 1.0f, 0.5f * (-1 + 0.5f * unit_width), 0 };
         GameObject objR(posR, ResourceManager::GetTexture("wallLR"), sizeR);
         //objR.isUnbreakable = true;
         this->Walls.push_back(objR);
+        this->RightWall.addWallComponent(objR);
     }
     //Bottom and Top Wall
     for (unsigned int x = 0; x < width; ++x)
@@ -85,12 +95,14 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
         GameObject objB(posB, ResourceManager::GetTexture("wallBT"), sizeB);
         //objB.isUnbreakable = true;
         this->Walls.push_back(objB);
+        this->BottomWall.addWallComponent(objB);
         //Top Wall
         std::array<float, 2> posT = { unit_width * x, -0.5f * unit_height };
         std::array<float, 4> sizeT = { 1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * unit_height) };
         GameObject objT(posT, ResourceManager::GetTexture("wallBT"), sizeT);
         //objT.isUnbreakable = true;
         this->Walls.push_back(objT);
+        this->TopWall.addWallComponent(objT);
     }
 
     // initialize level tiles based on tileData		

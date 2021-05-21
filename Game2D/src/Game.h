@@ -8,9 +8,11 @@
 #include <GLFW/glfw3.h>
 #include "PengoAnimator.h"
 #include "BlockAnimator.h"
+#include "WallAnimator.h"
 #include "GameLevel.h"
 #include "Player.h"
 #include "SpriteRenderer.h"
+#include "Wall.h"
 
 // Represents the current state of the game
 enum class GameState 
@@ -35,6 +37,7 @@ public:
     SpriteRenderer* Renderer;
     PengoAnimator* pengoAnimator;
     BlockAnimator* blockAnimator;
+    WallAnimator* wallAnimator;
     bool         Keys[1024];
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;

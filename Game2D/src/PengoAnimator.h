@@ -5,7 +5,7 @@
 #include "ResourceManager.h"
 #include <any>
 
-class PengoAnimator: public Animator
+class PengoAnimator: public Animator<GameObject>
 {
 public:
 	Player* pengo;

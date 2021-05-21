@@ -33,7 +33,16 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, std::array<float, 2> positio
 
 void SpriteRenderer::DrawLevel(GameLevel& gameLevel)
 {
-    for (GameObject& wall : gameLevel.Walls)
+    for (GameObject& wall : gameLevel.LeftWall.wallComponents)
+        this->DrawObject(wall);
+
+    for (GameObject& wall : gameLevel.RightWall.wallComponents)
+        this->DrawObject(wall);
+
+    for (GameObject& wall : gameLevel.TopWall.wallComponents)
+        this->DrawObject(wall);
+
+    for (GameObject& wall : gameLevel.BottomWall.wallComponents)
         this->DrawObject(wall);
 
     for (Block& tile : gameLevel.Bricks)

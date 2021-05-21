@@ -2,8 +2,8 @@
 
 #include "Observer.h"
 #include "GameObject.h"
-
-class Animator: public Observer<GameObject>
+template<class T>
+class Animator: public Observer<T>
 {
 public:
 	float currentAnimationDuration = 0.0f;
