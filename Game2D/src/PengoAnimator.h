@@ -3,8 +3,9 @@
 #include "Animator.h"
 #include "Player.h"
 #include "ResourceManager.h"
+#include <any>
 
-class PengoAnimator: public Animator, public Observer<Player*>
+class PengoAnimator: public Animator
 {
 public:
 	Player* pengo;
@@ -13,7 +14,8 @@ public:
 	void (PengoAnimator::* currentAnimation)();
 
 	PengoAnimator(Player* pengo, float pushDuration, float walkAnimationDuration);
-	void update(Player* pengo);
+	~PengoAnimator();
+	void update(GameObject* s) override;
 	void animate(float dt);
 	void stand();
 	void walk();

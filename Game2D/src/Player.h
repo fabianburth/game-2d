@@ -35,28 +35,28 @@ static std::string stringState(PengoState state)
 	}
 }
 
-class Player : public GameObject, public Subject<Player*>
+class Player : public GameObject
 {
 public:
-	bool ready = true;
-	bool toggleSprite = false;
 	Direction direction = Direction::NONE;
 	PengoState state = PengoState::STAND;
-	std::array<float, 2> newPosition;
+	std::array<float, 2> velocity, positionToMoveTo;
+	bool ready;
+	bool toggleSprite;
 
 	Player();
-	Player(std::array<float, 2> pos, std::array<float, 4> size, Texture2D sprite);
+	Player(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity);
 
-	virtual void addObserver(const std::shared_ptr<Observer<Player*>>& observer);
-	virtual void removeObserver(const std::shared_ptr<Observer<Player*>>& observer);
-	virtual void notify();
+	//virtual void registerObserver(const std::shared_ptr<Observer>& observer);
+	//virtual void removeObserver(const std::shared_ptr<Observer>& observer);
+	//virtual void notifyObservers();
 
 	void setDirection(Direction direction);
 	void setState(PengoState state);
-	void move(std::array<float, 2> velocity);
+	void setPositionToMoveTo();
+	void move(float deltaTime);
 	void swapSprite();
-	void calculateMovement();
 
-private:
-	std::vector<std::shared_ptr<Observer<Player*>>> observers;
+//private:
+//	std::vector<std::shared_ptr<Observer>> observers;
 };

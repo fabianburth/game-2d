@@ -3,6 +3,10 @@
 #include <fstream>
 #include <sstream>
 
+GameLevel::~GameLevel()
+{
+}
+
 void GameLevel::Load(const char* file, unsigned int levelWidth, unsigned int levelHeight)
 {
     // clear old data
@@ -28,24 +32,25 @@ void GameLevel::Load(const char* file, unsigned int levelWidth, unsigned int lev
     }
 }
 
-void GameLevel::Draw(SpriteRenderer& renderer)
-{
-    for (GameObject& wall : this->Walls)
-            wall.Draw(renderer);
-
-    for (GameObject& tile : this->Bricks)
-        if (!tile.Destroyed)
-            tile.Draw(renderer);
-
-    P->Draw(renderer);
-}
+//void GameLevel::Draw(SpriteRenderer& renderer)
+//{
+//    for (GameObject& wall : this->Walls)
+//            wall.Draw(renderer);
+//
+//    for (Block& tile : this->Bricks)
+//        if (tile.state != BlockState::BROKEN)
+//            tile.Draw(renderer);
+//
+//    P->Draw(renderer);
+//}
 
 bool GameLevel::IsCompleted() // NOT INTENTED TO WORK LIKE THAT FOR PENGO
 {
-    for (GameObject& tile : this->Bricks)
-        if (!tile.IsSolid && !tile.Destroyed)
-            return false;
-    return true;
+    //for (Block& tile : this->Bricks)
+    //    if (!tile.IsSolid && !tile.Destroyed)
+    //        return false;
+    //return true;
+    return false;
 }
 
 void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight)
@@ -53,7 +58,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
     // calculate dimensions
     unsigned int height = tileData.size();
     unsigned int width = tileData[0].size(); // note we can index vector at [0] since this function is only called if height > 0
-    float unit_width = WIDTH_UNIT, unit_height = HEIGHT_UNIT;
+    float unit_width = Constants::WIDTH_UNIT, unit_height = Constants::HEIGHT_UNIT;
     //initialize level wall (same for every level)
     //Left and Right Wall
     for (unsigned int x = 0; x < height + 1; ++x) 
@@ -61,14 +66,14 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
         //Left Wall
         std::array<float, 2> posL = { -0.5f * unit_width, -0.5f * unit_height + unit_height * x };
         std::array<float, 4> sizeL = { 0.5f, 1.0f, 0.5f * (-1 + 0.5f * unit_width), 0 };
-        GameObject objL(posL, sizeL, ResourceManager::GetTexture("wallLR"), { 0.8f, 0.8f, 0.7f });
-        objL.IsSolid = true;
+        GameObject objL(posL, ResourceManager::GetTexture("wallLR"), sizeL);
+        //objL.isUnbreakable = true;
         this->Walls.push_back(objL);
         //Right Wall
         std::array<float, 2> posR = { width * unit_width, -0.5f * unit_height + unit_height * x };
         std::array<float, 4> sizeR = { 0.5f, 1.0f, 0.5f * (-1 + 0.5f * unit_width), 0 };
-        GameObject objR(posR, sizeR, ResourceManager::GetTexture("wallLR"), { 0.8f, 0.8f, 0.7f });
-        objR.IsSolid = true;
+        GameObject objR(posR, ResourceManager::GetTexture("wallLR"), sizeR);
+        //objR.isUnbreakable = true;
         this->Walls.push_back(objR);
     }
     //Bottom and Top Wall
@@ -77,14 +82,14 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
         //Bottom Wall
         std::array<float, 2> posB = { unit_width * x, height * unit_height};
         std::array<float, 4> sizeB = { 1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * unit_height) };
-        GameObject objB(posB, sizeB, ResourceManager::GetTexture("wallBT"), { 0.8f, 0.8f, 0.7f });
-        objB.IsSolid = true;
+        GameObject objB(posB, ResourceManager::GetTexture("wallBT"), sizeB);
+        //objB.isUnbreakable = true;
         this->Walls.push_back(objB);
         //Top Wall
         std::array<float, 2> posT = { unit_width * x, -0.5f * unit_height };
         std::array<float, 4> sizeT = { 1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * unit_height) };
-        GameObject objT(posT, sizeT, ResourceManager::GetTexture("wallBT"), { 0.8f, 0.8f, 0.7f });
-        objT.IsSolid = true;
+        GameObject objT(posT, ResourceManager::GetTexture("wallBT"), sizeT);
+        //objT.isUnbreakable = true;
         this->Walls.push_back(objT);
     }
 
@@ -97,24 +102,22 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             if (tileData[y][x] == 1) // non-solid iceblock
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f };
-                GameObject obj(pos, size, ResourceManager::GetTexture("iceblock"), { 0.8f, 0.8f, 0.7f });
-                obj.IsSolid = false;
+                Block obj(pos, ResourceManager::GetTexture("iceblock"), false);
                 this->Bricks.push_back(obj);
             }
             else if (tileData[y][x] == 2)	// solid diamond block
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f };
-                this->Bricks.push_back(GameObject(pos, size, ResourceManager::GetTexture("diamondblock"), { 0.8f, 0.8f, 0.7f }));
+                Block obj(pos, ResourceManager::GetTexture("diamondblock"), true);
+                this->Bricks.push_back(obj);
             }
             else if (tileData[y][x] == 4)
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f };
+                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 4, Constants::HEIGHT_UNIT * 4 };
                 // initial Pengo texture to be loaded
                 // to change the texture, P.Sprite has to be changed between rendering
-                P = new Player(pos, size, ResourceManager::GetTexture("pengoRight"));
+                Pengo = Player(pos, ResourceManager::GetTexture("pengoRight"), velocity);
             }
         }
     }

@@ -6,9 +6,10 @@
 
 #include <GL/glew.h>
 
+#include "Constants.h"
 #include "gameobject.h"
 #include "Player.h"
-#include "spriterenderer.h"
+#include "Block.h"
 #include "resourcemanager.h"
 
 
@@ -25,15 +26,16 @@ class GameLevel
 {
 public:
     // level state
-    Player* P;
+    Player Pengo;
     std::vector<GameObject> Walls;
-    std::vector<GameObject> Bricks;
+    std::vector<Block> Bricks;
     // constructor
     GameLevel() { }
+    ~GameLevel();
     // loads level from file
     void Load(const char* file, unsigned int levelWidth, unsigned int levelHeight);
     // render level
-    void Draw(SpriteRenderer& renderer);
+    // void Draw(SpriteRenderer& renderer);
     // check if the level is completed (all non-solid tiles are destroyed)
     bool IsCompleted();
 private:

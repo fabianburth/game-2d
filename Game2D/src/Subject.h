@@ -1,13 +1,13 @@
 #pragma once
 
 #include <memory>
-
 #include "Observer.h"
+
 template<class T>
 class Subject
 {
 public:
-	virtual void addObserver(const std::shared_ptr<Observer<T>>&) = 0;
-	virtual void removeObserver(const std::shared_ptr<Observer<T>>&) = 0;
-	virtual void notify() = 0;
+	virtual void registerObserver(Observer<T>* o) = 0;
+	virtual void removeObserver(Observer<T>* o) = 0;
+	virtual void notifyObservers() = 0;
 };

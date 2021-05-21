@@ -3,11 +3,14 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "Constants.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
+#include "PengoAnimator.h"
+#include "BlockAnimator.h"
 #include "GameLevel.h"
 #include "Player.h"
+#include "SpriteRenderer.h"
 
 // Represents the current state of the game
 enum class GameState 
@@ -28,6 +31,10 @@ class Game
 public:
     // game state
     GameState    PengoState;
+    Player* Pengo;
+    SpriteRenderer* Renderer;
+    PengoAnimator* pengoAnimator;
+    BlockAnimator* blockAnimator;
     bool         Keys[1024];
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;
@@ -60,12 +67,12 @@ private:
     // @param gameObject: The GameObject to check the collision for
     // @param direction: The Direction in which collision has to be checked
     // @return a pointer to the gameObject with which the given GameObject is colliding or nullptr otherwise
-    GameObject* getCollisionBlock(GameObject& gameObject, Direction d);
+    Block* getCollisionBlock(GameObject& gameObject, Direction d);
 
     // Calculates how many units the given GameObject could move until colliding with another block or the wall (step range)
     // @param gameObject: The GameObject the step range has to be calculated for
     // @param direction: The Direction in which the step range has to be checked
-    int  calculateStepRange(GameObject& block, Direction d);
+    int  calculateStepRange(Block& block, Direction d);
 
     // Auxialiary method for checkCollisions and doCollisions - checks whether GameObject one collides with GameObject two if it is moved
     // one unit in the given Direction

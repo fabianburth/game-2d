@@ -1,29 +1,19 @@
 #include "Game.h"
 #include "ResourceManager.h"
-#include "SpriteRenderer.h"
-#include "PengoAnimator.h"
-#include "BlockAnimator.h"
 #include <array>
 
 #include <iostream>
 // Game-related State data
-SpriteRenderer* Renderer;
-Player* P;
-GameObject* movingBlock;
-std::shared_ptr<PengoAnimator> pengoAnimator;
-std::shared_ptr<BlockAnimator> blockAnimator;
 
 Game::Game(unsigned int width, unsigned int height)
-	: PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height)
-{
-
-}
+	: PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) { }
 
 Game::~Game()
 {
-	delete Renderer;
-	delete P;
-	delete movingBlock;
+	//delete Pengo;
+	//delete Renderer;
+	//delete pengoAnimator;
+	//delete blockAnimator;
 }
 
 void Game::Init()
@@ -34,7 +24,7 @@ void Game::Init()
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
 	// set render-specific controls
 	Shader shader = ResourceManager::GetShader("sprite");
-	Renderer = new SpriteRenderer(shader);
+	this->Renderer = new SpriteRenderer(shader);
 	// load textures
 	// Load all Iceblock Textures
 	ResourceManager::LoadTexture("res/sprites/Iceblock.bmp", "iceblock");
@@ -70,27 +60,28 @@ void Game::Init()
 
 	GameLevel one;
 	one.Load("res/levels/level0.lvl", 448, 576);
-	P = one.P;
+	//this->Pengo = one.Pengo;
 	this->Levels.push_back(one);
 	this->Level = 0;
+	this->Pengo = &this->Levels[this->Level].Pengo;
 
-	pengoAnimator = std::make_shared<PengoAnimator>(P, 0.5f, 0.25f);
-	blockAnimator = std::make_shared<BlockAnimator>(0.5f);
-	P->addObserver(pengoAnimator);
+	this->pengoAnimator = new PengoAnimator(&this->Levels[this->Level].Pengo, 0.5f, 0.25f);
+	this->blockAnimator = new BlockAnimator(0.5f, &this->Levels[this->Level].Bricks);
+	//this->Pengo->registerObserver(pengoAnimator);
 
-	for (GameObject& tile : this->Levels[this->Level].Bricks)
-		tile.addObserver(blockAnimator);
+	//for (Block& tile : this->Levels[this->Level].Bricks)
+	//	tile.registerObserver(blockAnimator);
 }
 
 void Game::Update(float dt)
 {
 	// Update Players actual position
-	for (GameObject& block : this->Levels[this->Level].Bricks)
+	for (Block& block : this->Levels[this->Level].Bricks)
 	{
-		if (block.Position != block.newPosition)
-			block.move({ WIDTH_UNIT * dt * 12, HEIGHT_UNIT * dt * 12 });
+		if (block.position != block.positionToMoveTo)
+			block.move(dt);
 	}
-	P->move({ WIDTH_UNIT * dt * 4, HEIGHT_UNIT * dt * 4 });
+	this->Pengo->move(dt);
 	pengoAnimator->animate(dt);
 	blockAnimator->animate(dt);
 }
@@ -99,7 +90,7 @@ void Game::ProcessInput(float dt)
 {
 	if (this->PengoState == GameState::GAME_ACTIVE)
 	{
-		if (P->ready)
+		if (Pengo->ready)
 		{
 			if (this->Keys[GLFW_KEY_LEFT_CONTROL])
 			{
@@ -108,77 +99,78 @@ void Game::ProcessInput(float dt)
 					P->setState(PengoState::PUSH);
 				}
 				return;*/
-				if (checkCollisions(*P, P->direction))
+				if (checkCollisions(*Pengo, Pengo->direction))
 				{
-					GameObject* block = getCollisionBlock(*P, P->direction);
+					Block* block = getCollisionBlock(*Pengo, Pengo->direction);
 					// Behavior if the collision is with an adjacent block
 					if (block != nullptr)
 					{
 						// Behavior if there actually is a block directly behind the adjacent one
-						if (checkCollisions(*block, P->direction))
+						if (checkCollisions(*block, Pengo->direction))
 						{
 							// Pengo always tries to break it (Pengo Animation)
-							P->setState(PengoState::BREAK);
+							Pengo->setState(PengoState::BREAK);
 							// Block only breaks if it's not solid (= not a diamond block)
-							if (!block->IsSolid)
+							if (!block->isUnbreakable)
 							{
-								block->destroy();
+								block->setState(BlockState::BREAKING);
 								return;
 							}
+							return;
 						}
 						// Behavior if there is no block directly behind the adjacent one
 						else
 						{
-							P->setState(PengoState::PUSH);
-							block->yeet(P->direction, calculateStepRange(*block, P->direction));
+							Pengo->setState(PengoState::PUSH);
+							block->push(Pengo->direction, calculateStepRange(*block, Pengo->direction));
 							return;
 						}
 					}
 					// Behavior if the collision is with a wall
 					else //if(checkWallCollision(*P, P->direction))
 					{
-						P->setState(PengoState::BREAK);
+						Pengo->setState(PengoState::BREAK);
 						return;
 					}
 				}
 			}
 			if (this->Keys[GLFW_KEY_D])
 			{
-				P->setDirection(Direction::RIGHT);
-				P->setState(PengoState::WALK);
-				if (!checkCollisions(*P, Direction::RIGHT))
+				Pengo->setDirection(Direction::RIGHT);
+				Pengo->setState(PengoState::WALK);
+				if (!checkCollisions(*Pengo, Direction::RIGHT))
 				{
-					P->calculateMovement();
+					Pengo->setPositionToMoveTo();
 				}
 				return;
 			}
 			if (this->Keys[GLFW_KEY_A])
 			{
-				P->setDirection(Direction::LEFT);
-				P->setState(PengoState::WALK);
-				if (!checkCollisions(*P, Direction::LEFT))
+				Pengo->setDirection(Direction::LEFT);
+				Pengo->setState(PengoState::WALK);
+				if (!checkCollisions(*Pengo, Direction::LEFT))
 				{
-					P->calculateMovement();
+					Pengo->setPositionToMoveTo();
 				}
 				return;
 			}
 			if (this->Keys[GLFW_KEY_W])
 			{
-				P->setDirection(Direction::UP);
-				P->setState(PengoState::WALK);
-				if (!checkCollisions(*P, Direction::UP))
+				Pengo->setDirection(Direction::UP);
+				Pengo->setState(PengoState::WALK);
+				if (!checkCollisions(*Pengo, Direction::UP))
 				{
-					P->calculateMovement();
+					Pengo->setPositionToMoveTo();
 				}
 				return;
 			}
 			if (this->Keys[GLFW_KEY_S])
 			{
-				P->setDirection(Direction::DOWN);
-				P->setState(PengoState::WALK);
-				if (!checkCollisions(*P, Direction::DOWN))
+				Pengo->setDirection(Direction::DOWN);
+				Pengo->setState(PengoState::WALK);
+				if (!checkCollisions(*Pengo, Direction::DOWN))
 				{
-					P->calculateMovement();
+					Pengo->setPositionToMoveTo();
 				}
 				return;
 			}
@@ -191,18 +183,19 @@ void Game::Render()
 	if (this->PengoState == GameState::GAME_ACTIVE)
 	{
 		// draw level
-		this->Levels[this->Level].Draw(*Renderer);
+		//this->Levels[this->Level].Draw(*Renderer);
+		this->Renderer->DrawLevel(this->Levels[this->Level]);
 	}
 
 	// Texture2D texture = ResourceManager::GetTexture("pengo");
-	// Renderer->DrawSprite(texture, { 6.0f * WIDTH_UNIT, 8.0f * HEIGHT_UNIT });
+	// Renderer->DrawSprite(texture, { 6.0f * Constants::WIDTH_UNIT, 8.0f * Constants::HEIGHT_UNIT });
 }
 
 bool Game::checkCollisions(GameObject& gameObject, Direction d)
 {
-	for (GameObject& block : this->Levels[this->Level].Bricks)
+	for (Block& block : this->Levels[this->Level].Bricks)
 	{
-		if (!block.Destroyed)
+		if (block.state != BlockState::BROKEN)
 		{
 			if (checkBlockCollision(gameObject, block, d) || checkWallCollision(gameObject, d))
 			{
@@ -213,39 +206,39 @@ bool Game::checkCollisions(GameObject& gameObject, Direction d)
 	return false;
 }
 
-bool Game::doCollision(GameObject& gameObject, Direction d)
-{
-	for (GameObject& block : this->Levels[this->Level].Bricks)
-	{
-		if (!block.Destroyed)
-		{
-			if (checkBlockCollision(gameObject, block, d))
-			{
-				if (checkCollisions(block, d) && !block.IsSolid)
-				{
-					block.destroy();
-				}
-				else
-				{
-					block.yeet(d, calculateStepRange(block, d));
-				}
-				return true;
-			}
-			else
-				if (checkWallCollision(gameObject, d))
-				{
-					return true;
-				}
-		}
-	}
-	return false;
-}
+//bool Game::doCollision(GameObject& gameObject, Direction d)
+//{
+//	for (Block& block : this->Levels[this->Level].Bricks)
+//	{
+//		if (block.state != BlockState::BROKEN)
+//		{
+//			if (checkBlockCollision(gameObject, block, d))
+//			{
+//				if (checkCollisions(block, d) && !block.IsUnbreakable)
+//				{
+//					block.destroy();
+//				}
+//				else
+//				{
+//					block.yeet(d, calculateStepRange(block, d));
+//				}
+//				return true;
+//			}
+//			else
+//				if (checkWallCollision(gameObject, d))
+//				{
+//					return true;
+//				}
+//		}
+//	}
+//	return false;
+//}
 
-GameObject* Game::getCollisionBlock(GameObject& gameObject, Direction d)
+Block* Game::getCollisionBlock(GameObject& gameObject, Direction d)
 {
-	for (GameObject& block : this->Levels[this->Level].Bricks)
+	for (Block& block : this->Levels[this->Level].Bricks)
 	{
-		if (!block.Destroyed)
+		if (block.state != BlockState::BROKEN)
 		{
 			if (checkBlockCollision(gameObject, block, d))
 			{
@@ -264,20 +257,20 @@ bool Game::checkBlockCollision(GameObject& one, GameObject& two, Direction d)
 	switch (d)
 	{
 	case Direction::RIGHT:
-		collisionX = ((one.Position[0] + 2 * WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - (one.Position[0] + WIDTH_UNIT)) > EPSILON;
-		collisionY = ((one.Position[1] + HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - one.Position[1]) > EPSILON;
+		collisionX = ((one.position[0] + 2 * Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - (one.position[0] + Constants::WIDTH_UNIT)) > EPSILON;
+		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON;
 		break;
 	case Direction::LEFT:
-		collisionX = ((one.Position[0] + WIDTH_UNIT - WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - (one.Position[0] - WIDTH_UNIT)) > EPSILON;
-		collisionY = ((one.Position[1] + HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - one.Position[1]) > EPSILON;
+		collisionX = ((one.position[0] + Constants::WIDTH_UNIT - Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - (one.position[0] - Constants::WIDTH_UNIT)) > EPSILON;
+		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON;
 		break;
 	case Direction::UP:
-		collisionX = ((one.Position[0] + WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - one.Position[0]) > EPSILON;
-		collisionY = ((one.Position[1] + 2 * HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - (one.Position[1] + HEIGHT_UNIT)) > EPSILON;
+		collisionX = ((one.position[0] + Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - one.position[0]) > EPSILON;
+		collisionY = ((one.position[1] + 2 * Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - (one.position[1] + Constants::HEIGHT_UNIT)) > EPSILON;
 		break;
 	case Direction::DOWN:
-		collisionX = ((one.Position[0] + WIDTH_UNIT) - two.Position[0]) > EPSILON && ((two.Position[0] + WIDTH_UNIT) - one.Position[0]) > EPSILON;
-		collisionY = ((one.Position[1] + HEIGHT_UNIT - HEIGHT_UNIT) - two.Position[1]) > EPSILON && ((two.Position[1] + HEIGHT_UNIT) - (one.Position[1] - HEIGHT_UNIT)) > EPSILON;
+		collisionX = ((one.position[0] + Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - one.position[0]) > EPSILON;
+		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT - Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - (one.position[1] - Constants::HEIGHT_UNIT)) > EPSILON;
 		break;
 	}
 	return collisionX && collisionY;
@@ -291,34 +284,34 @@ bool Game::checkWallCollision(GameObject& one, Direction d)
 	switch (d)
 	{
 	case Direction::RIGHT:
-		collision = !((-1.0f + 0.5f * WIDTH_UNIT) + one.Position[0] + WIDTH_UNIT < 1.0f - 0.5f * WIDTH_UNIT);
+		collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT);
 		break;
 	case Direction::LEFT:
-		collision = !((-1.0f + 0.5f * WIDTH_UNIT) + one.Position[0] - WIDTH_UNIT >= -1.0f + 0.5f * WIDTH_UNIT);
+		collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
 		break;
 	case Direction::UP:
-		collision = !((-1.0f + 0.5f * HEIGHT_UNIT) + one.Position[1] + HEIGHT_UNIT < 1.0f - 2 * HEIGHT_UNIT - 0.5f * HEIGHT_UNIT);	
+		collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);	
 		break;
 	case Direction::DOWN:
-		collision = !((-1.0f + 0.5f * HEIGHT_UNIT) + one.Position[1] - HEIGHT_UNIT >= -1.0f + 0.5f * HEIGHT_UNIT);
+		collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= -1.0f + 0.5f * Constants::HEIGHT_UNIT);
 		break;
 	}
 	return collision;
 }
 
-int Game::calculateStepRange(GameObject& block, Direction d)
+int Game::calculateStepRange(Block& block, Direction d)
 {
 	int stepWidth = 0;
-	std::array<float, 2> originalPosition = block.Position;
+	std::array<float, 2> originalPosition = block.position;
 
 	while (!checkCollisions(block, d))
 	{
-		block.calculateMovement(d);
-		block.Position = block.newPosition;
+		block.setPositionToMoveTo(d);
+		block.position = block.positionToMoveTo;
 		stepWidth++;
 	}
 
-	block.Position = originalPosition;
+	block.position = originalPosition;
 	return stepWidth;
 
 }

@@ -3,7 +3,7 @@
 #include "Observer.h"
 #include "GameObject.h"
 
-class Animator
+class Animator: public Observer<GameObject>
 {
 public:
 	float currentAnimationDuration = 0.0f;

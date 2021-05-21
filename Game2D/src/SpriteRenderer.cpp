@@ -31,20 +31,32 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, std::array<float, 2> positio
     glBindVertexArray(0);
 }
 
+void SpriteRenderer::DrawLevel(GameLevel& gameLevel)
+{
+    for (GameObject& wall : gameLevel.Walls)
+        this->DrawObject(wall);
+
+    for (Block& tile : gameLevel.Bricks)
+        if (tile.state != BlockState::BROKEN)
+            this->DrawObject(tile);
+
+    this->DrawObject(gameLevel.Pengo);
+}
+
 void SpriteRenderer::initRenderData()
 {
     // configure VAO/VBO
     unsigned int VBO;
     float vertices[] = {
-        // pos                                                                                      // tex
-        //x                                      //y
-        -1.0f + 0.5f * WIDTH_UNIT,              -1.0f + 0.5f * HEIGHT_UNIT,                         0.0f, 0.0f, //bottom-left
-        -1.0f + 0.5f * WIDTH_UNIT,              -1.0f + 0.5f * HEIGHT_UNIT + HEIGHT_UNIT,           0.0f, 1.0f, //top-left
-        -1.0f + 0.5f * WIDTH_UNIT + WIDTH_UNIT, -1.0f + 0.5f * HEIGHT_UNIT,                         1.0f, 0.0f, //bottom-right
+        // pos                                                                                                                            // tex
+        //x                                                             //y
+        -1.0f + 0.5f * Constants::WIDTH_UNIT,                           -1.0f + 0.5f * Constants::HEIGHT_UNIT,                            0.0f, 0.0f, //bottom-left
+        -1.0f + 0.5f * Constants::WIDTH_UNIT,                           -1.0f + 0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT,   0.0f, 1.0f, //top-left
+        -1.0f + 0.5f * Constants::WIDTH_UNIT + Constants::WIDTH_UNIT,   -1.0f + 0.5f * Constants::HEIGHT_UNIT,                            1.0f, 0.0f, //bottom-right
 
-        -1.0f + 0.5f * WIDTH_UNIT,              -1.0f + 0.5f * HEIGHT_UNIT + HEIGHT_UNIT,           0.0f, 1.0f, //top-left
-        -1.0f + 0.5f * WIDTH_UNIT + WIDTH_UNIT, -1.0f + 0.5f * HEIGHT_UNIT + HEIGHT_UNIT,           1.0f, 1.0f, //top-right
-        -1.0f + 0.5f * WIDTH_UNIT + WIDTH_UNIT, -1.0f + 0.5f * HEIGHT_UNIT,                         1.0f, 0.0f, //bottom-right
+        -1.0f + 0.5f * Constants::WIDTH_UNIT,                           -1.0f + 0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT,   0.0f, 1.0f, //top-left
+        -1.0f + 0.5f * Constants::WIDTH_UNIT + Constants::WIDTH_UNIT,   -1.0f + 0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT,   1.0f, 1.0f, //top-right
+        -1.0f + 0.5f * Constants::WIDTH_UNIT + Constants::WIDTH_UNIT,   -1.0f + 0.5f * Constants::HEIGHT_UNIT,                            1.0f, 0.0f, //bottom-right
     };
 
     glGenVertexArrays(1, &this->quadVAO);
@@ -57,4 +69,9 @@ void SpriteRenderer::initRenderData()
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void SpriteRenderer::DrawObject(GameObject& gameObject)
+{
+    this->DrawSprite(gameObject.sprite, gameObject.position, gameObject.size);
 }

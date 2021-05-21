@@ -2,21 +2,17 @@
 #include "ResourceManager.h"
 #include "Animator.h"
 
-Player::Player()
-{
-}
+Player::Player() {}
 
-Player::Player(std::array<float, 2> pos, std::array<float, 4> size, Texture2D sprite)
-    :GameObject{ pos, size, sprite }, ready{ true }, newPosition{ pos[0], pos[1] }
-{
-}
+Player::Player(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity)
+    :GameObject{ pos, sprite }, velocity{ velocity }, positionToMoveTo{ pos }, ready{ true }, toggleSprite{ true } {}
 
 void Player::setDirection(Direction direction)
 {
     if (this->direction != direction)
     {
         this->direction = direction;
-        notify();
+        this->notifyObservers();
     }
 }
 
@@ -25,58 +21,58 @@ void Player::setState(PengoState state)
     if (this->state != state)
     {
         this->state = state;
-        notify();
+        this->notifyObservers();
     }
 }
 
-void Player::move(std::array<float, 2> velocity)
+void Player::move(float deltaTime)
 {
-	if (this->Position[0] < this->newPosition[0])
+	if (this->position[0] < this->positionToMoveTo[0])
         {
-            if (this->newPosition[0] - this->Position[0] <= velocity[0]) 
+            if (this->positionToMoveTo[0] - this->position[0] <= (this->velocity[0] * deltaTime)) 
             {
-                this->Position[0] = this->newPosition[0];
+                this->position[0] = this->positionToMoveTo[0];
                 setState(PengoState::STAND);
                 this->ready = true;
             }
             else
-                this->Position[0] += velocity[0];
+                this->position[0] += this->velocity[0] * deltaTime;
         }
         //Movement to the left
-        if (this->Position[0] > this->newPosition[0])
+        if (this->position[0] > this->positionToMoveTo[0])
         {
-            if (this->newPosition[0] - this->Position[0] >= -velocity[0]) 
+            if (this->positionToMoveTo[0] - this->position[0] >= -(this->velocity[0] * deltaTime))
             {
-                this->Position[0] = this->newPosition[0];
+                this->position[0] = this->positionToMoveTo[0];
                 setState(PengoState::STAND);
                 this->ready = true;
             }
             else
-                this->Position[0] -= velocity[0];
+                this->position[0] -= this->velocity[0] * deltaTime;
         }
         //Movement up
-        if (this->Position[1] < this->newPosition[1])
+        if (this->position[1] < this->positionToMoveTo[1])
         {
-            if (this->newPosition[1] - this->Position[1] <= velocity[1])
+            if (this->positionToMoveTo[1] - this->position[1] <= (this->velocity[1] * deltaTime))
             {
-                this->Position[1] = this->newPosition[1];
+                this->position[1] = this->positionToMoveTo[1];
                 setState(PengoState::STAND);
                 this->ready = true;
             }
             else
-                this->Position[1] += velocity[1];
+                this->position[1] += this->velocity[1] * deltaTime;
         }
         //Movement down
-        if (this->Position[1] > this->newPosition[1])
+        if (this->position[1] > this->positionToMoveTo[1])
         {
-            if (this->newPosition[1] - this->Position[1] >= -velocity[1])
+            if (this->positionToMoveTo[1] - this->position[1] >= -(this->velocity[1] * deltaTime))
             {
-                this->Position[1] = this->newPosition[1];
+                this->position[1] = this->positionToMoveTo[1];
                 setState(PengoState::STAND);
                 this->ready = true;
             }
             else
-                this->Position[1] -= velocity[1];
+                this->position[1] -= this->velocity[1] * deltaTime;
         }
 }
 
@@ -85,33 +81,33 @@ void Player::swapSprite()
     if (toggleSprite)
     {
         toggleSprite = false;
-        this->Sprite = ResourceManager::GetTexture("pengo" + stringDirection(this->direction));
+        this->sprite = ResourceManager::GetTexture("pengo" + stringDirection(this->direction));
     }
     else
     {
         toggleSprite = true;
-        this->Sprite = ResourceManager::GetTexture("pengoMove" + stringDirection(this->direction));
+        this->sprite = ResourceManager::GetTexture("pengoMove" + stringDirection(this->direction));
     }
 }
 
-void Player::calculateMovement()
+void Player::setPositionToMoveTo()
 {
     switch (this->direction)
     {
     case Direction::RIGHT:
-        this->newPosition[0] = this->Position[0] + WIDTH_UNIT;
+        this->positionToMoveTo[0] = this->position[0] + Constants::WIDTH_UNIT;
         this->ready = false;
         break;
     case Direction::LEFT:
-        this->newPosition[0] = this->Position[0] - WIDTH_UNIT;
+        this->positionToMoveTo[0] = this->position[0] - Constants::WIDTH_UNIT;
         this->ready = false;
         break;
     case Direction::UP:
-        this->newPosition[1] = this->Position[1] + HEIGHT_UNIT;
+        this->positionToMoveTo[1] = this->position[1] + Constants::HEIGHT_UNIT;
         this->ready = false;
         break;
     case Direction::DOWN:
-        this->newPosition[1] = this->Position[1] - HEIGHT_UNIT;
+        this->positionToMoveTo[1] = this->position[1] - Constants::HEIGHT_UNIT;
         this->ready = false;
         break;
     default:
@@ -119,23 +115,23 @@ void Player::calculateMovement()
     }
 }
 
-void Player::addObserver(const std::shared_ptr<Observer<Player*>>& observer)
-{
-    observers.push_back(observer);
-}
-
-void Player::removeObserver(const std::shared_ptr<Observer<Player*>>& observer)
-{
-    observers.erase(std::remove_if(observers.begin(), observers.end(),
-        [&](const std::shared_ptr<Observer<Player*>>& vergleich) {
-            return vergleich == observer;
-        }));
-}
-
-void Player::notify()
-{
-    for (auto& observer : observers)
-    {
-        observer->update(this);
-    }
-}
+//void Player::registerObserver(const std::shared_ptr<Observer<Player*>>& observer)
+//{
+//    observers.push_back(observer);
+//}
+//
+//void Player::removeObserver(const std::shared_ptr<Observer<Player*>>& observer)
+//{
+//    observers.erase(std::remove_if(observers.begin(), observers.end(),
+//        [&](const std::shared_ptr<Observer<Player*>>& vergleich) {
+//            return vergleich == observer;
+//        }));
+//}
+//
+//void Player::notifyObservers()
+//{
+//    for (auto& observer : observers)
+//    {
+//        observer->update(this);
+//    }
+//}
