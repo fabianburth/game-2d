@@ -19,6 +19,19 @@ void WallAnimator::update(Wall* s)
 	{
 		this->wall = s;
 		currentAnimation = &WallAnimator::wobble;
+
+		if (wall->side == WallSide::TOP || wall->side == WallSide::BOTTOM)
+		{
+			sprite = ResourceManager::GetTexture("wallBT");
+			wobblySprite0 = ResourceManager::GetTexture("wallBT_00");
+			wobblySprite1 = ResourceManager::GetTexture("wallBT_01");
+		}
+		else if (wall->side == WallSide::LEFT || wall->side == WallSide::RIGHT)
+		{
+			sprite = ResourceManager::GetTexture("wallLR");
+			wobblySprite0 = ResourceManager::GetTexture("wallLR_00");
+			wobblySprite1 = ResourceManager::GetTexture("wallLR_01");
+		}
 	}
 }
 
@@ -33,22 +46,6 @@ void WallAnimator::animate(float dt)
 
 void WallAnimator::wobble()
 {
-	Texture2D wobblySprite0;
-	Texture2D wobblySprite1;
-	Texture2D sprite;
-	if (wall->side == WallSide::TOP || wall->side == WallSide::BOTTOM)
-	{
-		sprite = ResourceManager::GetTexture("wallBT");
-		wobblySprite0 = ResourceManager::GetTexture("wallBT_00");
-		wobblySprite1 = ResourceManager::GetTexture("wallBT_01");
-	}
-	else if (wall->side == WallSide::LEFT || wall->side == WallSide::RIGHT)
-	{
-		sprite = ResourceManager::GetTexture("wallLR");
-		wobblySprite0 = ResourceManager::GetTexture("wallLR_00");
-		wobblySprite1 = ResourceManager::GetTexture("wallLR_01");
-	}
-
 	if (currentAnimationDuration == 0)
 	{
 		wall->setSprite(wobblySprite0);
