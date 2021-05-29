@@ -13,7 +13,7 @@ public:
 	const float BREAKING_DURATION = 0.0f;
 	void (BlockAnimator::* currentAnimation)() = nullptr;
 
-	BlockAnimator(float breakingDuration, std::vector<Block>* bricks);
+	BlockAnimator(float breakingDuration, Block* block);
 	~BlockAnimator();
 	void update(GameObject* s);
 	void animate(float dt);

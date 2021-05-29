@@ -6,6 +6,8 @@
 #include "Constants.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <algorithm>
+#include <cstdlib>
 #include "PengoAnimator.h"
 #include "BlockAnimator.h"
 #include "WallAnimator.h"
@@ -13,6 +15,7 @@
 #include "Player.h"
 #include "SpriteRenderer.h"
 #include "Wall.h"
+#include "EnemyAnimator.h"
 
 // Represents the current state of the game
 enum class GameState 
@@ -38,6 +41,8 @@ public:
     PengoAnimator* pengoAnimator;
     BlockAnimator* blockAnimator;
     WallAnimator* wallAnimator;
+    std::vector<BlockAnimator*> blockAnimators;
+    std::vector<EnemyAnimator*> enemyAnimators;
     bool         Keys[1024];
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;
@@ -59,7 +64,7 @@ private:
     // @return true, if there is a collision, false otherwise
     bool checkCollisions(GameObject& gameObject, Direction d);
 
-    // Checks whether the given gameObject is colliding with another brick or a wall when moving one unit to the given direction AND
+    // Checks whether the given gameObject is colliding with another brick or a wall when moving one unit to the given direction AND 
     // initiates a corresponding action 
     // @param gameObject: The GameObject to check the collision for
     // @param direction: The Direction in which collision has to be checked
@@ -89,6 +94,13 @@ private:
     // @param one: The GameObject to be moved
     // @param d: The Direction to which it would be moved
     bool checkWallCollision(GameObject& one, Direction d);
+
+    bool checkCollisionPrecise(GameObject& one, GameObject& two);
+
+    std::vector<int> getPropabilityArray(Enemy& enemy, std::vector<Direction> directions);
+    std::vector<Direction> getInitialDirections(Enemy& enemy);
+    int getDirectionIndex(std::vector<int> chances);
+    bool isMovementPossible(Enemy& enemy, Direction d);
 };
 
 #endif

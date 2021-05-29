@@ -145,6 +145,8 @@
   <ItemGroup>
     <ClCompile Include="src\Block.cpp" />
     <ClCompile Include="src\BlockAnimator.cpp" />
+    <ClCompile Include="src\Enemy.cpp" />
+    <ClCompile Include="src\EnemyAnimator.cpp" />
     <ClCompile Include="src\PengoAnimator.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -163,6 +165,8 @@
     <ClInclude Include="src\Block.h" />
     <ClInclude Include="src\BlockAnimator.h" />
     <ClInclude Include="src\Constants.h" />
+    <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\EnemyAnimator.h" />
     <ClInclude Include="src\PengoAnimator.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameLevel.h" />

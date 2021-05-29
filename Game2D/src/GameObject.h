@@ -47,6 +47,28 @@ static std::string stringDirection(Direction direction)
 	}
 }
 
+static Direction oppositeDirection(Direction direction)
+{
+	switch (direction)
+	{
+	case Direction::RIGHT:
+		return Direction::LEFT;
+		break;
+	case Direction::LEFT:
+		return Direction::RIGHT;
+		break;
+	case Direction::UP:
+		return Direction::DOWN;
+		break;
+	case Direction::DOWN:
+		return Direction::UP;
+		break;
+	case Direction::NONE:
+		return Direction::NONE;
+		break;
+	}
+}
+
 // TODO
 // Make a subclass "Bricks" of GameObject and implement replace [bool Destroyed] with a enum class to clean up the observer pattern
 // Add the observer upon creation of the objects instead of in the Game class

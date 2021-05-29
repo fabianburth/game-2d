@@ -26,6 +26,12 @@ Texture2D ResourceManager::LoadTexture(const char* ImageFile, std::string name)
     return Textures[name];
 }
 
+Texture2D ResourceManager::LoadCompressedTexture(const char* file, std::string name)
+{
+    Textures[name] = loadTextureFromCompressedFile(file);
+    return Textures[name];
+}
+
 Texture2D ResourceManager::GetTexture(std::string name)
 {
     return Textures[name];
@@ -126,6 +132,51 @@ Texture2D ResourceManager::loadTextureFromFile(const char* ImageFile)
     fclose(file);
     //and so can the image data
     delete(data);
+
+    return texture;
+}
+
+Texture2D ResourceManager::loadTextureFromCompressedFile(const char* file)
+{
+    Texture2D texture;
+
+    unsigned char header[124];
+
+    FILE* fp;
+
+    /* try to open the file */
+    fp = fopen(file, "rb");
+    if (fp == NULL)
+        std::cout << "Image could not be opened" << std::endl;
+
+    /* verify the type of file */
+    char filecode[4];
+    fread(filecode, 1, 4, fp);
+    if (strncmp(filecode, "DDS ", 4) != 0) {
+        fclose(fp);
+        std::cout << "Not a correct BMP file" << std::endl;
+    }
+
+    /* get the surface desc */
+    fread(&header, 124, 1, fp);
+
+    unsigned int height = *(unsigned int*)&(header[8]);
+    unsigned int width = *(unsigned int*)&(header[12]);
+    unsigned int linearSize = *(unsigned int*)&(header[16]);
+    unsigned int mipMapCount = *(unsigned int*)&(header[24]);
+    unsigned int fourCC = *(unsigned int*)&(header[80]);
+
+    unsigned char* buffer;
+    unsigned int bufsize;
+    /* how big is it going to be including all mipmaps? */
+    bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
+    buffer = (unsigned char*)malloc(bufsize * sizeof(unsigned char));
+    fread(buffer, 1, bufsize, fp);
+
+    texture.GenerateFromCompressed(fourCC, height, width, linearSize, mipMapCount, buffer);
+    /* close the file pointer */
+    fclose(fp);
+    delete(buffer);
 
     return texture;
 }

@@ -44,6 +44,7 @@ void Game::Init()
 	ResourceManager::LoadTexture("res/sprites/Wall_BT_00.bmp", "wallBT_00");
 	ResourceManager::LoadTexture("res/sprites/Wall_BT_01.bmp", "wallBT_01");
 
+
 	// Load all Pengo Textures
 	ResourceManager::LoadTexture("res/sprites/PengoRight.bmp", "pengoRight");
 	ResourceManager::LoadTexture("res/sprites/PengoLeft.bmp", "pengoLeft");
@@ -62,6 +63,27 @@ void Game::Init()
 	ResourceManager::LoadTexture("res/sprites/PengoPostPushLeft.bmp", "pengoPostPushLeft");
 	ResourceManager::LoadTexture("res/sprites/PengoPostPushRight.bmp", "pengoPostPushRight");
 
+	// Load all Wandering Enemy Textures
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveRight00.bmp", "enemyMoveRight00");
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveLeft00.bmp", "enemyMoveLeft00");
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveDown00.bmp", "enemyMoveDown00");
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveUp00.bmp", "enemyMoveUp00");
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveRight01.bmp", "enemyMoveRight01");
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveLeft01.bmp", "enemyMoveLeft01");
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveDown01.bmp", "enemyMoveDown01");
+	ResourceManager::LoadTexture("res/sprites/EnemyMoveUp01.bmp", "enemyMoveUp01");
+	// Load all Boxing Enemy Textures
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerRight00.bmp", "enemyBoxerRight00");
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerLeft00.bmp", "enemyBoxerLeft00");
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerDown00.bmp", "enemyBoxerDown00");
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerUp00.bmp", "enemyBoxerUp00");
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerRight01.bmp", "enemyBoxerRight01");
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerLeft01.bmp", "enemyBoxerLeft01");
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerDown01.bmp", "enemyBoxerDown01");
+	ResourceManager::LoadTexture("res/sprites/EnemyBoxerUp01.bmp", "enemyBoxerUp01");
+
+
+
 	GameLevel one;
 	one.Load("res/levels/level0.lvl", 448, 576);
 	//this->Pengo = one.Pengo;
@@ -70,8 +92,15 @@ void Game::Init()
 	this->Pengo = &this->Levels[this->Level].Pengo;
 
 	this->pengoAnimator = new PengoAnimator(&this->Levels[this->Level].Pengo, 0.5f, 0.25f);
-	this->blockAnimator = new BlockAnimator(0.5f, &this->Levels[this->Level].Bricks);
+	for (Block& b : this->Levels[this->Level].Bricks)
+		blockAnimators.push_back(new BlockAnimator(0.5f, &b));
+	//this->blockAnimator = new BlockAnimator(0.5f, &this->Levels[this->Level].Bricks);
 	this->wallAnimator = new WallAnimator(&this->Levels[this->Level].BottomWall, &this->Levels[this->Level].TopWall, &this->Levels[this->Level].LeftWall, &this->Levels[this->Level].RightWall, 0.5f);
+	for (Enemy* e : this->Levels[this->Level].Enemies)
+	{
+		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f));
+	}
+
 	//this->Pengo->registerObserver(pengoAnimator);
 
 	//for (Block& tile : this->Levels[this->Level].Bricks)
@@ -80,16 +109,98 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-	// Update Players actual position
-	for (Block& block : this->Levels[this->Level].Bricks)
+	if (this->PengoState == GameState::GAME_ACTIVE)
 	{
-		if (block.position != block.positionToMoveTo)
-			block.move(dt);
+		// bots do stuff
+		for (Enemy* enemy : this->Levels[this->Level].Enemies)
+		{
+			if (enemy->ready == true)
+			{
+				std::vector<Direction> directions = getInitialDirections(*enemy);
+
+				// Determine a direction with certain propabilities
+				//bool movementImpossible = true;
+				//while (movementImpossible)
+				//{
+				std::vector<int> chances = getPropabilityArray(*enemy, directions);
+				int index = getDirectionIndex(chances);
+				Direction direction = directions.at(index);
+
+				//if (!checkCollisions(enemy, direction))
+				//	movementImpossible = false;
+				//else
+				//	directions.erase(directions.begin() + index);
+			//}
+				enemy->setDirection(direction);
+				if (enemy->state == EnemyState::CHASING)
+				{
+					Block* block = getCollisionBlock(*enemy, direction);
+					if (block != nullptr)
+					{
+						block->setState(BlockState::BREAKING);
+						enemy->setState(EnemyState::BREAKING);
+					}
+					else
+					{
+						enemy->setPositionToMoveTo();
+					}
+				}
+				else
+				{
+					enemy->setPositionToMoveTo();
+				}
+			}
+			if (checkCollisionPrecise(*enemy, *Pengo))
+			{
+				enemy->setState(EnemyState::BREAKING);
+				std::cout << "GAME OVER" << std::endl;
+				PengoState = GameState::GAME_MENU;
+			}
+
+			enemy->move(dt);
+
+
+			//switch (enemy.state)
+			//{
+			//case EnemyState::WANDERING:
+			//	break;
+			//case EnemyState::CHASING:
+			//	break;
+			//default:
+			//	break;
+			//}
+		}
+
+		// Update Players actual position
+		for (Block& block : this->Levels[this->Level].Bricks)
+		{
+			if (block.position != block.positionToMoveTo)
+			{
+				for (Enemy* e : this->Levels[this->Level].Enemies)
+				{
+					if (checkCollisionPrecise(*e, block))
+					{
+						this->enemyAnimators.erase(std::remove_if(enemyAnimators.begin(), enemyAnimators.end(),
+							[&](EnemyAnimator* ea) {
+								return ea->enemy == e;
+							}));
+						this->Levels[this->Level].Enemies.erase(std::remove_if(this->Levels[this->Level].Enemies.begin(), this->Levels[this->Level].Enemies.end(),
+							[&](Enemy* comparison) {
+								return comparison == e;
+							}));
+					}
+				}
+				block.move(dt);
+			}
+		}
+		this->Pengo->move(dt);
+		pengoAnimator->animate(dt);
+		wallAnimator->animate(dt);
+		for (BlockAnimator* ba : blockAnimators)
+			ba->animate(dt);
+		for (EnemyAnimator* ea : this->enemyAnimators)
+			ea->animate(dt);
 	}
-	this->Pengo->move(dt);
-	pengoAnimator->animate(dt);
-	blockAnimator->animate(dt);
-	wallAnimator->animate(dt);
 }
 
 void Game::ProcessInput(float dt)
@@ -196,12 +307,12 @@ void Game::ProcessInput(float dt)
 
 void Game::Render()
 {
-	if (this->PengoState == GameState::GAME_ACTIVE)
-	{
+	//if (this->PengoState == GameState::GAME_ACTIVE)
+	//{
 		// draw level
 		//this->Levels[this->Level].Draw(*Renderer);
 		this->Renderer->DrawLevel(this->Levels[this->Level]);
-	}
+	//}
 
 	// Texture2D texture = ResourceManager::GetTexture("pengo");
 	// Renderer->DrawSprite(texture, { 6.0f * Constants::WIDTH_UNIT, 8.0f * Constants::HEIGHT_UNIT });
@@ -313,6 +424,201 @@ bool Game::checkWallCollision(GameObject& one, Direction d)
 		break;
 	}
 	return collision;
+}
+
+bool Game::checkCollisionPrecise(GameObject& one, GameObject& two)
+{
+	bool collisionX = one.position[0] + Constants::WIDTH_UNIT - two.position[0] > EPSILON && two.position[0] + Constants::WIDTH_UNIT >= one.position[0] > EPSILON;
+	bool collisionY = one.position[1] + Constants::HEIGHT_UNIT - two.position[1] > EPSILON && two.position[1] + Constants::HEIGHT_UNIT - one.position[1] > EPSILON;
+	return collisionX && collisionY;
+}
+
+std::vector<int> Game::getPropabilityArray(Enemy& enemy, std::vector<Direction> directions)
+{
+	std::vector<int> propabilities;
+	bool currentDirectionPossible;
+	bool oppositeDirectionPossible;
+	switch (directions.size())
+	{
+	case 4:
+		propabilities.push_back(80);
+		propabilities.push_back(87);
+		propabilities.push_back(94);
+		propabilities.push_back(100);
+		break;
+	case 3:
+		currentDirectionPossible = std::find(directions.begin(), directions.end(), enemy.direction) != directions.end();
+		oppositeDirectionPossible = std::find(directions.begin(), directions.end(), oppositeDirection(enemy.direction)) != directions.end();
+		if (currentDirectionPossible && oppositeDirectionPossible)
+		{
+			propabilities.push_back(80);
+			propabilities.push_back(95);
+			propabilities.push_back(100);
+		}
+		else if (currentDirectionPossible && !oppositeDirectionPossible)
+		{
+			propabilities.push_back(80);
+			propabilities.push_back(90);
+			propabilities.push_back(100);
+		}
+		else if (!currentDirectionPossible && oppositeDirectionPossible)
+		{
+			propabilities.push_back(50);
+			propabilities.push_back(95);
+			propabilities.push_back(100);
+		}
+		break;
+	case 2:
+		currentDirectionPossible = std::find(directions.begin(), directions.end(), enemy.direction) != directions.end();
+		oppositeDirectionPossible = std::find(directions.begin(), directions.end(), oppositeDirection(enemy.direction)) != directions.end();
+		if (currentDirectionPossible && oppositeDirectionPossible)
+		{
+			propabilities.push_back(95);
+			propabilities.push_back(100);
+		}
+		else if (currentDirectionPossible && !oppositeDirectionPossible)
+		{
+			propabilities.push_back(80);
+			propabilities.push_back(100);
+		}
+		else if (!currentDirectionPossible && oppositeDirectionPossible)
+		{
+			propabilities.push_back(95);
+			propabilities.push_back(100);
+		}
+		break;
+	case 1:
+		propabilities.push_back(100);
+		break;
+	default:
+		propabilities.push_back(100);
+		break;
+	}
+
+	return propabilities;
+}
+
+std::vector<Direction> Game::getInitialDirections(Enemy& enemy)
+{
+	// Build array for determining a direction with certain propabilities
+	std::vector<Direction> allDirections{ Direction::RIGHT, Direction::LEFT, Direction::UP, Direction::DOWN };
+	std::vector<Direction> orderedDirections;
+	std::vector<Direction> directions;
+
+	float xDistance = std::abs(enemy.position[0] - Pengo->position[0]) * (2.0f / 448.0f);
+	float yDistance = std::abs(enemy.position[1] - Pengo->position[1]) * (2.0f / 576.0f);
+
+	switch (enemy.state)
+	{
+	case EnemyState::WANDERING:
+		orderedDirections.push_back(enemy.direction);
+		for (Direction d : allDirections)
+		{
+			if (d != enemy.direction && d != oppositeDirection(enemy.direction))
+			{
+				orderedDirections.push_back(d);
+			}
+		}
+		orderedDirections.push_back(oppositeDirection(enemy.direction));
+
+		for (int i = 0; i < orderedDirections.size(); ++i)
+		{
+			if (!checkCollisions(enemy, orderedDirections.at(i)))
+			{
+				directions.push_back(orderedDirections.at(i));
+			}
+		}
+		break;
+	case EnemyState::CHASING:
+
+		if (xDistance >= yDistance)
+		{
+			//Move horizontally (x-direction)
+			if (enemy.position[0] > Pengo->position[0])
+			{
+				//Pengo is left, so move left
+				orderedDirections.push_back(Direction::LEFT);
+			}
+			else
+			{
+				orderedDirections.push_back(Direction::RIGHT);
+			}
+
+			if (enemy.position[1] > Pengo->position[1])
+			{
+				//Pengo is left, so move left
+				orderedDirections.push_back(Direction::DOWN);
+			}
+			else
+			{
+				orderedDirections.push_back(Direction::UP);
+			}
+		}
+		else if (xDistance < yDistance)
+		{
+			//Move vertically (y-direction)
+			if (enemy.position[1] > Pengo->position[1])
+			{
+				//Pengo is left, so move left
+				orderedDirections.push_back(Direction::DOWN);
+			}
+			else
+			{
+				orderedDirections.push_back(Direction::UP);
+			}
+
+			if (enemy.position[0] > Pengo->position[0])
+			{
+				//Pengo is left, so move left
+				orderedDirections.push_back(Direction::LEFT);
+			}
+			else
+			{
+				orderedDirections.push_back(Direction::RIGHT);
+			}
+		}
+
+		for (Direction d : allDirections)
+		{
+			if (std::find(orderedDirections.begin(), orderedDirections.end(), d) == orderedDirections.end())
+			{
+				orderedDirections.push_back(d);
+			}
+		}
+
+		for (int i = 0; i < orderedDirections.size(); ++i)
+		{
+			if (!checkWallCollision(enemy, orderedDirections.at(i)))
+			{
+				Block* block = getCollisionBlock(enemy, orderedDirections.at(i));
+				if (block == nullptr || !block->isUnbreakable)
+				{
+					directions.push_back(orderedDirections.at(i));
+				}
+			}
+		}
+		break;
+	}
+
+	return directions;
+}
+
+int Game::getDirectionIndex(std::vector<int> chances)
+{
+	int index = 0;
+	int randomNumber = std::rand() % 100;
+	for (int i = 0; i < chances.size(); i++)
+	{
+		if (randomNumber > chances.at(i))
+			index++;
+	}
+	return index;
+}
+
+bool Game::isMovementPossible(Enemy& enemy, Direction d)
+{
+
+	return false;
 }
 
 int Game::calculateStepRange(Block& block, Direction d)

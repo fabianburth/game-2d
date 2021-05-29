@@ -3,7 +3,7 @@
 Block::Block() {}
 
 Block::Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable)
-    :GameObject{ pos, sprite }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable } {}
+    :GameObject{ pos, sprite }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable }, direction{ Direction::NONE} {}
 
 //void Block::registerObserver(const std::shared_ptr<Observer<Block*>>& observer)
 //{
@@ -58,6 +58,7 @@ void Block::setPositionToMoveTo(Direction d)
 
 void Block::push(Direction d, int stepRange)
 {
+    this->direction = d;
     switch (d)
     {
     case Direction::RIGHT:
@@ -85,6 +86,7 @@ void Block::move(float deltaTime)
         if (this->positionToMoveTo[0] - this->position[0] <= (Block::VELOCITY[0] * deltaTime))
         {
             this->position[0] = this->positionToMoveTo[0];
+            this->direction = Direction::NONE;
             //return true;
         }
         else
@@ -99,6 +101,7 @@ void Block::move(float deltaTime)
         if (this->positionToMoveTo[0] - this->position[0] >= -(Block::VELOCITY[0] * deltaTime))
         {
             this->position[0] = this->positionToMoveTo[0];
+            this->direction = Direction::NONE;
             //return true;
         }
         else
@@ -113,6 +116,7 @@ void Block::move(float deltaTime)
         if (this->positionToMoveTo[1] - this->position[1] <= (Block::VELOCITY[1] * deltaTime))
         {
             this->position[1] = this->positionToMoveTo[1];
+            this->direction = Direction::NONE;
             //return true;
         }
         else
@@ -127,6 +131,7 @@ void Block::move(float deltaTime)
         if (this->positionToMoveTo[1] - this->position[1] >= -(Block::VELOCITY[1] * deltaTime))
         {
             this->position[1] = this->positionToMoveTo[1];
+            this->direction = Direction::NONE;
             //return true;
         }
         else

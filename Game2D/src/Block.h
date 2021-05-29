@@ -20,6 +20,7 @@ public:
     BlockState state = BlockState::SOLID;
     std::array<float, 2> positionToMoveTo;
     bool isUnbreakable;
+    Direction direction;
 
     Block();
     Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable);

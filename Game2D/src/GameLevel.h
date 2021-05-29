@@ -12,6 +12,7 @@
 #include "Block.h"
 #include "resourcemanager.h"
 #include "Wall.h"
+#include "Enemy.h"
 
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
@@ -28,6 +29,7 @@ class GameLevel
 public:
     // level state
     Player Pengo;
+    std::vector<Enemy*> Enemies;
     std::vector<GameObject> Walls;
     Wall LeftWall;
     Wall RightWall;

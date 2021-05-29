@@ -5,6 +5,10 @@
 
 #include <GL/glew.h>
 
+#define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII
+#define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
+#define FOURCC_DXT5 0x35545844 // Equivalent to "DXT5" in ASCII
+
 // Texture2D is able to store and configure a texture in OpenGL.
 // It also hosts utility functions for easy management.
 class Texture2D
@@ -26,6 +30,7 @@ public:
     Texture2D();
     // generates texture from image data
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
+    void GenerateFromCompressed(unsigned int fourCC, unsigned int height, unsigned int width, unsigned int linearSize, unsigned int mipMapCount, unsigned char* data);
     // binds the texture as the current active GL_TEXTURE_2D texture object
     void Bind() const;
 };

@@ -49,6 +49,9 @@ void SpriteRenderer::DrawLevel(GameLevel& gameLevel)
         if (tile.state != BlockState::BROKEN)
             this->DrawObject(tile);
 
+    for (Enemy* enemy : gameLevel.Enemies)
+        this->DrawObject(*enemy);
+
     this->DrawObject(gameLevel.Pengo);
 }
 

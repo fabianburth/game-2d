@@ -1,12 +1,10 @@
 #include "BlockAnimator.h"
 
-BlockAnimator::BlockAnimator(float breakingDuration, std::vector<Block>* bricks)
+BlockAnimator::BlockAnimator(float breakingDuration, Block* block)
 	:BREAKING_DURATION(breakingDuration) 
 {
-	for (Block& b : *bricks)
-	{
-		b.registerObserver(this);
-	}
+	this->brick = block;
+	this->brick->registerObserver(this);
 }
 
 BlockAnimator::~BlockAnimator()
@@ -15,10 +13,10 @@ BlockAnimator::~BlockAnimator()
 
 void BlockAnimator::update(GameObject* s)
 {
-	Block* block = dynamic_cast<Block*>(s);
-	if (block->state != BlockState::BROKEN)
+	//Block* block = dynamic_cast<Block*>(s);
+	if (brick->state != BlockState::BROKEN)
 	{
-		this->brick = block;
+		//this->brick = block;
 		currentAnimation = &BlockAnimator::destroyIceblock;
 	}
 }

@@ -10,7 +10,6 @@
 #include "texture.h"
 #include "shader.h"
 
-
 // A static singleton ResourceManager class that hosts several
 // functions to load Textures and Shaders. Each loaded texture
 // and/or shader is also stored for future reference by string
@@ -28,6 +27,7 @@ public:
     static Shader    GetShader(std::string name);
     // loads (and generates) a texture from file
     static Texture2D LoadTexture(const char* file, std::string name);
+    static Texture2D LoadCompressedTexture(const char* file, std::string name);
     // retrieves a stored texture
     static Texture2D GetTexture(std::string name);
     // properly de-allocates all loaded resources
@@ -39,6 +39,8 @@ private:
     static Shader    loadShaderFromFile(const char* vShaderFile, const char* fShaderFile);
     // loads a single texture from file
     static Texture2D loadTextureFromFile(const char* file);
+    
+    static Texture2D loadTextureFromCompressedFile(const char* file);
 };
 
 #endif
