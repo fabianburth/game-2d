@@ -44,7 +44,6 @@ void Game::Init()
 	ResourceManager::LoadTexture("res/sprites/Wall_BT_00.bmp", "wallBT_00");
 	ResourceManager::LoadTexture("res/sprites/Wall_BT_01.bmp", "wallBT_01");
 
-
 	// Load all Pengo Textures
 	ResourceManager::LoadTexture("res/sprites/PengoRight.bmp", "pengoRight");
 	ResourceManager::LoadTexture("res/sprites/PengoLeft.bmp", "pengoLeft");
@@ -81,6 +80,9 @@ void Game::Init()
 	ResourceManager::LoadTexture("res/sprites/EnemyBoxerLeft01.bmp", "enemyBoxerLeft01");
 	ResourceManager::LoadTexture("res/sprites/EnemyBoxerDown01.bmp", "enemyBoxerDown01");
 	ResourceManager::LoadTexture("res/sprites/EnemyBoxerUp01.bmp", "enemyBoxerUp01");
+	// Load Stunned Enemy Texture
+	ResourceManager::LoadTexture("res/sprites/EnemyStunnedRight.bmp", "enemyStunnedRight");
+	ResourceManager::LoadTexture("res/sprites/EnemyStunnedLeft.bmp", "enemyStunnedLeft");
 
 
 
@@ -98,7 +100,7 @@ void Game::Init()
 	this->wallAnimator = new WallAnimator(&this->Levels[this->Level].BottomWall, &this->Levels[this->Level].TopWall, &this->Levels[this->Level].LeftWall, &this->Levels[this->Level].RightWall, 0.5f);
 	for (Enemy* e : this->Levels[this->Level].Enemies)
 	{
-		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f));
+		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f));
 	}
 
 	//this->Pengo->registerObserver(pengoAnimator);
@@ -152,9 +154,23 @@ void Game::Update(float dt)
 			}
 			if (checkCollisionPrecise(*enemy, *Pengo))
 			{
-				enemy->setState(EnemyState::BREAKING);
-				std::cout << "GAME OVER" << std::endl;
-				PengoState = GameState::GAME_MENU;
+				if (enemy->state != EnemyState::STUNNED)
+				{
+					enemy->setState(EnemyState::BREAKING);
+					std::cout << "GAME OVER" << std::endl;
+					PengoState = GameState::GAME_MENU;
+				}
+				else
+				{
+					this->enemyAnimators.erase(std::remove_if(enemyAnimators.begin(), enemyAnimators.end(),
+						[&](EnemyAnimator* ea) {
+							return ea->enemy == enemy;
+						}));
+					this->Levels[this->Level].Enemies.erase(std::remove_if(this->Levels[this->Level].Enemies.begin(), this->Levels[this->Level].Enemies.end(),
+						[&](Enemy* comparison) {
+							return comparison == enemy;
+						}));
+				}
 			}
 
 			enemy->move(dt);
@@ -248,15 +264,50 @@ void Game::ProcessInput(float dt)
 					{
 						Pengo->setState(PengoState::BREAK);
 
-						if(Pengo->direction == Direction::UP)
+						if (Pengo->direction == Direction::UP)
+						{
 							this->Levels[this->Level].BottomWall.setState(WallState::WOBBLY);
-						else if(Pengo->direction == Direction::DOWN)
+							for (Enemy* e : this->Levels[this->Level].Enemies)
+							{
+								if (checkWallCollision(*e, Direction::UP))
+								{
+									e->setState(EnemyState::STUNNED);
+								}
+							}
+						}
+						else if (Pengo->direction == Direction::DOWN)
+						{
 							this->Levels[this->Level].TopWall.setState(WallState::WOBBLY);
-						else if(Pengo->direction == Direction::LEFT)
+							for (Enemy* e : this->Levels[this->Level].Enemies)
+							{
+								if (checkWallCollision(*e, Direction::DOWN))
+								{
+									e->setState(EnemyState::STUNNED);
+								}
+							}
+						}
+						else if (Pengo->direction == Direction::LEFT)
+						{
 							this->Levels[this->Level].LeftWall.setState(WallState::WOBBLY);
-						else if(Pengo->direction == Direction::RIGHT)
+							for (Enemy* e : this->Levels[this->Level].Enemies)
+							{
+								if (checkWallCollision(*e, Direction::LEFT))
+								{
+									e->setState(EnemyState::STUNNED);
+								}
+							}
+						}
+						else if (Pengo->direction == Direction::RIGHT)
+						{
 							this->Levels[this->Level].RightWall.setState(WallState::WOBBLY);
-
+							for (Enemy* e : this->Levels[this->Level].Enemies)
+							{
+								if (checkWallCollision(*e, Direction::RIGHT))
+								{
+									e->setState(EnemyState::STUNNED);
+								}
+							}
+						}
 						return;
 					}
 				}
@@ -441,9 +492,9 @@ std::vector<int> Game::getPropabilityArray(Enemy& enemy, std::vector<Direction> 
 	switch (directions.size())
 	{
 	case 4:
-		propabilities.push_back(80);
-		propabilities.push_back(87);
+		propabilities.push_back(90);
 		propabilities.push_back(94);
+		propabilities.push_back(98);
 		propabilities.push_back(100);
 		break;
 	case 3:
@@ -452,7 +503,7 @@ std::vector<int> Game::getPropabilityArray(Enemy& enemy, std::vector<Direction> 
 		if (currentDirectionPossible && oppositeDirectionPossible)
 		{
 			propabilities.push_back(80);
-			propabilities.push_back(95);
+			propabilities.push_back(98);
 			propabilities.push_back(100);
 		}
 		else if (currentDirectionPossible && !oppositeDirectionPossible)
@@ -463,8 +514,8 @@ std::vector<int> Game::getPropabilityArray(Enemy& enemy, std::vector<Direction> 
 		}
 		else if (!currentDirectionPossible && oppositeDirectionPossible)
 		{
-			propabilities.push_back(50);
-			propabilities.push_back(95);
+			propabilities.push_back(49);
+			propabilities.push_back(98);
 			propabilities.push_back(100);
 		}
 		break;
@@ -473,7 +524,7 @@ std::vector<int> Game::getPropabilityArray(Enemy& enemy, std::vector<Direction> 
 		oppositeDirectionPossible = std::find(directions.begin(), directions.end(), oppositeDirection(enemy.direction)) != directions.end();
 		if (currentDirectionPossible && oppositeDirectionPossible)
 		{
-			propabilities.push_back(95);
+			propabilities.push_back(98);
 			propabilities.push_back(100);
 		}
 		else if (currentDirectionPossible && !oppositeDirectionPossible)
@@ -483,7 +534,7 @@ std::vector<int> Game::getPropabilityArray(Enemy& enemy, std::vector<Direction> 
 		}
 		else if (!currentDirectionPossible && oppositeDirectionPossible)
 		{
-			propabilities.push_back(95);
+			propabilities.push_back(98);
 			propabilities.push_back(100);
 		}
 		break;
