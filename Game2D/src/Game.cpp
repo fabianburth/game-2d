@@ -126,6 +126,7 @@ void Game::Update(float dt)
 				//{
 				std::vector<int> chances = getPropabilityArray(*enemy, directions);
 				int index = getDirectionIndex(chances);
+				//TODO cover the case when there is no direction to go to
 				Direction direction = directions.at(index);
 
 				//if (!checkCollisions(enemy, direction))
@@ -479,7 +480,7 @@ bool Game::checkWallCollision(GameObject& one, Direction d)
 
 bool Game::checkCollisionPrecise(GameObject& one, GameObject& two)
 {
-	bool collisionX = one.position[0] + Constants::WIDTH_UNIT - two.position[0] > EPSILON && two.position[0] + Constants::WIDTH_UNIT >= one.position[0] > EPSILON;
+	bool collisionX = one.position[0] + Constants::WIDTH_UNIT - two.position[0] > EPSILON && two.position[0] + Constants::WIDTH_UNIT - one.position[0] > EPSILON;
 	bool collisionY = one.position[1] + Constants::HEIGHT_UNIT - two.position[1] > EPSILON && two.position[1] + Constants::HEIGHT_UNIT - one.position[1] > EPSILON;
 	return collisionX && collisionY;
 }
