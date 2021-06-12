@@ -4,12 +4,14 @@
 #include <vector>
 
 #include "GameObject.h"
+#include "Enemy.h"
 
 enum class BlockState
 {
     SOLID,
     BREAKING,
-    BROKEN
+    BROKEN,
+    SPAWNING
 };
 
 class Block : public GameObject
@@ -20,10 +22,11 @@ public:
     BlockState state = BlockState::SOLID;
     std::array<float, 2> positionToMoveTo;
     bool isUnbreakable;
+    Enemy* containedEnemy;
     Direction direction;
 
     Block();
-    Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable);
+    Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable, Enemy* containedEnemy);
 
     //virtual void registerObserver(const std::shared_ptr<Observer<Block*>>& observer);
     //virtual void removeObserver(const std::shared_ptr<Observer<Block*>>& observer);

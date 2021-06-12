@@ -114,13 +114,24 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             if (tileData[y][x] == 1) // non-solid iceblock
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                Block obj(pos, ResourceManager::GetTexture("iceblock"), false);
+                Block obj(pos, ResourceManager::GetTexture("iceblock"), false, nullptr);
                 this->Bricks.push_back(obj);
             }
             else if (tileData[y][x] == 2)	// solid diamond block
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                Block obj(pos, ResourceManager::GetTexture("diamondblock"), true);
+                Block obj(pos, ResourceManager::GetTexture("diamondblock"), true, nullptr);
+                this->Bricks.push_back(obj);
+            }
+            else if (tileData[y][x] == 3)
+            {
+                std::array<float, 2> pos = { unit_width * x, unit_height * y };
+                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 4, Constants::HEIGHT_UNIT * 4 };
+                Direction direction = Direction::DOWN;
+                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyMove" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Move", false);
+                this->frozenEnemies.push_back(enemy);
+
+                Block obj(pos, ResourceManager::GetTexture("iceblock"), false, enemy);
                 this->Bricks.push_back(obj);
             }
             else if (tileData[y][x] == 4)
@@ -136,7 +147,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
                 std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 4, Constants::HEIGHT_UNIT * 4 };
                 Direction direction = Direction::DOWN;
-                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyMove" + stringDirection(direction) + "00"), velocity, direction, EnemyState::WANDERING, "Move");
+                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyMove" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Move", true);
                 this->Enemies.push_back(enemy);
             }
             else if (tileData[y][x] == 6)
@@ -144,7 +155,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
                 std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 4, Constants::HEIGHT_UNIT * 4 };
                 Direction direction = Direction::DOWN;
-                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyBoxer" + stringDirection(direction) + "00"), velocity, direction, EnemyState::CHASING, "Boxer");
+                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyBoxer" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Boxer", true);
                 this->Enemies.push_back(enemy);
             }
         }

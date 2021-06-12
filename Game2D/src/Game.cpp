@@ -83,7 +83,15 @@ void Game::Init()
 	// Load Stunned Enemy Texture
 	ResourceManager::LoadTexture("res/sprites/EnemyStunnedRight.bmp", "enemyStunnedRight");
 	ResourceManager::LoadTexture("res/sprites/EnemyStunnedLeft.bmp", "enemyStunnedLeft");
-
+	// Load Spawning Enemy Textures
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn0.bmp", "enemySpawn0");
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn1.bmp", "enemySpawn1");
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn2.bmp", "enemySpawn2");
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn3.bmp", "enemySpawn3");
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn4.bmp", "enemySpawn4");
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn5.bmp", "enemySpawn5");
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn6.bmp", "enemySpawn6");
+	ResourceManager::LoadTexture("res/sprites/EnemySpawn7.bmp", "enemySpawn7");
 
 
 	GameLevel one;
@@ -100,7 +108,7 @@ void Game::Init()
 	this->wallAnimator = new WallAnimator(&this->Levels[this->Level].BottomWall, &this->Levels[this->Level].TopWall, &this->Levels[this->Level].LeftWall, &this->Levels[this->Level].RightWall, 0.5f);
 	for (Enemy* e : this->Levels[this->Level].Enemies)
 	{
-		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f));
+		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f));
 	}
 
 	//this->Pengo->registerObserver(pengoAnimator);
@@ -113,6 +121,10 @@ void Game::Update(float dt)
 {
 	if (this->PengoState == GameState::GAME_ACTIVE)
 	{
+		if (!boxerExists())
+		{
+			trySettingBoxer();
+		}
 		// bots do stuff
 		for (Enemy* enemy : this->Levels[this->Level].Enemies)
 		{
@@ -138,14 +150,9 @@ void Game::Update(float dt)
 				// if enemies touch pengo while they are stunned, the enemy dies
 				else
 				{
-					this->enemyAnimators.erase(std::remove_if(enemyAnimators.begin(), enemyAnimators.end(),
-						[&](EnemyAnimator* ea) {
-							return ea->enemy == enemy;
-						}));
-					this->Levels[this->Level].Enemies.erase(std::remove_if(this->Levels[this->Level].Enemies.begin(), this->Levels[this->Level].Enemies.end(),
-						[&](Enemy* comparison) {
-							return comparison == enemy;
-						}));
+					killEnemy(enemy);
+					if (!this->Levels[this->Level].frozenEnemies.empty())
+						spawnEnemy();
 				}
 			}
 
@@ -162,7 +169,7 @@ void Game::Update(float dt)
 				// cover the case when there is no direction to go to
 				// for example, if you pushed a block and it happens to be currently flying by the only direction this enemy could go to
 				// or you trap the enemy 
-				if (directions.size() == 0)
+				if (directions.empty())
 					continue;
 
 				Direction direction = directions.at(index);
@@ -192,20 +199,8 @@ void Game::Update(float dt)
 				}
 			}
 			enemy->move(dt);
-
-
-			//switch (enemy.state)
-			//{
-			//case EnemyState::WANDERING:
-			//	break;
-			//case EnemyState::CHASING:
-			//	break;
-			//default:
-			//	break;
-			//}
 		}
 
-		// Update Players actual position
 		for (Block& block : this->Levels[this->Level].Bricks)
 		{
 			if (block.position != block.positionToMoveTo)
@@ -214,14 +209,9 @@ void Game::Update(float dt)
 				{
 					if (checkCollisionPrecise(*e, block))
 					{
-						this->enemyAnimators.erase(std::remove_if(enemyAnimators.begin(), enemyAnimators.end(),
-							[&](EnemyAnimator* ea) {
-								return ea->enemy == e;
-							}));
-						this->Levels[this->Level].Enemies.erase(std::remove_if(this->Levels[this->Level].Enemies.begin(), this->Levels[this->Level].Enemies.end(),
-							[&](Enemy* comparison) {
-								return comparison == e;
-							}));
+						killEnemy(e);
+						if (!this->Levels[this->Level].frozenEnemies.empty())
+							spawnEnemy();
 					}
 				}
 				block.move(dt);
@@ -660,6 +650,53 @@ bool Game::isMovementPossible(Enemy& enemy, Direction d)
 {
 
 	return false;
+}
+
+void Game::killEnemy(Enemy* enemy)
+{
+	this->enemyAnimators.erase(std::remove_if(enemyAnimators.begin(), enemyAnimators.end(),
+		[&](EnemyAnimator* ea) {
+			return ea->enemy == enemy;
+		}));
+	this->Levels[this->Level].Enemies.erase(std::remove_if(this->Levels[this->Level].Enemies.begin(), this->Levels[this->Level].Enemies.end(),
+		[&](Enemy* comparison) {
+			return comparison == enemy;
+		}));
+}
+
+void Game::spawnEnemy()
+{
+	Enemy* enemy = this->Levels[this->Level].frozenEnemies.back();
+	this->Levels[this->Level].Enemies.push_back(enemy);
+	this->Levels[this->Level].frozenEnemies.pop_back();
+	for (Block& block : this->Levels[this->Level].Bricks)
+		if (block.position == enemy->position)
+			block.setState(BlockState::BROKEN);
+	enemyAnimators.push_back(new EnemyAnimator(enemy, 0.4f, 3.0f, 1.5f));
+	enemy->setState(EnemyState::SPAWNING);
+}
+
+bool Game::boxerExists()
+{
+	for (Enemy* e : this->Levels[this->Level].Enemies)
+	{
+		if (e->baseType == "Boxer")
+			return true;
+	}
+	return false;
+}
+
+void Game::trySettingBoxer()
+{
+	for (Enemy* e : this->Levels[this->Level].Enemies)
+	{
+		if (e->state == EnemyState::WANDERING)
+		{
+			e->baseType = "Boxer";
+			e->setState(EnemyState::CHASING);
+			return;
+		}
+	}
 }
 
 int Game::calculateStepRange(Block& block, Direction d)

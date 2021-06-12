@@ -1,8 +1,8 @@
 #include "EnemyAnimator.h"
 
 
-EnemyAnimator::EnemyAnimator(Enemy* enemy, float walkAnimationDuration, float stunnedAnimation)
-	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION(stunnedAnimation), currentAnimation(&EnemyAnimator::walk)
+EnemyAnimator::EnemyAnimator(Enemy* enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)
+	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration), currentAnimation(&EnemyAnimator::spawning)
 {
 	enemy->registerObserver(this);
 }
@@ -13,8 +13,11 @@ EnemyAnimator::~EnemyAnimator()
 
 void EnemyAnimator::animate(float dt)
 {
-	(*this.*currentAnimation)();
-	currentAnimationDuration += dt;
+	if (currentAnimation != nullptr)
+	{
+		(*this.*currentAnimation)();
+		currentAnimationDuration += dt;
+	}
 }
 
 void EnemyAnimator::update(GameObject* s)
@@ -34,6 +37,12 @@ void EnemyAnimator::update(GameObject* s)
 	case(EnemyState::STUNNED):
 		currentAnimationDuration = 0.0f;
 		currentAnimation = &EnemyAnimator::stunned;
+		break;
+	case(EnemyState::SPAWNING):
+		currentAnimationDuration = 0.0f;
+		currentAnimation = &EnemyAnimator::spawningFromBlock;
+		break;
+	case(EnemyState::NONE):
 		break;
 	}
 }
@@ -89,51 +98,51 @@ void EnemyAnimator::stunned()
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
-	else if (currentAnimationDuration > (1.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (2.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (1.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (2.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
-	else if (currentAnimationDuration > (2.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (3.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (2.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (3.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
-	else if (currentAnimationDuration > (3.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (4.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (3.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (4.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
-	else if (currentAnimationDuration > (4.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (5.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (4.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (5.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
-	else if (currentAnimationDuration > (5.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (6.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (5.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (6.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
-	else if (currentAnimationDuration > (6.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (7.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (6.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (7.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
-	else if (currentAnimationDuration > (7.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (8.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (7.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (8.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
-	else if (currentAnimationDuration > (8.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (9.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (8.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (9.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
-	else if (currentAnimationDuration > (9.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (10.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (9.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (10.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
-	else if (currentAnimationDuration > (10.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= (11.0f / 12.0f) * STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (10.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (11.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
-	else if (currentAnimationDuration > (11.0f / 12.0f) * STUNNED_ANIMATION && currentAnimationDuration <= STUNNED_ANIMATION)
+	else if (currentAnimationDuration > (11.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= STUNNED_ANIMATION_DURATION)
 	{
 		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
-	else if (currentAnimationDuration > STUNNED_ANIMATION)
+	else if (currentAnimationDuration > STUNNED_ANIMATION_DURATION)
 	{
 		if (enemy->baseType == "boxer")
 			enemy->setState(EnemyState::CHASING);
@@ -145,4 +154,116 @@ void EnemyAnimator::stunned()
 		enemy->ready = true;
 	}
 
+}
+
+void EnemyAnimator::spawning()
+{
+	enemy->ready = false;
+	if (currentAnimationDuration == 0)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn0");
+	}
+	else if (currentAnimationDuration > (1.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (2.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn1");
+	}
+	else if (currentAnimationDuration > (2.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (3.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn2");
+	}
+	else if (currentAnimationDuration > (3.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (4.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn3");
+	}
+	else if (currentAnimationDuration > (4.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (5.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn4");
+	}
+	else if (currentAnimationDuration > (5.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (6.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn5");
+	}
+	else if (currentAnimationDuration > (6.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (7.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn6");
+	}
+	else if (currentAnimationDuration > (7.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn7");
+	}
+	else if (currentAnimationDuration > SPAWNING_ANIMATION_DURATION)
+	{
+		if (enemy->baseType == "Boxer")
+			enemy->setState(EnemyState::CHASING);
+		else
+			enemy->setState(EnemyState::WANDERING);
+
+		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		currentAnimationDuration = 0.0f;
+		enemy->ready = true;
+	}
+}
+
+void EnemyAnimator::spawningFromBlock()
+{
+	enemy->ready = false;
+	if (currentAnimationDuration == 0)
+	{
+		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking0");
+	}
+	else if (currentAnimationDuration >= (1.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration < (2.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking1");
+	}
+	else if (currentAnimationDuration >= (2.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration < (3.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking2");
+	}
+	else if (currentAnimationDuration >= (3.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration < (4.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking3");
+	}
+	else if (currentAnimationDuration > (4.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (5.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn0");
+	}
+	else if (currentAnimationDuration > (5.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (6.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn1");
+	}
+	else if (currentAnimationDuration > (6.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (7.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn2");
+	}
+	else if (currentAnimationDuration > (7.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (8.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn3");
+	}
+	else if (currentAnimationDuration > (8.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (9.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn4");
+	}
+	else if (currentAnimationDuration > (9.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (10.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn5");
+	}
+	else if (currentAnimationDuration > (10.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (11.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn6");
+	}
+	else if (currentAnimationDuration > (10.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= SPAWNING_ANIMATION_DURATION)
+	{
+		enemy->sprite = ResourceManager::GetTexture("enemySpawn7");
+	}
+	else if (currentAnimationDuration > SPAWNING_ANIMATION_DURATION)
+	{
+		if (enemy->baseType == "boxer")
+			enemy->setState(EnemyState::CHASING);
+		else
+			enemy->setState(EnemyState::WANDERING);
+
+		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		currentAnimationDuration = 0.0f;
+		enemy->ready = true;
+	}
 }

@@ -2,8 +2,8 @@
 
 Enemy::Enemy(){}
 
-Enemy::Enemy(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity, Direction direction, EnemyState state, std::string baseType)
-    : GameObject{ pos, sprite }, velocity{ velocity }, positionToMoveTo{ pos }, direction{ direction }, state{ state }, baseType{ baseType }{}
+Enemy::Enemy(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity, Direction direction, EnemyState state, std::string baseType, bool ready)
+    : GameObject{ pos, sprite }, velocity{ velocity }, positionToMoveTo{ pos }, direction{ direction }, state{ state }, baseType{ baseType }, ready{ ready } {}
 
 void Enemy::setDirection(Direction direction)
 {

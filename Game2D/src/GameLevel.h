@@ -30,6 +30,7 @@ public:
     // level state
     Player Pengo;
     std::vector<Enemy*> Enemies;
+    std::vector<Enemy*> frozenEnemies;
     std::vector<GameObject> Walls;
     Wall LeftWall;
     Wall RightWall;

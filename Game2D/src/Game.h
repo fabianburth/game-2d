@@ -101,6 +101,10 @@ private:
     std::vector<Direction> getInitialDirections(Enemy& enemy);
     int getDirectionIndex(std::vector<int> chances);
     bool isMovementPossible(Enemy& enemy, Direction d);
+    void killEnemy(Enemy* enemy);
+    void spawnEnemy();
+    bool boxerExists();
+    void trySettingBoxer();
 };
 
 #endif

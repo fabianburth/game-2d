@@ -2,8 +2,8 @@
 
 Block::Block() {}
 
-Block::Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable)
-    :GameObject{ pos, sprite }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable }, direction{ Direction::NONE} {}
+Block::Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable, Enemy* containedEnemy)
+    :GameObject{ pos, sprite }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable }, containedEnemy{ containedEnemy }, direction{ Direction::NONE } {}
 
 //void Block::registerObserver(const std::shared_ptr<Observer<Block*>>& observer)
 //{
