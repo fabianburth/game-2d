@@ -116,6 +116,39 @@ void Game::Update(float dt)
 		// bots do stuff
 		for (Enemy* enemy : this->Levels[this->Level].Enemies)
 		{
+			// if enemies touch a wall that is wobbly, the enemies shall be stunned
+			if (this->Levels[this->Level].RightWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::RIGHT)
+				|| this->Levels[this->Level].LeftWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::LEFT)
+				|| this->Levels[this->Level].TopWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::UP)
+				|| this->Levels[this->Level].BottomWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::DOWN))
+			{
+				enemy->setState(EnemyState::STUNNED);
+			}
+
+			// Behavior if enemies touch Pengo
+			if (checkCollisionPrecise(*enemy, *Pengo))
+			{
+				// if enemies touch pengo while they are not stunned, pengo dies
+				if (enemy->state != EnemyState::STUNNED)
+				{
+					enemy->setState(EnemyState::BREAKING);
+					std::cout << "GAME OVER" << std::endl;
+					PengoState = GameState::GAME_MENU;
+				}
+				// if enemies touch pengo while they are stunned, the enemy dies
+				else
+				{
+					this->enemyAnimators.erase(std::remove_if(enemyAnimators.begin(), enemyAnimators.end(),
+						[&](EnemyAnimator* ea) {
+							return ea->enemy == enemy;
+						}));
+					this->Levels[this->Level].Enemies.erase(std::remove_if(this->Levels[this->Level].Enemies.begin(), this->Levels[this->Level].Enemies.end(),
+						[&](Enemy* comparison) {
+							return comparison == enemy;
+						}));
+				}
+			}
+
 			if (enemy->ready == true)
 			{
 				std::vector<Direction> directions = getInitialDirections(*enemy);
@@ -126,7 +159,12 @@ void Game::Update(float dt)
 				//{
 				std::vector<int> chances = getPropabilityArray(*enemy, directions);
 				int index = getDirectionIndex(chances);
-				//TODO cover the case when there is no direction to go to
+				// cover the case when there is no direction to go to
+				// for example, if you pushed a block and it happens to be currently flying by the only direction this enemy could go to
+				// or you trap the enemy 
+				if (directions.size() == 0)
+					continue;
+
 				Direction direction = directions.at(index);
 
 				//if (!checkCollisions(enemy, direction))
@@ -153,27 +191,6 @@ void Game::Update(float dt)
 					enemy->setPositionToMoveTo();
 				}
 			}
-			if (checkCollisionPrecise(*enemy, *Pengo))
-			{
-				if (enemy->state != EnemyState::STUNNED)
-				{
-					enemy->setState(EnemyState::BREAKING);
-					std::cout << "GAME OVER" << std::endl;
-					PengoState = GameState::GAME_MENU;
-				}
-				else
-				{
-					this->enemyAnimators.erase(std::remove_if(enemyAnimators.begin(), enemyAnimators.end(),
-						[&](EnemyAnimator* ea) {
-							return ea->enemy == enemy;
-						}));
-					this->Levels[this->Level].Enemies.erase(std::remove_if(this->Levels[this->Level].Enemies.begin(), this->Levels[this->Level].Enemies.end(),
-						[&](Enemy* comparison) {
-							return comparison == enemy;
-						}));
-				}
-			}
-
 			enemy->move(dt);
 
 
@@ -268,46 +285,18 @@ void Game::ProcessInput(float dt)
 						if (Pengo->direction == Direction::UP)
 						{
 							this->Levels[this->Level].BottomWall.setState(WallState::WOBBLY);
-							for (Enemy* e : this->Levels[this->Level].Enemies)
-							{
-								if (checkWallCollision(*e, Direction::UP))
-								{
-									e->setState(EnemyState::STUNNED);
-								}
-							}
 						}
 						else if (Pengo->direction == Direction::DOWN)
 						{
 							this->Levels[this->Level].TopWall.setState(WallState::WOBBLY);
-							for (Enemy* e : this->Levels[this->Level].Enemies)
-							{
-								if (checkWallCollision(*e, Direction::DOWN))
-								{
-									e->setState(EnemyState::STUNNED);
-								}
-							}
 						}
 						else if (Pengo->direction == Direction::LEFT)
 						{
 							this->Levels[this->Level].LeftWall.setState(WallState::WOBBLY);
-							for (Enemy* e : this->Levels[this->Level].Enemies)
-							{
-								if (checkWallCollision(*e, Direction::LEFT))
-								{
-									e->setState(EnemyState::STUNNED);
-								}
-							}
 						}
 						else if (Pengo->direction == Direction::RIGHT)
 						{
 							this->Levels[this->Level].RightWall.setState(WallState::WOBBLY);
-							for (Enemy* e : this->Levels[this->Level].Enemies)
-							{
-								if (checkWallCollision(*e, Direction::RIGHT))
-								{
-									e->setState(EnemyState::STUNNED);
-								}
-							}
 						}
 						return;
 					}
