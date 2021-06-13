@@ -67,8 +67,14 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
     RightWall = Wall(WallSide::RIGHT);
     BottomWall = Wall(WallSide::BOTTOM);
     TopWall = Wall(WallSide::TOP);
-    //initialize level wall (same for every level)
-    //Left and Right Wall
+    // initialize game information (1P, Score), maybe more later
+    //d = GameObject({ (-0.5f * unit_width + width * unit_width) - 0.5f * unit_width , -0.5f * unit_height + 17 * unit_height }, ResourceManager::GetTexture("one"), { 0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width, (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height});
+    P1 = GameInformation({(-0.5f * unit_width + 0.5f * unit_width), -0.5f * unit_height + 17 * unit_height }, { 0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width, (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height }, 2);
+    P1.show("1P");
+    Score = GameInformation({ (-0.5f * unit_width + 4.5f * unit_width), -0.5f * unit_height + 17 * unit_height }, { 0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width, (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height }, 6);
+    Score.show("12345");
+    // initialize level wall (same for every level)
+    // Left and Right Wall
     for (unsigned int x = 0; x < height + 1; ++x) 
     {
         //Left Wall

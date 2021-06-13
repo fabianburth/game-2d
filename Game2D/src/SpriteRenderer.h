@@ -11,6 +11,7 @@
 #include "shader.h"
 #include "GameObject.h"
 #include "GameLevel.h"
+#include "GameInformation.h"
 
 #include <array>
 
@@ -39,6 +40,7 @@ private:
     void initRenderData();
 
     void DrawObject(GameObject& gameObject);
+    void DrawDisplayElement(GameInformation& gameInformation);
 };
 
 #endif

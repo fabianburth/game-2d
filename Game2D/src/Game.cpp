@@ -93,6 +93,19 @@ void Game::Init()
 	ResourceManager::LoadTexture("res/sprites/EnemySpawn6.bmp", "enemySpawn6");
 	ResourceManager::LoadTexture("res/sprites/EnemySpawn7.bmp", "enemySpawn7");
 
+	ResourceManager::LoadTexture("res/sprites/Placeholder.bmp", "placeholder");
+	ResourceManager::LoadTexture("res/sprites/One.bmp", "One");
+	ResourceManager::LoadTexture("res/sprites/P.bmp", "P");
+	ResourceManager::LoadTexture("res/sprites/1.bmp", "1");
+	ResourceManager::LoadTexture("res/sprites/2.bmp", "2");
+	ResourceManager::LoadTexture("res/sprites/3.bmp", "3");
+	ResourceManager::LoadTexture("res/sprites/4.bmp", "4");
+	ResourceManager::LoadTexture("res/sprites/5.bmp", "5");
+	ResourceManager::LoadTexture("res/sprites/6.bmp", "6");
+	ResourceManager::LoadTexture("res/sprites/7.bmp", "7");
+	ResourceManager::LoadTexture("res/sprites/8.bmp", "8");
+	ResourceManager::LoadTexture("res/sprites/9.bmp", "9");
+
 
 	GameLevel one;
 	one.Load("res/levels/level0.lvl", 448, 576);

@@ -13,6 +13,7 @@
 #include "resourcemanager.h"
 #include "Wall.h"
 #include "Enemy.h"
+#include "GameInformation.h"
 
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
@@ -37,6 +38,9 @@ public:
     Wall TopWall;
     Wall BottomWall;
     std::vector<Block> Bricks;
+    //GameObject d;
+    GameInformation P1;
+    GameInformation Score;
     // constructor
     GameLevel();
     ~GameLevel();

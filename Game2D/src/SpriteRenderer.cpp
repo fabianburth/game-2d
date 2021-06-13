@@ -53,6 +53,9 @@ void SpriteRenderer::DrawLevel(GameLevel& gameLevel)
         this->DrawObject(*enemy);
 
     this->DrawObject(gameLevel.Pengo);
+    //this->DrawObject(gameLevel.d);
+    this->DrawDisplayElement(gameLevel.P1);
+    this->DrawDisplayElement(gameLevel.Score);
 }
 
 void SpriteRenderer::initRenderData()
@@ -87,3 +90,12 @@ void SpriteRenderer::DrawObject(GameObject& gameObject)
 {
     this->DrawSprite(gameObject.sprite, gameObject.position, gameObject.size);
 }
+
+void SpriteRenderer::DrawDisplayElement(GameInformation& gameInformation)
+{
+    for (DisplayBlock* d : gameInformation.displayBlocks)
+    {
+        this->DrawSprite(d->sprite, d->position, d->size);
+    }
+}
+
