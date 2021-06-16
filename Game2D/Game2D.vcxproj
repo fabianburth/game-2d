@@ -187,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\levels\level0.lvl" />
+    <None Include="res\levels\level1.lvl" />
     <None Include="res\shaders\sprites.fs" />
     <None Include="res\shaders\sprites.vs" />
   </ItemGroup>

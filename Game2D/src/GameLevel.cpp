@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 GameLevel::GameLevel()
 {
@@ -50,16 +51,13 @@ void GameLevel::Load(const char* file, unsigned int levelWidth, unsigned int lev
 
 bool GameLevel::IsCompleted() // NOT INTENTED TO WORK LIKE THAT FOR PENGO
 {
-    //for (Block& tile : this->Bricks)
-    //    if (!tile.IsSolid && !tile.Destroyed)
-    //        return false;
-    //return true;
-    return false;
+    return this->Enemies.empty();
 }
 
 void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight)
 {
     // calculate dimensions
+    std::reverse(tileData.begin(), tileData.end());
     unsigned int height = tileData.size();
     unsigned int width = tileData[0].size(); // note we can index vector at [0] since this function is only called if height > 0
     float unit_width = Constants::WIDTH_UNIT, unit_height = Constants::HEIGHT_UNIT;
@@ -101,14 +99,14 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
         GameObject objB(posB, ResourceManager::GetTexture("wallBT"), sizeB);
         //objB.isUnbreakable = true;
         this->Walls.push_back(objB);
-        this->BottomWall.addWallComponent(objB);
+        this->TopWall.addWallComponent(objB);
         //Top Wall
         std::array<float, 2> posT = { unit_width * x, -0.5f * unit_height };
         std::array<float, 4> sizeT = { 1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * unit_height) };
         GameObject objT(posT, ResourceManager::GetTexture("wallBT"), sizeT);
         //objT.isUnbreakable = true;
         this->Walls.push_back(objT);
-        this->TopWall.addWallComponent(objT);
+        this->BottomWall.addWallComponent(objT);
     }
 
     // initialize level tiles based on tileData		

@@ -108,7 +108,7 @@ void Game::Init()
 
 
 	GameLevel one;
-	one.Load("res/levels/level0.lvl", 448, 576);
+	one.Load("res/levels/level1.lvl", 448, 576);
 	//this->Pengo = one.Pengo;
 	this->Levels.push_back(one);
 	this->Level = 0;
@@ -132,8 +132,18 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
+
 	if (this->PengoState == GameState::GAME_ACTIVE)
 	{
+
+		if (this->Levels[this->Level].IsCompleted())
+		{
+			if (this->Level < this->Levels.size())
+			{
+				//initNewLevel();
+			}
+		}
+
 		if (!boxerExists())
 		{
 			trySettingBoxer();
@@ -287,11 +297,11 @@ void Game::ProcessInput(float dt)
 
 						if (Pengo->direction == Direction::UP)
 						{
-							this->Levels[this->Level].BottomWall.setState(WallState::WOBBLY);
+							this->Levels[this->Level].TopWall.setState(WallState::WOBBLY);
 						}
 						else if (Pengo->direction == Direction::DOWN)
 						{
-							this->Levels[this->Level].TopWall.setState(WallState::WOBBLY);
+							this->Levels[this->Level].BottomWall.setState(WallState::WOBBLY);
 						}
 						else if (Pengo->direction == Direction::LEFT)
 						{

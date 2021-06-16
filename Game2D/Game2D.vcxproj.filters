@@ -139,6 +139,7 @@
     <None Include="res\shaders\sprites.vs" />
     <None Include="res\shaders\sprites.fs" />
     <None Include="res\levels\level0.lvl" />
+    <None Include="res\levels\level1.lvl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\sprites\Pengo00.bmp">
