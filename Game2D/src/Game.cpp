@@ -679,9 +679,25 @@ void Game::killEnemy(Enemy* enemy)
 
 void Game::spawnEnemy()
 {
-	Enemy* enemy = this->Levels[this->Level].frozenEnemies.back();
+	bool validEnemy = false;
+	Enemy* enemy;
+
+	while (!validEnemy)
+	{
+		enemy = this->Levels[this->Level].frozenEnemies.back();
+		this->Levels[this->Level].frozenEnemies.pop_back();
+		for (Block b : this->Levels[this->Level].Bricks)
+		{
+			if (b.position == enemy->position && b.state != BlockState::BROKEN && b.state != BlockState::BREAKING)
+			{
+				validEnemy = true;
+			}
+
+		}
+		if (this->Levels[this->Level].frozenEnemies.empty() && validEnemy == false)
+			return;
+	}
 	this->Levels[this->Level].Enemies.push_back(enemy);
-	this->Levels[this->Level].frozenEnemies.pop_back();
 	for (Block& block : this->Levels[this->Level].Bricks)
 		if (block.position == enemy->position)
 			block.setState(BlockState::BROKEN);
