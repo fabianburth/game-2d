@@ -494,16 +494,20 @@ bool Game::checkWallCollision(GameObject& one, Direction d)
 	switch (d)
 	{
 	case Direction::RIGHT:
-		collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT);
+		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT );
+		collision = !(((one.position[0] + Constants::WIDTH_UNIT) - (12 * Constants::WIDTH_UNIT)) < EPSILON);
 		break;
 	case Direction::LEFT:
-		collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
+		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
+		collision = !(0 - (one.position[0] - Constants::WIDTH_UNIT) < EPSILON);
 		break;
 	case Direction::UP:
-		collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);	
+		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);
+		collision = !(((one.position[1] + Constants::HEIGHT_UNIT) - (14 * Constants::HEIGHT_UNIT)) < EPSILON);
 		break;
 	case Direction::DOWN:
-		collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= -1.0f + 0.5f * Constants::HEIGHT_UNIT);
+		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
+		collision = !(0 - (one.position[1] - Constants::HEIGHT_UNIT) < EPSILON);
 		break;
 	}
 	return collision;
