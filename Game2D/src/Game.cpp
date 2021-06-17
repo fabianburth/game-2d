@@ -127,6 +127,8 @@ void Game::Init()
 		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f));
 	}
 
+	startClockLevel, startClockEnemyKill = std::clock();
+
 	//this->Pengo->registerObserver(pengoAnimator);
 
 	//for (Block& tile : this->Levels[this->Level].Bricks)
@@ -141,6 +143,20 @@ void Game::Update(float dt)
 
 		if (this->Levels[this->Level].IsCompleted())
 		{
+			double levelDuration = ((std::clock() - startClockLevel) / (double)CLOCKS_PER_SEC);
+			if (levelDuration < 20)
+				score += 5000;
+			else if (levelDuration < 30)
+				score += 2000;
+			else if (levelDuration < 40)
+				score += 1000;
+			else if (levelDuration < 50)
+				score += 500;
+			else if (levelDuration < 60)
+				score += 10;
+			else
+				score += 0;
+
 			if (this->Level < this->Levels.size())
 			{
 				initNextLevel();
@@ -156,6 +172,9 @@ void Game::Update(float dt)
 		{
 			trySettingBoxer();
 		}
+
+		if (((std::clock() - startClockEnemyKill) / (double)CLOCKS_PER_SEC) > 60)
+			trySettingBoxer();
 		// bots do stuff
 		for (Enemy* enemy : this->Levels[this->Level].Enemies)
 		{
@@ -718,6 +737,8 @@ void Game::killEnemy(Enemy* enemy)
 		[&](Enemy* comparison) {
 			return comparison == enemy;
 		}));
+
+	startClockEnemyKill = std::clock();
 }
 
 void Game::spawnEnemy()

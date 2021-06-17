@@ -17,6 +17,7 @@
 #include "Wall.h"
 #include "EnemyAnimator.h"
 #include <string>
+#include <ctime>
 
 // Represents the current state of the game
 enum class GameState 
@@ -49,6 +50,8 @@ public:
     std::vector<GameLevel>  Levels;
     unsigned int            Level;
     unsigned int score = 0;
+    std::clock_t startClockLevel;
+    std::clock_t startClockEnemyKill;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
