@@ -87,6 +87,7 @@ void Block::move(float deltaTime)
         {
             this->position[0] = this->positionToMoveTo[0];
             this->direction = Direction::NONE;
+            this->killedWithOneMove = 0;
             //return true;
         }
         else
@@ -102,6 +103,7 @@ void Block::move(float deltaTime)
         {
             this->position[0] = this->positionToMoveTo[0];
             this->direction = Direction::NONE;
+            this->killedWithOneMove = 0;
             //return true;
         }
         else
@@ -117,6 +119,7 @@ void Block::move(float deltaTime)
         {
             this->position[1] = this->positionToMoveTo[1];
             this->direction = Direction::NONE;
+            this->killedWithOneMove = 0;
             //return true;
         }
         else
@@ -132,6 +135,7 @@ void Block::move(float deltaTime)
         {
             this->position[1] = this->positionToMoveTo[1];
             this->direction = Direction::NONE;
+            this->killedWithOneMove = 0;
             //return true;
         }
         else

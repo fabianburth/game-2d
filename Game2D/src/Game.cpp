@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "ResourceManager.h"
 #include <array>
+#include <Windows.h>
 
 #include <iostream>
 // Game-related State data
@@ -96,6 +97,7 @@ void Game::Init()
 	ResourceManager::LoadTexture("res/sprites/Placeholder.bmp", "placeholder");
 	ResourceManager::LoadTexture("res/sprites/One.bmp", "One");
 	ResourceManager::LoadTexture("res/sprites/P.bmp", "P");
+	ResourceManager::LoadTexture("res/sprites/0.bmp", "0");
 	ResourceManager::LoadTexture("res/sprites/1.bmp", "1");
 	ResourceManager::LoadTexture("res/sprites/2.bmp", "2");
 	ResourceManager::LoadTexture("res/sprites/3.bmp", "3");
@@ -107,10 +109,11 @@ void Game::Init()
 	ResourceManager::LoadTexture("res/sprites/9.bmp", "9");
 
 
-	GameLevel one;
-	one.Load("res/levels/level1.lvl", 448, 576);
+	GameLevel one; one.Load("res/levels/level1.lvl", 448, 576);
+	GameLevel two; two.Load("res/levels/level0.lvl", 448, 576);
 	//this->Pengo = one.Pengo;
 	this->Levels.push_back(one);
+	this->Levels.push_back(two);
 	this->Level = 0;
 	this->Pengo = &this->Levels[this->Level].Pengo;
 
@@ -132,7 +135,7 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-
+	this->Levels[this->Level].Score.show(std::to_string(score));
 	if (this->PengoState == GameState::GAME_ACTIVE)
 	{
 
@@ -140,8 +143,13 @@ void Game::Update(float dt)
 		{
 			if (this->Level < this->Levels.size())
 			{
-				//initNewLevel();
+				initNextLevel();
+				return;
 			}
+		}
+		if (!this->Levels[this->Level].diamondBlocksAligned && checkThreeDiamonds())
+		{
+			this->Levels[this->Level].diamondBlocksAligned = true;
 		}
 
 		if (!boxerExists())
@@ -174,6 +182,7 @@ void Game::Update(float dt)
 				else
 				{
 					killEnemy(enemy);
+					score += 100;
 					if (!this->Levels[this->Level].frozenEnemies.empty())
 						spawnEnemy();
 				}
@@ -233,6 +242,22 @@ void Game::Update(float dt)
 					if (checkCollisionPrecise(*e, block))
 					{
 						killEnemy(e);
+						switch (block.killedWithOneMove)
+						{
+						case 0:
+							score += 400;
+							break;
+						case 1:
+							score += 1200;
+							break;
+						case 2:
+							score += 1600;
+							break;
+						default:
+							break;
+						}
+						++block.killedWithOneMove;
+
 						if (!this->Levels[this->Level].frozenEnemies.empty())
 							spawnEnemy();
 					}
@@ -278,6 +303,10 @@ void Game::ProcessInput(float dt)
 							if (!block->isUnbreakable)
 							{
 								block->setState(BlockState::BREAKING);
+								if (block->containedEnemy == nullptr)
+									score += 30;
+								else
+									score += 500;
 								return;
 							}
 							return;
@@ -736,6 +765,144 @@ void Game::trySettingBoxer()
 			return;
 		}
 	}
+}
+
+void Game::initNextLevel()
+{
+	Sleep(5000);
+
+	blockAnimators.clear();
+	enemyAnimators.clear();
+	
+	++this->Level;
+	if (this->Levels.size() <= this->Level)
+	{
+		std::cout << "GAME WON" << std::endl;
+		PengoState = GameState::GAME_MENU;
+		return;
+	}
+
+	this->Pengo = &this->Levels[this->Level].Pengo;
+
+	this->pengoAnimator = new PengoAnimator(&this->Levels[this->Level].Pengo, 0.5f, 0.25f);
+	for (Block& b : this->Levels[this->Level].Bricks)
+		blockAnimators.push_back(new BlockAnimator(0.5f, &b));
+	this->wallAnimator = new WallAnimator(&this->Levels[this->Level].BottomWall, &this->Levels[this->Level].TopWall, &this->Levels[this->Level].LeftWall, &this->Levels[this->Level].RightWall, 0.5f);
+	for (Enemy* e : this->Levels[this->Level].Enemies)
+	{
+		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f));
+	}
+}
+
+bool Game::checkThreeDiamonds()
+{
+	int amountAdjacentDiamonds = 0;
+	bool bTouchesWall = false;
+	bool firstAdjacentBlockTouchesWall = false;
+	bool secondAdjacentBlockTouchesWall = false;
+
+	for (Block& b : this->Levels[this->Level].Bricks)
+	{
+		if (b.isUnbreakable)
+		{
+			bTouchesWall = blockTouchesWall(b);
+			Block* firstAdjacentBlock = getCollisionBlock(b, Direction::RIGHT);
+			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+			{
+				Block fab = *firstAdjacentBlock;
+				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::RIGHT);
+				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+				{
+					Block sab = *secondAdjacentBlock;
+					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+						score += 5000;
+					else
+						score += 10000;
+					return true;
+				}
+			}
+			//bTouchesWall = checkWallCollision(b, Direction::LEFT);
+			firstAdjacentBlock = getCollisionBlock(b, Direction::LEFT);
+			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+			{
+				Block fab = *firstAdjacentBlock;
+				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::LEFT);
+				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+				{
+					Block sab = *secondAdjacentBlock;
+					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+						score += 5000;
+					else
+						score += 10000;
+					return true;
+				}
+			}
+			//bTouchesWall = checkWallCollision(b, Direction::UP);
+			firstAdjacentBlock = getCollisionBlock(b, Direction::UP);
+			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+			{
+				Block fab = *firstAdjacentBlock;
+				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::UP);
+				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+				{
+					Block sab = *secondAdjacentBlock;
+					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+						score += 5000;
+					else
+						score += 10000;
+					return true;
+				}
+			}
+			//bTouchesWall = checkWallCollision(b, Direction::DOWN);
+			firstAdjacentBlock = getCollisionBlock(b, Direction::DOWN);
+			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+			{
+				Block fab = *firstAdjacentBlock;
+				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::DOWN);
+				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+				{
+					Block sab = *secondAdjacentBlock;
+					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+						score += 5000;
+					else
+						score += 10000;
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+Block* Game::adjacentBlockIsDiamond(Block& b)
+{
+	Block* collisionBlockRight = getCollisionBlock(b, Direction::RIGHT);
+	Block* collisionBlockLeft = getCollisionBlock(b, Direction::LEFT);
+	Block* collisionBlockUp = getCollisionBlock(b, Direction::UP);
+	Block* collisionBlockDown = getCollisionBlock(b, Direction::DOWN);
+	if (collisionBlockRight != nullptr && collisionBlockRight->isUnbreakable)
+		return collisionBlockRight;
+	else if (collisionBlockLeft != nullptr && collisionBlockLeft->isUnbreakable)
+		return collisionBlockLeft;
+	else if (collisionBlockUp != nullptr && collisionBlockUp->isUnbreakable)
+		return collisionBlockUp;
+	else if (collisionBlockDown != nullptr && collisionBlockDown->isUnbreakable)
+		return collisionBlockDown;
+	return nullptr;
+}
+
+bool Game::blockTouchesWall(Block& b)
+{
+	
+	return checkWallCollision(b, Direction::RIGHT) || checkWallCollision(b, Direction::LEFT) || checkWallCollision(b, Direction::UP) || checkWallCollision(b, Direction::DOWN);
 }
 
 int Game::calculateStepRange(Block& block, Direction d)

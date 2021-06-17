@@ -24,6 +24,7 @@ public:
     bool isUnbreakable;
     Enemy* containedEnemy;
     Direction direction;
+    int killedWithOneMove = 0;
 
     Block();
     Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable, Enemy* containedEnemy);

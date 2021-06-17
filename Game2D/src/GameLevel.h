@@ -41,6 +41,7 @@ public:
     //GameObject d;
     GameInformation P1;
     GameInformation Score;
+    bool diamondBlocksAligned = false;
     // constructor
     GameLevel();
     ~GameLevel();

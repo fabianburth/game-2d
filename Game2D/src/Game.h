@@ -16,6 +16,7 @@
 #include "SpriteRenderer.h"
 #include "Wall.h"
 #include "EnemyAnimator.h"
+#include <string>
 
 // Represents the current state of the game
 enum class GameState 
@@ -47,6 +48,7 @@ public:
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;
     unsigned int            Level;
+    unsigned int score = 0;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
@@ -105,6 +107,10 @@ private:
     void spawnEnemy();
     bool boxerExists();
     void trySettingBoxer();
+    void initNextLevel();
+    bool checkThreeDiamonds();
+    Block* adjacentBlockIsDiamond(Block& b);
+    bool blockTouchesWall(Block& b);
 };
 
 #endif
