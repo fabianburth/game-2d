@@ -819,8 +819,6 @@ void Game::trySettingBoxer()
 
 void Game::initNextLevel()
 {
-	Sleep(5000);
-
 	blockAnimators.clear();
 	enemyAnimators.clear();
 	

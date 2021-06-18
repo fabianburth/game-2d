@@ -22,7 +22,7 @@ void EnemyAnimator::animate(float dt)
 
 void EnemyAnimator::update(GameObject* s)
 {
-	Enemy* enemy = dynamic_cast<Enemy*>(s);
+	//Enemy* enemy = dynamic_cast<Enemy*>(s);
 	switch (enemy->state)
 	{
 	case(EnemyState::WANDERING):
