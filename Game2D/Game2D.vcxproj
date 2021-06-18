@@ -234,6 +234,7 @@
     <Image Include="res\sprites\IceblockBreaking1.bmp" />
     <Image Include="res\sprites\IceblockBreaking2.bmp" />
     <Image Include="res\sprites\IceblockBreaking3.bmp" />
+    <Image Include="res\sprites\IceblockGreen.bmp" />
     <Image Include="res\sprites\One.bmp" />
     <Image Include="res\sprites\P.bmp" />
     <Image Include="res\sprites\Pengo00.bmp" />

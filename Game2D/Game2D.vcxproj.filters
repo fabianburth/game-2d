@@ -346,5 +346,8 @@
     <Image Include="res\sprites\Placeholder.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\sprites\IceblockGreen.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
