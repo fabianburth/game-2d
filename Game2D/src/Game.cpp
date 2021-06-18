@@ -214,10 +214,10 @@ void Game::Update(float dt)
 			}
 
 			// if enemies touch a wall that is wobbly, the enemies shall be stunned
-			if (this->Levels[this->Level].RightWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::RIGHT)
-				|| this->Levels[this->Level].LeftWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::LEFT)
-				|| this->Levels[this->Level].TopWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::UP)
-				|| this->Levels[this->Level].BottomWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::DOWN))
+			if (this->Levels[this->Level].RightWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::RIGHT)
+				|| this->Levels[this->Level].LeftWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::LEFT)
+				|| this->Levels[this->Level].TopWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::UP)
+				|| this->Levels[this->Level].BottomWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::DOWN))
 			{
 				enemy->setState(EnemyState::STUNNED);
 			}
@@ -543,6 +543,32 @@ bool Game::checkWallCollision(GameObject& one, Direction d)
 	case Direction::DOWN:
 		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
 		collision = !(0 - (one.position[1] - Constants::HEIGHT_UNIT) < EPSILON);
+		break;
+	}
+	return collision;
+}
+
+bool Game::checkWallCollisionPrecise(GameObject& one, Direction d)
+{
+    bool collision = false;
+
+	switch (d)
+	{
+	case Direction::RIGHT:
+		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT );
+		collision = !(((12 * Constants::WIDTH_UNIT) - one.position[0]) > EPSILON);
+		break;
+	case Direction::LEFT:
+		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
+		collision = !(0 + one.position[0] > EPSILON);
+		break;
+	case Direction::UP:
+		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);
+		collision = !(((14 * Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON);
+		break;
+	case Direction::DOWN:
+		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
+		collision = !(0 + one.position[1] > EPSILON);
 		break;
 	}
 	return collision;

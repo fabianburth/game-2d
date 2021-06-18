@@ -99,6 +99,7 @@ private:
     // @param one: The GameObject to be moved
     // @param d: The Direction to which it would be moved
     bool checkWallCollision(GameObject& one, Direction d);
+    bool checkWallCollisionPrecise(GameObject& one, Direction d);
 
     bool checkCollisionPrecise(GameObject& one, GameObject& two);
 
