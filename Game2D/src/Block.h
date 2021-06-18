@@ -11,7 +11,8 @@ enum class BlockState
     SOLID,
     BREAKING,
     BROKEN,
-    SPAWNING
+    SPAWNING,
+    FLASHING
 };
 
 class Block : public GameObject

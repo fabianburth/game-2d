@@ -2,7 +2,7 @@
 
 
 EnemyAnimator::EnemyAnimator(Enemy* enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)
-	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration), currentAnimation(&EnemyAnimator::spawning)
+	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration)
 {
 	enemy->registerObserver(this);
 }
@@ -41,6 +41,10 @@ void EnemyAnimator::update(GameObject* s)
 	case(EnemyState::SPAWNING):
 		currentAnimationDuration = 0.0f;
 		currentAnimation = &EnemyAnimator::spawningFromBlock;
+		break;
+	case(EnemyState::INITIAL_SPAWNING):
+		currentAnimationDuration = 0.0f;
+		currentAnimation = &EnemyAnimator::spawning;
 		break;
 	case(EnemyState::NONE):
 		break;

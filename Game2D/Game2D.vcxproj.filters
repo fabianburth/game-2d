@@ -307,5 +307,44 @@
     <Image Include="res\sprites\Wall_BT_00.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\sprites\4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\8.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\9.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\P.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\One.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Placeholder.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

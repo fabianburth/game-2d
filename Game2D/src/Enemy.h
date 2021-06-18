@@ -8,6 +8,7 @@ enum class EnemyState
 	BREAKING,
 	STUNNED,
 	SPAWNING,
+	INITIAL_SPAWNING,
 	NONE
 };
 
@@ -18,7 +19,7 @@ public:
 	EnemyState state;
 	std::string baseType;
 	std::array<float, 2> velocity, positionToMoveTo;
-	bool ready = true;
+	bool ready;
 
 	Enemy();
 	Enemy(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity, Direction direction, EnemyState state, std::string baseType, bool ready);

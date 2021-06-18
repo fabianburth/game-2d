@@ -29,6 +29,7 @@ void Game::Init()
 	// load textures
 	// Load all Iceblock Textures
 	ResourceManager::LoadTexture("res/sprites/Iceblock.bmp", "iceblock");
+	ResourceManager::LoadTexture("res/sprites/IceblockGreen.bmp", "iceblockGreen");
 	ResourceManager::LoadTexture("res/sprites/IceblockBreaking0.bmp", "iceblockBreaking0");
 	ResourceManager::LoadTexture("res/sprites/IceblockBreaking1.bmp", "iceblockBreaking1");
 	ResourceManager::LoadTexture("res/sprites/IceblockBreaking2.bmp", "iceblockBreaking2");
@@ -119,13 +120,27 @@ void Game::Init()
 
 	this->pengoAnimator = new PengoAnimator(&this->Levels[this->Level].Pengo, 0.5f, 0.25f);
 	for (Block& b : this->Levels[this->Level].Bricks)
-		blockAnimators.push_back(new BlockAnimator(0.5f, &b));
+		blockAnimators.push_back(new BlockAnimator(0.5f, 3.0f, &b));
 	//this->blockAnimator = new BlockAnimator(0.5f, &this->Levels[this->Level].Bricks);
 	this->wallAnimator = new WallAnimator(&this->Levels[this->Level].BottomWall, &this->Levels[this->Level].TopWall, &this->Levels[this->Level].LeftWall, &this->Levels[this->Level].RightWall, 0.5f);
 	for (Enemy* e : this->Levels[this->Level].Enemies)
 	{
 		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f));
 	}
+
+	for (Block& b : this->Levels[this->Level].Bricks)
+	{
+		if ((b.state != BlockState::BROKEN && b.state != BlockState::BREAKING) && b.containedEnemy != nullptr)
+		{
+			b.setState(BlockState::FLASHING);
+		}
+	}
+
+	for (Enemy* e : this->Levels[this->Level].Enemies)
+	{
+		e->setState(EnemyState::INITIAL_SPAWNING);
+	}
+
 
 	startClockLevel, startClockEnemyKill = std::clock();
 
@@ -137,9 +152,9 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-	this->Levels[this->Level].Score.show(std::to_string(score));
 	if (this->PengoState == GameState::GAME_ACTIVE)
 	{
+		this->Levels[this->Level].Score.show(std::to_string(score));
 
 		if (this->Levels[this->Level].IsCompleted())
 		{
@@ -413,6 +428,7 @@ void Game::Render()
 	//{
 		// draw level
 		//this->Levels[this->Level].Draw(*Renderer);
+	if (this->Levels.size() > this->Level)
 		this->Renderer->DrawLevel(this->Levels[this->Level]);
 	//}
 
@@ -763,10 +779,19 @@ void Game::spawnEnemy()
 	}
 	this->Levels[this->Level].Enemies.push_back(enemy);
 	for (Block& block : this->Levels[this->Level].Bricks)
-		if (block.position == enemy->position)
+		//if (std::abs(block.position[0] - enemy->position[0]) < EPSILON && std::abs(block.position[1] - enemy->position[1]) < EPSILON)
+		if(block.containedEnemy == enemy)
 			block.setState(BlockState::BROKEN);
 	enemyAnimators.push_back(new EnemyAnimator(enemy, 0.4f, 3.0f, 1.5f));
 	enemy->setState(EnemyState::SPAWNING);
+
+	for (Block& b : this->Levels[this->Level].Bricks)
+	{
+		if ((b.state != BlockState::BROKEN && b.state != BlockState::BREAKING) && b.containedEnemy != nullptr)
+		{
+			b.setState(BlockState::FLASHING);
+		}
+	}
 }
 
 bool Game::boxerExists()
@@ -811,12 +836,27 @@ void Game::initNextLevel()
 
 	this->pengoAnimator = new PengoAnimator(&this->Levels[this->Level].Pengo, 0.5f, 0.25f);
 	for (Block& b : this->Levels[this->Level].Bricks)
-		blockAnimators.push_back(new BlockAnimator(0.5f, &b));
+		blockAnimators.push_back(new BlockAnimator(0.5f, 3.0f, &b));
 	this->wallAnimator = new WallAnimator(&this->Levels[this->Level].BottomWall, &this->Levels[this->Level].TopWall, &this->Levels[this->Level].LeftWall, &this->Levels[this->Level].RightWall, 0.5f);
 	for (Enemy* e : this->Levels[this->Level].Enemies)
 	{
 		enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f));
 	}
+
+	for (Block& b : this->Levels[this->Level].Bricks)
+	{
+		if ((b.state != BlockState::BROKEN && b.state != BlockState::BREAKING) && b.containedEnemy != nullptr)
+		{
+			b.setState(BlockState::FLASHING);
+		}
+	}
+	for (Enemy* e : this->Levels[this->Level].Enemies)
+	{
+		e->setState(EnemyState::INITIAL_SPAWNING);
+	}
+
+	startClockLevel, startClockEnemyKill = std::clock();
+
 }
 
 bool Game::checkThreeDiamonds()

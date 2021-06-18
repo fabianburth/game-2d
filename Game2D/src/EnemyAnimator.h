@@ -12,7 +12,7 @@ public:
 	const float WALK_ANIMATION_DURATION;
 	const float STUNNED_ANIMATION_DURATION;
 	const float SPAWNING_ANIMATION_DURATION;
-	void (EnemyAnimator::* currentAnimation)();
+	void (EnemyAnimator::* currentAnimation)() = nullptr;
 
 	EnemyAnimator(Enemy* enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration);
 	~EnemyAnimator();

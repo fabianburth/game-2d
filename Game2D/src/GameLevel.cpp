@@ -151,7 +151,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
                 std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 1, Constants::HEIGHT_UNIT * 1};
                 Direction direction = Direction::DOWN;
-                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyMove" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Move", true);
+                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyMove" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Move", false);
                 this->Enemies.push_back(enemy);
             }
             else if (tileData[y][x] == 6)
@@ -159,7 +159,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
                 std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 1, Constants::HEIGHT_UNIT * 1 };
                 Direction direction = Direction::DOWN;
-                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyBoxer" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Boxer", true);
+                Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyBoxer" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Boxer", false);
                 this->Enemies.push_back(enemy);
             }
         }
