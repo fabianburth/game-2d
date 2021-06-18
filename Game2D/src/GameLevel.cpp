@@ -130,7 +130,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             else if (tileData[y][x] == 3)
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 1, Constants::HEIGHT_UNIT * 1 };
+                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3 };
                 Direction direction = Direction::DOWN;
                 Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyMove" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Move", false);
                 this->frozenEnemies.push_back(enemy);
@@ -141,7 +141,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             else if (tileData[y][x] == 4)
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 4, Constants::HEIGHT_UNIT * 4 };
+                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3 };
                 // initial Pengo texture to be loaded
                 // to change the texture, P.Sprite has to be changed between rendering
                 Pengo = Player(pos, ResourceManager::GetTexture("pengoRight"), velocity);
@@ -149,7 +149,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             else if (tileData[y][x] == 5)
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 1, Constants::HEIGHT_UNIT * 1};
+                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
                 Direction direction = Direction::DOWN;
                 Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyMove" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Move", false);
                 this->Enemies.push_back(enemy);
@@ -157,7 +157,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             else if (tileData[y][x] == 6)
             {
                 std::array<float, 2> pos = { unit_width * x, unit_height * y };
-                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 1, Constants::HEIGHT_UNIT * 1 };
+                std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3 };
                 Direction direction = Direction::DOWN;
                 Enemy* enemy = new Enemy(pos, ResourceManager::GetTexture("enemyBoxer" + stringDirection(direction) + "00"), velocity, direction, EnemyState::NONE, "Boxer", false);
                 this->Enemies.push_back(enemy);

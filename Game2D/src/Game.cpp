@@ -193,15 +193,6 @@ void Game::Update(float dt)
 		// bots do stuff
 		for (Enemy* enemy : this->Levels[this->Level].Enemies)
 		{
-			// if enemies touch a wall that is wobbly, the enemies shall be stunned
-			if (this->Levels[this->Level].RightWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::RIGHT)
-				|| this->Levels[this->Level].LeftWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::LEFT)
-				|| this->Levels[this->Level].TopWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::UP)
-				|| this->Levels[this->Level].BottomWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::DOWN))
-			{
-				enemy->setState(EnemyState::STUNNED);
-			}
-
 			// Behavior if enemies touch Pengo
 			if (checkCollisionPrecise(*enemy, *Pengo))
 			{
@@ -220,6 +211,15 @@ void Game::Update(float dt)
 					if (!this->Levels[this->Level].frozenEnemies.empty())
 						spawnEnemy();
 				}
+			}
+
+			// if enemies touch a wall that is wobbly, the enemies shall be stunned
+			if (this->Levels[this->Level].RightWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::RIGHT)
+				|| this->Levels[this->Level].LeftWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::LEFT)
+				|| this->Levels[this->Level].TopWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::UP)
+				|| this->Levels[this->Level].BottomWall.state == WallState::WOBBLY && checkWallCollision(*enemy, Direction::DOWN))
+			{
+				enemy->setState(EnemyState::STUNNED);
 			}
 
 			if (enemy->ready == true)

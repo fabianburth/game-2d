@@ -148,7 +148,7 @@ void EnemyAnimator::stunned()
 	}
 	else if (currentAnimationDuration > STUNNED_ANIMATION_DURATION)
 	{
-		if (enemy->baseType == "boxer")
+		if (enemy->baseType == "Boxer")
 			enemy->setState(EnemyState::CHASING);
 		else
 			enemy->setState(EnemyState::WANDERING);
