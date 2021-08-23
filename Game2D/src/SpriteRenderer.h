@@ -7,8 +7,8 @@
 
 #include <GL/glew.h>
 
-#include "texture.h"
-#include "shader.h"
+#include "Texture.h"
+#include "Shader.h"
 #include "GameObject.h"
 #include "GameLevel.h"
 #include "GameInformation.h"
