@@ -7,10 +7,19 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(Dependencies/glfw-3.3.4)
-add_subdirectory(Dependencies/glew-2.2.0/build/cmake)
+find_package(OpenGL REQUIRED)
+include_directories( ${OPENGL_INCLUDE_DIRS})
 
-include_directories(Dependencies/glew-2.2.0/include)
+set(FILE "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/glew/include/GL/glew.h")
+message(STATUS "Checking if glew is build")
+if (NOT EXISTS "${FILE}")
+    message(STATUS "Building Glew")
+    execute_process(COMMAND make -j$(nproc) -C ${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/glew/auto)
+endif()
+
+add_subdirectory(Dependencies/glfw)
+add_subdirectory(Dependencies/glew/build/cmake)
+include_directories(Dependencies/glew/include)
 
 set(SOURCES
         Game2D/src/Application.cpp
@@ -33,9 +42,6 @@ set(SOURCES
         Game2D/src/WallAnimator.cpp
 )
 
-find_package(OpenGL REQUIRED)
-include_directories( ${OPENGL_INCLUDE_DIRS})
-
 add_executable(Game2D ${SOURCES})
 
-target_link_libraries(Game2D ${OPENGL_LIBRARIES} glew glfw)
+target_link_libraries(Game2D ${OPENGL_LIBRARIES} glew_s glfw)

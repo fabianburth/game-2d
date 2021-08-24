@@ -1,0 +1,6 @@
+[submodule "Dependencies/glew"]
+	path = Dependencies/glew
+	url = git@github.com:nigels-com/glew.git
+[submodule "Dependencies/glfw"]
+	path = Dependencies/glfw
+	url = git@github.com:glfw/glfw.git
