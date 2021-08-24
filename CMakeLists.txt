@@ -3,6 +3,15 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(Game2D)
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(Dependencies/glfw-3.3.4)
+add_subdirectory(Dependencies/glew-2.2.0/build/cmake)
+
+include_directories(Dependencies/glew-2.2.0/include)
+
 set(SOURCES
         Game2D/src/Application.cpp
         Game2D/src/Block.cpp
@@ -24,11 +33,9 @@ set(SOURCES
         Game2D/src/WallAnimator.cpp
 )
 
-add_executable(Game2D ${SOURCES})
 find_package(OpenGL REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS})
-find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
-find_package(glfw3 REQUIRED)
 
-target_link_libraries(Game2D ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} glfw)
+add_executable(Game2D ${SOURCES})
+
+target_link_libraries(Game2D ${OPENGL_LIBRARIES} glew glfw)
