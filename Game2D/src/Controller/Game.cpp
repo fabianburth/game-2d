@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "ResourceManager.h"
+#include "../View/ResourceManager.h"
 #include <array>
 
 #include <iostream>

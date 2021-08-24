@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Animator.h"
-#include "GameObject.h"
-#include "Block.h"
+#include "../Animator.h"
+#include "../Model/GameObject.h"
+#include "../Model/Block.h"
 #include "ResourceManager.h"
 #include <any>
 

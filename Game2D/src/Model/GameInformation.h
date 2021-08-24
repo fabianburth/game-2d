@@ -3,8 +3,8 @@
 #include <vector>
 #include <string>
 #include "DisplayBlock.h"
-#include "Constants.h"
-#include "ResourceManager.h"
+#include "../Constants.h"
+#include "../View/ResourceManager.h"
 #include <ctype.h>
 
 class GameInformation

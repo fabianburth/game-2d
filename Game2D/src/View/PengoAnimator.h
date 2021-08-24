@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Animator.h"
-#include "Player.h"
+#include "../Animator.h"
+#include "../Model/Player.h"
 #include "ResourceManager.h"
 #include <any>
 

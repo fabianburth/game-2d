@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Observer.h"
-#include "GameObject.h"
+#include "Model/GameObject.h"
 template<class T>
 class Animator: public Observer<T>
 {
