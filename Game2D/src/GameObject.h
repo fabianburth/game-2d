@@ -10,7 +10,7 @@
 #include <array>
 #include <string>
 
-#include "texture.h"
+#include "Texture.h"
 #include "Subject.h"
 
 enum class Direction

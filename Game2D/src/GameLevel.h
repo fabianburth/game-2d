@@ -7,10 +7,10 @@
 #include <GL/glew.h>
 
 #include "Constants.h"
-#include "gameobject.h"
+#include "GameObject.h"
 #include "Player.h"
 #include "Block.h"
-#include "resourcemanager.h"
+#include "ResourceManager.h"
 #include "Wall.h"
 #include "Enemy.h"
 #include "GameInformation.h"

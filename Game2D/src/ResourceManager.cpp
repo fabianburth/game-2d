@@ -1,8 +1,9 @@
-#include "resourcemanager.h"
+#include "ResourceManager.h"
 
+#include <cstring>
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 
 // Instantiate static variables
 std::map<std::string, Texture2D>    ResourceManager::Textures;

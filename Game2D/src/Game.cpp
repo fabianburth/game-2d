@@ -1,7 +1,6 @@
 #include "Game.h"
 #include "ResourceManager.h"
 #include <array>
-#include <Windows.h>
 
 #include <iostream>
 // Game-related State data
@@ -20,7 +19,7 @@ Game::~Game()
 void Game::Init()
 {
 	// load shaders
-	ResourceManager::LoadShader("res/shaders/sprites.vs", "res/shaders/sprites.fs", "sprite");
+	ResourceManager::LoadShader("../Game2D/res/shaders/sprites.vs", "../Game2D/res/shaders/sprites.fs", "sprite");
 	// configure shaders
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
 	// set render-specific controls
@@ -28,90 +27,90 @@ void Game::Init()
 	this->Renderer = new SpriteRenderer(shader);
 	// load textures
 	// Load all Iceblock Textures
-	ResourceManager::LoadTexture("res/sprites/Iceblock.bmp", "iceblock");
-	ResourceManager::LoadTexture("res/sprites/IceblockGreen.bmp", "iceblockGreen");
-	ResourceManager::LoadTexture("res/sprites/IceblockBreaking0.bmp", "iceblockBreaking0");
-	ResourceManager::LoadTexture("res/sprites/IceblockBreaking1.bmp", "iceblockBreaking1");
-	ResourceManager::LoadTexture("res/sprites/IceblockBreaking2.bmp", "iceblockBreaking2");
-	ResourceManager::LoadTexture("res/sprites/IceblockBreaking3.bmp", "iceblockBreaking3");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Iceblock.bmp", "iceblock");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/IceblockGreen.bmp", "iceblockGreen");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/IceblockBreaking0.bmp", "iceblockBreaking0");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/IceblockBreaking1.bmp", "iceblockBreaking1");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/IceblockBreaking2.bmp", "iceblockBreaking2");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/IceblockBreaking3.bmp", "iceblockBreaking3");
 
 	// Load Diamondblock Textures
-	ResourceManager::LoadTexture("res/sprites/Diamondblock.bmp", "diamondblock");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Diamondblock.bmp", "diamondblock");
 
 	// Load Wall Textures
-	ResourceManager::LoadTexture("res/sprites/Wall_LR.bmp", "wallLR");
-	ResourceManager::LoadTexture("res/sprites/Wall_LR_00.bmp", "wallLR_00");
-	ResourceManager::LoadTexture("res/sprites/Wall_LR_01.bmp", "wallLR_01");
-	ResourceManager::LoadTexture("res/sprites/Wall_BT.bmp", "wallBT");
-	ResourceManager::LoadTexture("res/sprites/Wall_BT_00.bmp", "wallBT_00");
-	ResourceManager::LoadTexture("res/sprites/Wall_BT_01.bmp", "wallBT_01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Wall_LR.bmp", "wallLR");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Wall_LR_00.bmp", "wallLR_00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Wall_LR_01.bmp", "wallLR_01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Wall_BT.bmp", "wallBT");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Wall_BT_00.bmp", "wallBT_00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Wall_BT_01.bmp", "wallBT_01");
 
 	// Load all Pengo Textures
-	ResourceManager::LoadTexture("res/sprites/PengoRight.bmp", "pengoRight");
-	ResourceManager::LoadTexture("res/sprites/PengoLeft.bmp", "pengoLeft");
-	ResourceManager::LoadTexture("res/sprites/PengoMoveRight.bmp", "pengoMoveRight");
-	ResourceManager::LoadTexture("res/sprites/PengoMoveLeft.bmp", "pengoMoveLeft");
-	ResourceManager::LoadTexture("res/sprites/PengoDown.bmp", "pengoDown");
-	ResourceManager::LoadTexture("res/sprites/PengoMoveDown.bmp", "pengoMoveDown");
-	ResourceManager::LoadTexture("res/sprites/PengoUp.bmp", "pengoUp");
-	ResourceManager::LoadTexture("res/sprites/PengoMoveUp.bmp", "pengoMoveUp");
-	ResourceManager::LoadTexture("res/sprites/PengoPushRight.bmp", "pengoPushRight");
-	ResourceManager::LoadTexture("res/sprites/PengoPushLeft.bmp", "pengoPushLeft");
-	ResourceManager::LoadTexture("res/sprites/PengoPostPushUp.bmp", "pengoPostPushUp");
-	ResourceManager::LoadTexture("res/sprites/PengoPushUp.bmp", "pengoPushUp");
-	ResourceManager::LoadTexture("res/sprites/PengoPostPushDown.bmp", "pengoPostPushDown");
-	ResourceManager::LoadTexture("res/sprites/PengoPushDown.bmp", "pengoPushDown");
-	ResourceManager::LoadTexture("res/sprites/PengoPostPushLeft.bmp", "pengoPostPushLeft");
-	ResourceManager::LoadTexture("res/sprites/PengoPostPushRight.bmp", "pengoPostPushRight");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoRight.bmp", "pengoRight");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoLeft.bmp", "pengoLeft");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoMoveRight.bmp", "pengoMoveRight");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoMoveLeft.bmp", "pengoMoveLeft");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoDown.bmp", "pengoDown");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoMoveDown.bmp", "pengoMoveDown");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoUp.bmp", "pengoUp");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoMoveUp.bmp", "pengoMoveUp");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPushRight.bmp", "pengoPushRight");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPushLeft.bmp", "pengoPushLeft");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPostPushUp.bmp", "pengoPostPushUp");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPushUp.bmp", "pengoPushUp");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPostPushDown.bmp", "pengoPostPushDown");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPushDown.bmp", "pengoPushDown");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPostPushLeft.bmp", "pengoPostPushLeft");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/PengoPostPushRight.bmp", "pengoPostPushRight");
 
 	// Load all Wandering Enemy Textures
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveRight00.bmp", "enemyMoveRight00");
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveLeft00.bmp", "enemyMoveLeft00");
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveDown00.bmp", "enemyMoveDown00");
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveUp00.bmp", "enemyMoveUp00");
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveRight01.bmp", "enemyMoveRight01");
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveLeft01.bmp", "enemyMoveLeft01");
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveDown01.bmp", "enemyMoveDown01");
-	ResourceManager::LoadTexture("res/sprites/EnemyMoveUp01.bmp", "enemyMoveUp01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveRight00.bmp", "enemyMoveRight00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveLeft00.bmp", "enemyMoveLeft00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveDown00.bmp", "enemyMoveDown00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveUp00.bmp", "enemyMoveUp00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveRight01.bmp", "enemyMoveRight01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveLeft01.bmp", "enemyMoveLeft01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveDown01.bmp", "enemyMoveDown01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyMoveUp01.bmp", "enemyMoveUp01");
 	// Load all Boxing Enemy Textures
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerRight00.bmp", "enemyBoxerRight00");
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerLeft00.bmp", "enemyBoxerLeft00");
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerDown00.bmp", "enemyBoxerDown00");
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerUp00.bmp", "enemyBoxerUp00");
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerRight01.bmp", "enemyBoxerRight01");
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerLeft01.bmp", "enemyBoxerLeft01");
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerDown01.bmp", "enemyBoxerDown01");
-	ResourceManager::LoadTexture("res/sprites/EnemyBoxerUp01.bmp", "enemyBoxerUp01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerRight00.bmp", "enemyBoxerRight00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerLeft00.bmp", "enemyBoxerLeft00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerDown00.bmp", "enemyBoxerDown00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerUp00.bmp", "enemyBoxerUp00");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerRight01.bmp", "enemyBoxerRight01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerLeft01.bmp", "enemyBoxerLeft01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerDown01.bmp", "enemyBoxerDown01");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyBoxerUp01.bmp", "enemyBoxerUp01");
 	// Load Stunned Enemy Texture
-	ResourceManager::LoadTexture("res/sprites/EnemyStunnedRight.bmp", "enemyStunnedRight");
-	ResourceManager::LoadTexture("res/sprites/EnemyStunnedLeft.bmp", "enemyStunnedLeft");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyStunnedRight.bmp", "enemyStunnedRight");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemyStunnedLeft.bmp", "enemyStunnedLeft");
 	// Load Spawning Enemy Textures
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn0.bmp", "enemySpawn0");
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn1.bmp", "enemySpawn1");
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn2.bmp", "enemySpawn2");
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn3.bmp", "enemySpawn3");
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn4.bmp", "enemySpawn4");
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn5.bmp", "enemySpawn5");
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn6.bmp", "enemySpawn6");
-	ResourceManager::LoadTexture("res/sprites/EnemySpawn7.bmp", "enemySpawn7");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn0.bmp", "enemySpawn0");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn1.bmp", "enemySpawn1");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn2.bmp", "enemySpawn2");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn3.bmp", "enemySpawn3");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn4.bmp", "enemySpawn4");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn5.bmp", "enemySpawn5");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn6.bmp", "enemySpawn6");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/EnemySpawn7.bmp", "enemySpawn7");
 
-	ResourceManager::LoadTexture("res/sprites/Placeholder.bmp", "placeholder");
-	ResourceManager::LoadTexture("res/sprites/One.bmp", "One");
-	ResourceManager::LoadTexture("res/sprites/P.bmp", "P");
-	ResourceManager::LoadTexture("res/sprites/0.bmp", "0");
-	ResourceManager::LoadTexture("res/sprites/1.bmp", "1");
-	ResourceManager::LoadTexture("res/sprites/2.bmp", "2");
-	ResourceManager::LoadTexture("res/sprites/3.bmp", "3");
-	ResourceManager::LoadTexture("res/sprites/4.bmp", "4");
-	ResourceManager::LoadTexture("res/sprites/5.bmp", "5");
-	ResourceManager::LoadTexture("res/sprites/6.bmp", "6");
-	ResourceManager::LoadTexture("res/sprites/7.bmp", "7");
-	ResourceManager::LoadTexture("res/sprites/8.bmp", "8");
-	ResourceManager::LoadTexture("res/sprites/9.bmp", "9");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/Placeholder.bmp", "placeholder");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/One.bmp", "One");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/P.bmp", "P");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/0.bmp", "0");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/1.bmp", "1");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/2.bmp", "2");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/3.bmp", "3");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/4.bmp", "4");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/5.bmp", "5");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/6.bmp", "6");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/7.bmp", "7");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/8.bmp", "8");
+	ResourceManager::LoadTexture("../Game2D/res/sprites/9.bmp", "9");
 
 
-	GameLevel one; one.Load("res/levels/level1.lvl", 448, 576);
-	GameLevel two; two.Load("res/levels/level0.lvl", 448, 576);
+	GameLevel one; one.Load("../Game2D/res/levels/level1.lvl", 448, 576);
+	GameLevel two; two.Load("../Game2D/res/levels/level0.lvl", 448, 576);
 	//this->Pengo = one.Pengo;
 	this->Levels.push_back(one);
 	this->Levels.push_back(two);
