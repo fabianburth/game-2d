@@ -698,5 +698,8 @@ modules.xml
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+## Special files
+compile_commands.json
+compile_commands_copy.json
 
 # End of https://www.toptal.com/developers/gitignore/api/clion,clion+iml,clion+all,c++,c,git,visualstudio,visualstudiocode

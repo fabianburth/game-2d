@@ -3,6 +3,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(Game2D)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -fno-omit-frame-pointer -fsanitize=address")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -51,6 +52,6 @@ set(SOURCES
         Game2D/src/View/WallAnimator.cpp
 )
 
-add_executable(Game2D ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(Game2D ${OPENGL_LIBRARIES} glew_s glfw)
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glew_s glfw)
