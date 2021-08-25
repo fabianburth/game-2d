@@ -3,15 +3,15 @@
 #ifndef SPRITE_RENDERER_H
 #define SPRITE_RENDERER_H
 
-#include "Constants.h"
+#include "../Constants.h"
 
 #include <GL/glew.h>
 
 #include "Texture.h"
 #include "Shader.h"
-#include "GameObject.h"
-#include "GameLevel.h"
-#include "GameInformation.h"
+#include "../Model/GameObject.h"
+#include "../Model/GameLevel.h"
+#include "../Model/GameInformation.h"
 
 #include <array>
 

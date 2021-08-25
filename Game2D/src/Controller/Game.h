@@ -3,19 +3,19 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Constants.h"
+#include "../Constants.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <algorithm>
 #include <cstdlib>
-#include "PengoAnimator.h"
-#include "BlockAnimator.h"
-#include "WallAnimator.h"
-#include "GameLevel.h"
-#include "Player.h"
-#include "SpriteRenderer.h"
-#include "Wall.h"
-#include "EnemyAnimator.h"
+#include "../View/PengoAnimator.h"
+#include "../View/BlockAnimator.h"
+#include "../View/WallAnimator.h"
+#include "../Model/GameLevel.h"
+#include "../Model/Player.h"
+#include "../View/SpriteRenderer.h"
+#include "../Model/Wall.h"
+#include "../View/EnemyAnimator.h"
 #include <string>
 #include <ctime>
 

@@ -6,11 +6,11 @@
 
 #include <GL/glew.h>
 
-#include "Constants.h"
+#include "../Constants.h"
 #include "GameObject.h"
 #include "Player.h"
 #include "Block.h"
-#include "ResourceManager.h"
+#include "../View/ResourceManager.h"
 #include "Wall.h"
 #include "Enemy.h"
 #include "GameInformation.h"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Animator.h"
-#include "Enemy.h"
+#include "../Animator.h"
+#include "../Model/Enemy.h"
 #include "ResourceManager.h"
 #include <string>
 

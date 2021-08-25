@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Animator.h"
+#include "../Animator.h"
 #include "ResourceManager.h"
-#include "Wall.h"
+#include "../Model/Wall.h"
 
 class WallAnimator : public Animator<Wall>
 {

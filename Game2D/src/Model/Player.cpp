@@ -1,6 +1,6 @@
 #include "Player.h"
-#include "ResourceManager.h"
-#include "Animator.h"
+#include "../View/ResourceManager.h"
+#include "../Animator.h"
 
 Player::Player() {}
 

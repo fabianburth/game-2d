@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 20)
 
 project(Game2D)
@@ -31,24 +31,24 @@ add_subdirectory(Dependencies/glew/build/cmake)
 include_directories(Dependencies/glew/include)
 
 set(SOURCES
-        Game2D/src/Application.cpp
-        Game2D/src/Block.cpp
-        Game2D/src/BlockAnimator.cpp
-        Game2D/src/DisplayBlock.cpp
-        Game2D/src/Enemy.cpp
-        Game2D/src/EnemyAnimator.cpp
-        Game2D/src/Game.cpp
-        Game2D/src/GameInformation.cpp
-        Game2D/src/GameLevel.cpp
-        Game2D/src/GameObject.cpp
-        Game2D/src/PengoAnimator.cpp
-        Game2D/src/Player.cpp
-        Game2D/src/ResourceManager.cpp
-        Game2D/src/Shader.cpp
-        Game2D/src/SpriteRenderer.cpp
-        Game2D/src/Texture.cpp
-        Game2D/src/Wall.cpp
-        Game2D/src/WallAnimator.cpp
+        Game2D/src/View/Application.cpp
+        Game2D/src/Model/Block.cpp
+        Game2D/src/View/BlockAnimator.cpp
+        Game2D/src/Model/DisplayBlock.cpp
+        Game2D/src/Model/Enemy.cpp
+        Game2D/src/View/EnemyAnimator.cpp
+        Game2D/src/Controller/Game.cpp
+        Game2D/src/Model/GameInformation.cpp
+        Game2D/src/Model/GameLevel.cpp
+        Game2D/src/Model/GameObject.cpp
+        Game2D/src/View/PengoAnimator.cpp
+        Game2D/src/Model/Player.cpp
+        Game2D/src/View/ResourceManager.cpp
+        Game2D/src/View/Shader.cpp
+        Game2D/src/View/SpriteRenderer.cpp
+        Game2D/src/View/Texture.cpp
+        Game2D/src/Model/Wall.cpp
+        Game2D/src/View/WallAnimator.cpp
 )
 
 add_executable(Game2D ${SOURCES})
