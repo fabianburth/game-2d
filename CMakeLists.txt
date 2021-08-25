@@ -7,6 +7,7 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
+find_package(Python REQUIRED)
 find_package(OpenGL REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS})
 
@@ -16,9 +17,11 @@ if (NOT EXISTS "${FILE}")
     if(UNIX)
         message(STATUS "Building Glew")
         execute_process(COMMAND make -C ${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/glew/auto)
-    elseif(WIN32)
-        message(STATUS "Building Glew")
-        execute_process(COMMAND mingw32-make.exe -C ${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/glew/auto)
+    else()
+        message(FATAL_ERROR "Please build GLEW first:\n"
+                "1. Open Git Bash in Dependencies/glew/auto\n"
+                "2. Execute mingw-32-make.exe\n"
+                "3. Reload the Cmake Project")
     endif()
 endif()
 
