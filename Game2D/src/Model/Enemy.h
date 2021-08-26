@@ -29,4 +29,9 @@ public:
 	void setPositionToMoveTo();
 	void move(float deltaTime);
 
+	// Auxiliary method which generates a vector containing probabilities for the possible directions
+	// @param directions: A vector containing all possible directions for the enemy to move to
+	// @return: A vector containing a probability for each direction in the direction vector
+	std::vector<int> getProbabilityArray(std::vector<Direction> directions);
+
 };

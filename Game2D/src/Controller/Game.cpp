@@ -229,7 +229,7 @@ void Game::Update(float dt)
 				//bool movementImpossible = true;
 				//while (movementImpossible)
 				//{
-				std::vector<int> chances = getPropabilityArray(*enemy, directions);
+				std::vector<int> chances = getProbabilityArray(*enemy, directions);
 				int index = getDirectionIndex(chances);
 				// cover the case when there is no direction to go to
 				// for example, if you pushed a block and it happens to be currently flying by the only direction this enemy could go to
@@ -321,14 +321,14 @@ void Game::ProcessInput(float dt)
 					P->setState(PengoState::PUSH);
 				}
 				return;*/
-				if (checkCollisions(*Pengo, Pengo->direction))
+				if (this->Levels[this->Level].checkCollisions(*Pengo, Pengo->direction))
 				{
 					Block* block = getCollisionBlock(*Pengo, Pengo->direction);
 					// Behavior if the collision is with an adjacent block
 					if (block != nullptr)
 					{
 						// Behavior if there actually is a block directly behind the adjacent one
-						if (checkCollisions(*block, Pengo->direction))
+						if (this->Levels[this->Level].checkCollisions(*block, Pengo->direction))
 						{
 							// Pengo always tries to break it (Pengo Animation)
 							Pengo->setState(PengoState::BREAK);
@@ -381,7 +381,7 @@ void Game::ProcessInput(float dt)
 			{
 				Pengo->setDirection(Direction::RIGHT);
 				Pengo->setState(PengoState::WALK);
-				if (!checkCollisions(*Pengo, Direction::RIGHT))
+				if (!this->Levels[this->Level].checkCollisions(*Pengo, Direction::RIGHT))
 				{
 					Pengo->setPositionToMoveTo();
 				}
@@ -391,7 +391,7 @@ void Game::ProcessInput(float dt)
 			{
 				Pengo->setDirection(Direction::LEFT);
 				Pengo->setState(PengoState::WALK);
-				if (!checkCollisions(*Pengo, Direction::LEFT))
+				if (!this->Levels[this->Level].checkCollisions(*Pengo, Direction::LEFT))
 				{
 					Pengo->setPositionToMoveTo();
 				}
@@ -401,7 +401,7 @@ void Game::ProcessInput(float dt)
 			{
 				Pengo->setDirection(Direction::UP);
 				Pengo->setState(PengoState::WALK);
-				if (!checkCollisions(*Pengo, Direction::UP))
+				if (!this->Levels[this->Level].checkCollisions(*Pengo, Direction::UP))
 				{
 					Pengo->setPositionToMoveTo();
 				}
@@ -411,7 +411,7 @@ void Game::ProcessInput(float dt)
 			{
 				Pengo->setDirection(Direction::DOWN);
 				Pengo->setState(PengoState::WALK);
-				if (!checkCollisions(*Pengo, Direction::DOWN))
+				if (!this->Levels[this->Level].checkCollisions(*Pengo, Direction::DOWN))
 				{
 					Pengo->setPositionToMoveTo();
 				}
@@ -435,20 +435,20 @@ void Game::Render()
 	// Renderer->DrawSprite(texture, { 6.0f * Constants::WIDTH_UNIT, 8.0f * Constants::HEIGHT_UNIT });
 }
 
-bool Game::checkCollisions(GameObject& gameObject, Direction d)
-{
-	for (Block& block : this->Levels[this->Level].Bricks)
-	{
-		if (block.state != BlockState::BROKEN)
-		{
-			if (checkBlockCollision(gameObject, block, d) || checkWallCollision(gameObject, d))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
+//bool Game::checkCollisions(GameObject& gameObject, Direction d)
+//{
+//	for (Block& block : this->Levels[this->Level].Bricks)
+//	{
+//		if (block.state != BlockState::BROKEN)
+//		{
+//			if (checkBlockCollision(gameObject, block, d) || checkWallCollision(gameObject, d))
+//			{
+//				return true;
+//			}
+//		}
+//	}
+//	return false;
+//}
 
 //bool Game::doCollision(GameObject& gameObject, Direction d)
 //{
@@ -478,295 +478,295 @@ bool Game::checkCollisions(GameObject& gameObject, Direction d)
 //	return false;
 //}
 
-Block* Game::getCollisionBlock(GameObject& gameObject, Direction d)
-{
-	for (Block& block : this->Levels[this->Level].Bricks)
-	{
-		if (block.state != BlockState::BROKEN)
-		{
-			if (checkBlockCollision(gameObject, block, d))
-			{
-				return &block;
-			}
-		}
-	}
-	return nullptr;
-}
+//Block* Game::getCollisionBlock(GameObject& gameObject, Direction d)
+//{
+//	for (Block& block : this->Levels[this->Level].Bricks)
+//	{
+//		if (block.state != BlockState::BROKEN)
+//		{
+//			if (checkBlockCollision(gameObject, block, d))
+//			{
+//				return &block;
+//			}
+//		}
+//	}
+//	return nullptr;
+//}
 
-bool Game::checkBlockCollision(GameObject& one, GameObject& two, Direction d)
-{
-	bool collisionX = false;
-	bool collisionY = false;
+//bool Game::checkBlockCollision(GameObject& one, GameObject& two, Direction d)
+//{
+//	bool collisionX = false;
+//	bool collisionY = false;
+//
+//	switch (d)
+//	{
+//	case Direction::RIGHT:
+//		collisionX = ((one.position[0] + 2 * Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - (one.position[0] + Constants::WIDTH_UNIT)) > EPSILON;
+//		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON;
+//		break;
+//	case Direction::LEFT:
+//		collisionX = ((one.position[0] + Constants::WIDTH_UNIT - Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - (one.position[0] - Constants::WIDTH_UNIT)) > EPSILON;
+//		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON;
+//		break;
+//	case Direction::UP:
+//		collisionX = ((one.position[0] + Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - one.position[0]) > EPSILON;
+//		collisionY = ((one.position[1] + 2 * Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - (one.position[1] + Constants::HEIGHT_UNIT)) > EPSILON;
+//		break;
+//	case Direction::DOWN:
+//		collisionX = ((one.position[0] + Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - one.position[0]) > EPSILON;
+//		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT - Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - (one.position[1] - Constants::HEIGHT_UNIT)) > EPSILON;
+//		break;
+//	}
+//	return collisionX && collisionY;
+//}
+//
+//
+//bool Game::checkWallCollision(GameObject& one, Direction d)
+//{
+//	bool collision = false;
+//
+//	switch (d)
+//	{
+//	case Direction::RIGHT:
+//		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT );
+//		collision = !(((one.position[0] + Constants::WIDTH_UNIT) - (12 * Constants::WIDTH_UNIT)) < EPSILON);
+//		break;
+//	case Direction::LEFT:
+//		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
+//		collision = !(0 - (one.position[0] - Constants::WIDTH_UNIT) < EPSILON);
+//		break;
+//	case Direction::UP:
+//		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);
+//		collision = !(((one.position[1] + Constants::HEIGHT_UNIT) - (14 * Constants::HEIGHT_UNIT)) < EPSILON);
+//		break;
+//	case Direction::DOWN:
+//		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
+//		collision = !(0 - (one.position[1] - Constants::HEIGHT_UNIT) < EPSILON);
+//		break;
+//	}
+//	return collision;
+//}
 
-	switch (d)
-	{
-	case Direction::RIGHT:
-		collisionX = ((one.position[0] + 2 * Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - (one.position[0] + Constants::WIDTH_UNIT)) > EPSILON;
-		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON;
-		break;
-	case Direction::LEFT:
-		collisionX = ((one.position[0] + Constants::WIDTH_UNIT - Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - (one.position[0] - Constants::WIDTH_UNIT)) > EPSILON;
-		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON;
-		break;
-	case Direction::UP:
-		collisionX = ((one.position[0] + Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - one.position[0]) > EPSILON;
-		collisionY = ((one.position[1] + 2 * Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - (one.position[1] + Constants::HEIGHT_UNIT)) > EPSILON;
-		break;
-	case Direction::DOWN:
-		collisionX = ((one.position[0] + Constants::WIDTH_UNIT) - two.position[0]) > EPSILON && ((two.position[0] + Constants::WIDTH_UNIT) - one.position[0]) > EPSILON;
-		collisionY = ((one.position[1] + Constants::HEIGHT_UNIT - Constants::HEIGHT_UNIT) - two.position[1]) > EPSILON && ((two.position[1] + Constants::HEIGHT_UNIT) - (one.position[1] - Constants::HEIGHT_UNIT)) > EPSILON;
-		break;
-	}
-	return collisionX && collisionY;
-}
+//bool Game::checkWallCollisionPrecise(GameObject& one, Direction d)
+//{
+//    bool collision = false;
+//
+//	switch (d)
+//	{
+//	case Direction::RIGHT:
+//		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT );
+//		collision = !(((12 * Constants::WIDTH_UNIT) - one.position[0]) > EPSILON);
+//		break;
+//	case Direction::LEFT:
+//		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
+//		collision = !(0 + one.position[0] > EPSILON);
+//		break;
+//	case Direction::UP:
+//		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);
+//		collision = !(((14 * Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON);
+//		break;
+//	case Direction::DOWN:
+//		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
+//		collision = !(0 + one.position[1] > EPSILON);
+//		break;
+//	}
+//	return collision;
+//}
 
+//bool Game::checkCollisionPrecise(GameObject& one, GameObject& two)
+//{
+//	bool collisionX = one.position[0] + Constants::WIDTH_UNIT - two.position[0] > EPSILON && two.position[0] + Constants::WIDTH_UNIT - one.position[0] > EPSILON;
+//	bool collisionY = one.position[1] + Constants::HEIGHT_UNIT - two.position[1] > EPSILON && two.position[1] + Constants::HEIGHT_UNIT - one.position[1] > EPSILON;
+//	return collisionX && collisionY;
+//}
 
-bool Game::checkWallCollision(GameObject& one, Direction d)
-{
-	bool collision = false;
+//std::vector<int> Game::getProbabilityArray(Enemy& enemy, std::vector<Direction> directions)
+//{
+//	std::vector<int> probabilities;
+//	bool currentDirectionPossible;
+//	bool oppositeDirectionPossible;
+//	switch (directions.size())
+//	{
+//	case 4:
+//		probabilities.push_back(90);
+//		probabilities.push_back(94);
+//		probabilities.push_back(98);
+//		probabilities.push_back(100);
+//		break;
+//	case 3:
+//		currentDirectionPossible = std::find(directions.begin(), directions.end(), enemy.direction) != directions.end();
+//		oppositeDirectionPossible = std::find(directions.begin(), directions.end(), oppositeDirection(enemy.direction)) != directions.end();
+//		if (currentDirectionPossible && oppositeDirectionPossible)
+//		{
+//			probabilities.push_back(80);
+//			probabilities.push_back(98);
+//			probabilities.push_back(100);
+//		}
+//		else if (currentDirectionPossible && !oppositeDirectionPossible)
+//		{
+//			probabilities.push_back(80);
+//			probabilities.push_back(90);
+//			probabilities.push_back(100);
+//		}
+//		else if (!currentDirectionPossible && oppositeDirectionPossible)
+//		{
+//			probabilities.push_back(49);
+//			probabilities.push_back(98);
+//			probabilities.push_back(100);
+//		}
+//		break;
+//	case 2:
+//		currentDirectionPossible = std::find(directions.begin(), directions.end(), enemy.direction) != directions.end();
+//		oppositeDirectionPossible = std::find(directions.begin(), directions.end(), oppositeDirection(enemy.direction)) != directions.end();
+//		if (currentDirectionPossible && oppositeDirectionPossible)
+//		{
+//			probabilities.push_back(98);
+//			probabilities.push_back(100);
+//		}
+//		else if (currentDirectionPossible && !oppositeDirectionPossible)
+//		{
+//			probabilities.push_back(80);
+//			probabilities.push_back(100);
+//		}
+//		else if (!currentDirectionPossible && oppositeDirectionPossible)
+//		{
+//			probabilities.push_back(98);
+//			probabilities.push_back(100);
+//		}
+//		break;
+//	case 1:
+//		probabilities.push_back(100);
+//		break;
+//	default:
+//		probabilities.push_back(100);
+//		break;
+//	}
+//
+//	return probabilities;
+//}
 
-	switch (d)
-	{
-	case Direction::RIGHT:
-		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT );
-		collision = !(((one.position[0] + Constants::WIDTH_UNIT) - (12 * Constants::WIDTH_UNIT)) < EPSILON);
-		break;
-	case Direction::LEFT:
-		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
-		collision = !(0 - (one.position[0] - Constants::WIDTH_UNIT) < EPSILON);
-		break;
-	case Direction::UP:
-		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);
-		collision = !(((one.position[1] + Constants::HEIGHT_UNIT) - (14 * Constants::HEIGHT_UNIT)) < EPSILON);
-		break;
-	case Direction::DOWN:
-		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
-		collision = !(0 - (one.position[1] - Constants::HEIGHT_UNIT) < EPSILON);
-		break;
-	}
-	return collision;
-}
+//std::vector<Direction> Game::getInitialDirections(Enemy& enemy)
+//{
+//	// Build array for determining a direction with certain propabilities
+//	std::vector<Direction> allDirections{ Direction::RIGHT, Direction::LEFT, Direction::UP, Direction::DOWN };
+//	std::vector<Direction> orderedDirections;
+//	std::vector<Direction> directions;
+//
+//	float xDistance = std::abs(enemy.position[0] - Pengo->position[0]) * (2.0f / 448.0f);
+//	float yDistance = std::abs(enemy.position[1] - Pengo->position[1]) * (2.0f / 576.0f);
+//
+//	switch (enemy.state)
+//	{
+//	case EnemyState::WANDERING:
+//		orderedDirections.push_back(enemy.direction);
+//		for (Direction d : allDirections)
+//		{
+//			if (d != enemy.direction && d != oppositeDirection(enemy.direction))
+//			{
+//				orderedDirections.push_back(d);
+//			}
+//		}
+//		orderedDirections.push_back(oppositeDirection(enemy.direction));
+//
+//		for (int i = 0; i < orderedDirections.size(); ++i)
+//		{
+//			if (!checkCollisions(enemy, orderedDirections.at(i)))
+//			{
+//				directions.push_back(orderedDirections.at(i));
+//			}
+//		}
+//		break;
+//	case EnemyState::CHASING:
+//
+//		if (xDistance >= yDistance)
+//		{
+//			//Move horizontally (x-direction)
+//			if (enemy.position[0] > Pengo->position[0])
+//			{
+//				//Pengo is left, so move left
+//				orderedDirections.push_back(Direction::LEFT);
+//			}
+//			else
+//			{
+//				orderedDirections.push_back(Direction::RIGHT);
+//			}
+//
+//			if (enemy.position[1] > Pengo->position[1])
+//			{
+//				//Pengo is left, so move left
+//				orderedDirections.push_back(Direction::DOWN);
+//			}
+//			else
+//			{
+//				orderedDirections.push_back(Direction::UP);
+//			}
+//		}
+//		else if (xDistance < yDistance)
+//		{
+//			//Move vertically (y-direction)
+//			if (enemy.position[1] > Pengo->position[1])
+//			{
+//				//Pengo is left, so move left
+//				orderedDirections.push_back(Direction::DOWN);
+//			}
+//			else
+//			{
+//				orderedDirections.push_back(Direction::UP);
+//			}
+//
+//			if (enemy.position[0] > Pengo->position[0])
+//			{
+//				//Pengo is left, so move left
+//				orderedDirections.push_back(Direction::LEFT);
+//			}
+//			else
+//			{
+//				orderedDirections.push_back(Direction::RIGHT);
+//			}
+//		}
+//
+//		for (Direction d : allDirections)
+//		{
+//			if (std::find(orderedDirections.begin(), orderedDirections.end(), d) == orderedDirections.end())
+//			{
+//				orderedDirections.push_back(d);
+//			}
+//		}
+//
+//		for (int i = 0; i < orderedDirections.size(); ++i)
+//		{
+//			if (!checkWallCollision(enemy, orderedDirections.at(i)))
+//			{
+//				Block* block = getCollisionBlock(enemy, orderedDirections.at(i));
+//				if (block == nullptr || !block->isUnbreakable)
+//				{
+//					directions.push_back(orderedDirections.at(i));
+//				}
+//			}
+//		}
+//		break;
+//	}
+//
+//	return directions;
+//}
 
-bool Game::checkWallCollisionPrecise(GameObject& one, Direction d)
-{
-    bool collision = false;
+//int Game::getDirectionIndex(std::vector<int> chances)
+//{
+//	int index = 0;
+//	int randomNumber = std::rand() % 100;
+//	for (int i = 0; i < chances.size(); i++)
+//	{
+//		if (randomNumber > chances.at(i))
+//			index++;
+//	}
+//	return index;
+//}
 
-	switch (d)
-	{
-	case Direction::RIGHT:
-		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f - 0.5f * Constants::WIDTH_UNIT );
-		collision = !(((12 * Constants::WIDTH_UNIT) - one.position[0]) > EPSILON);
-		break;
-	case Direction::LEFT:
-		//collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f + 0.5f * Constants::WIDTH_UNIT);
-		collision = !(0 + one.position[0] > EPSILON);
-		break;
-	case Direction::UP:
-		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f - 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);
-		collision = !(((14 * Constants::HEIGHT_UNIT) - one.position[1]) > EPSILON);
-		break;
-	case Direction::DOWN:
-		//collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >= (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
-		collision = !(0 + one.position[1] > EPSILON);
-		break;
-	}
-	return collision;
-}
-
-bool Game::checkCollisionPrecise(GameObject& one, GameObject& two)
-{
-	bool collisionX = one.position[0] + Constants::WIDTH_UNIT - two.position[0] > EPSILON && two.position[0] + Constants::WIDTH_UNIT - one.position[0] > EPSILON;
-	bool collisionY = one.position[1] + Constants::HEIGHT_UNIT - two.position[1] > EPSILON && two.position[1] + Constants::HEIGHT_UNIT - one.position[1] > EPSILON;
-	return collisionX && collisionY;
-}
-
-std::vector<int> Game::getPropabilityArray(Enemy& enemy, std::vector<Direction> directions)
-{
-	std::vector<int> propabilities;
-	bool currentDirectionPossible;
-	bool oppositeDirectionPossible;
-	switch (directions.size())
-	{
-	case 4:
-		propabilities.push_back(90);
-		propabilities.push_back(94);
-		propabilities.push_back(98);
-		propabilities.push_back(100);
-		break;
-	case 3:
-		currentDirectionPossible = std::find(directions.begin(), directions.end(), enemy.direction) != directions.end();
-		oppositeDirectionPossible = std::find(directions.begin(), directions.end(), oppositeDirection(enemy.direction)) != directions.end();
-		if (currentDirectionPossible && oppositeDirectionPossible)
-		{
-			propabilities.push_back(80);
-			propabilities.push_back(98);
-			propabilities.push_back(100);
-		}
-		else if (currentDirectionPossible && !oppositeDirectionPossible)
-		{
-			propabilities.push_back(80);
-			propabilities.push_back(90);
-			propabilities.push_back(100);
-		}
-		else if (!currentDirectionPossible && oppositeDirectionPossible)
-		{
-			propabilities.push_back(49);
-			propabilities.push_back(98);
-			propabilities.push_back(100);
-		}
-		break;
-	case 2:
-		currentDirectionPossible = std::find(directions.begin(), directions.end(), enemy.direction) != directions.end();
-		oppositeDirectionPossible = std::find(directions.begin(), directions.end(), oppositeDirection(enemy.direction)) != directions.end();
-		if (currentDirectionPossible && oppositeDirectionPossible)
-		{
-			propabilities.push_back(98);
-			propabilities.push_back(100);
-		}
-		else if (currentDirectionPossible && !oppositeDirectionPossible)
-		{
-			propabilities.push_back(80);
-			propabilities.push_back(100);
-		}
-		else if (!currentDirectionPossible && oppositeDirectionPossible)
-		{
-			propabilities.push_back(98);
-			propabilities.push_back(100);
-		}
-		break;
-	case 1:
-		propabilities.push_back(100);
-		break;
-	default:
-		propabilities.push_back(100);
-		break;
-	}
-
-	return propabilities;
-}
-
-std::vector<Direction> Game::getInitialDirections(Enemy& enemy)
-{
-	// Build array for determining a direction with certain propabilities
-	std::vector<Direction> allDirections{ Direction::RIGHT, Direction::LEFT, Direction::UP, Direction::DOWN };
-	std::vector<Direction> orderedDirections;
-	std::vector<Direction> directions;
-
-	float xDistance = std::abs(enemy.position[0] - Pengo->position[0]) * (2.0f / 448.0f);
-	float yDistance = std::abs(enemy.position[1] - Pengo->position[1]) * (2.0f / 576.0f);
-
-	switch (enemy.state)
-	{
-	case EnemyState::WANDERING:
-		orderedDirections.push_back(enemy.direction);
-		for (Direction d : allDirections)
-		{
-			if (d != enemy.direction && d != oppositeDirection(enemy.direction))
-			{
-				orderedDirections.push_back(d);
-			}
-		}
-		orderedDirections.push_back(oppositeDirection(enemy.direction));
-
-		for (int i = 0; i < orderedDirections.size(); ++i)
-		{
-			if (!checkCollisions(enemy, orderedDirections.at(i)))
-			{
-				directions.push_back(orderedDirections.at(i));
-			}
-		}
-		break;
-	case EnemyState::CHASING:
-
-		if (xDistance >= yDistance)
-		{
-			//Move horizontally (x-direction)
-			if (enemy.position[0] > Pengo->position[0])
-			{
-				//Pengo is left, so move left
-				orderedDirections.push_back(Direction::LEFT);
-			}
-			else
-			{
-				orderedDirections.push_back(Direction::RIGHT);
-			}
-
-			if (enemy.position[1] > Pengo->position[1])
-			{
-				//Pengo is left, so move left
-				orderedDirections.push_back(Direction::DOWN);
-			}
-			else
-			{
-				orderedDirections.push_back(Direction::UP);
-			}
-		}
-		else if (xDistance < yDistance)
-		{
-			//Move vertically (y-direction)
-			if (enemy.position[1] > Pengo->position[1])
-			{
-				//Pengo is left, so move left
-				orderedDirections.push_back(Direction::DOWN);
-			}
-			else
-			{
-				orderedDirections.push_back(Direction::UP);
-			}
-
-			if (enemy.position[0] > Pengo->position[0])
-			{
-				//Pengo is left, so move left
-				orderedDirections.push_back(Direction::LEFT);
-			}
-			else
-			{
-				orderedDirections.push_back(Direction::RIGHT);
-			}
-		}
-
-		for (Direction d : allDirections)
-		{
-			if (std::find(orderedDirections.begin(), orderedDirections.end(), d) == orderedDirections.end())
-			{
-				orderedDirections.push_back(d);
-			}
-		}
-
-		for (int i = 0; i < orderedDirections.size(); ++i)
-		{
-			if (!checkWallCollision(enemy, orderedDirections.at(i)))
-			{
-				Block* block = getCollisionBlock(enemy, orderedDirections.at(i));
-				if (block == nullptr || !block->isUnbreakable)
-				{
-					directions.push_back(orderedDirections.at(i));
-				}
-			}
-		}
-		break;
-	}
-
-	return directions;
-}
-
-int Game::getDirectionIndex(std::vector<int> chances)
-{
-	int index = 0;
-	int randomNumber = std::rand() % 100;
-	for (int i = 0; i < chances.size(); i++)
-	{
-		if (randomNumber > chances.at(i))
-			index++;
-	}
-	return index;
-}
-
-bool Game::isMovementPossible(Enemy& enemy, Direction d)
-{
-
-	return false;
-}
+//bool Game::isMovementPossible(Enemy& enemy, Direction d)
+//{
+//
+//	return false;
+//}
 
 void Game::killEnemy(Enemy* enemy)
 {
@@ -882,132 +882,131 @@ void Game::initNextLevel()
 
 }
 
-bool Game::checkThreeDiamonds()
-{
-	int amountAdjacentDiamonds = 0;
-	bool bTouchesWall = false;
-	bool firstAdjacentBlockTouchesWall = false;
-	bool secondAdjacentBlockTouchesWall = false;
+//bool Game::checkThreeDiamonds()
+//{
+//	int amountAdjacentDiamonds = 0;
+//	bool bTouchesWall = false;
+//	bool firstAdjacentBlockTouchesWall = false;
+//	bool secondAdjacentBlockTouchesWall = false;
+//
+//	for (Block& b : this->Levels[this->Level].Bricks)
+//	{
+//		if (b.isUnbreakable)
+//		{
+//			bTouchesWall = blockTouchesWall(b);
+//			Block* firstAdjacentBlock = getCollisionBlock(b, Direction::RIGHT);
+//			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+//			{
+//				Block fab = *firstAdjacentBlock;
+//				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+//				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::RIGHT);
+//				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+//				{
+//					Block sab = *secondAdjacentBlock;
+//					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+//					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+//						score += 5000;
+//					else
+//						score += 10000;
+//					return true;
+//				}
+//			}
+//			//bTouchesWall = checkWallCollision(b, Direction::LEFT);
+//			firstAdjacentBlock = getCollisionBlock(b, Direction::LEFT);
+//			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+//			{
+//				Block fab = *firstAdjacentBlock;
+//				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+//				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::LEFT);
+//				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+//				{
+//					Block sab = *secondAdjacentBlock;
+//					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+//					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+//						score += 5000;
+//					else
+//						score += 10000;
+//					return true;
+//				}
+//			}
+//			//bTouchesWall = checkWallCollision(b, Direction::UP);
+//			firstAdjacentBlock = getCollisionBlock(b, Direction::UP);
+//			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+//			{
+//				Block fab = *firstAdjacentBlock;
+//				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+//				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::UP);
+//				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+//				{
+//					Block sab = *secondAdjacentBlock;
+//					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+//					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+//						score += 5000;
+//					else
+//						score += 10000;
+//					return true;
+//				}
+//			}
+//			//bTouchesWall = checkWallCollision(b, Direction::DOWN);
+//			firstAdjacentBlock = getCollisionBlock(b, Direction::DOWN);
+//			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
+//			{
+//				Block fab = *firstAdjacentBlock;
+//				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
+//				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::DOWN);
+//				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
+//				{
+//					Block sab = *secondAdjacentBlock;
+//					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
+//					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
+//						score += 5000;
+//					else
+//						score += 10000;
+//					return true;
+//				}
+//			}
+//		}
+//	}
+//	return false;
+//}
 
-	for (Block& b : this->Levels[this->Level].Bricks)
-	{
-		if (b.isUnbreakable)
-		{
-			bTouchesWall = blockTouchesWall(b);
-			Block* firstAdjacentBlock = getCollisionBlock(b, Direction::RIGHT);
-			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-			{
-				Block fab = *firstAdjacentBlock;
-				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::RIGHT);
-				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-				{
-					Block sab = *secondAdjacentBlock;
-					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
-					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-						score += 5000;
-					else
-						score += 10000;
-					return true;
-				}
-			}
-			//bTouchesWall = checkWallCollision(b, Direction::LEFT);
-			firstAdjacentBlock = getCollisionBlock(b, Direction::LEFT);
-			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-			{
-				Block fab = *firstAdjacentBlock;
-				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::LEFT);
-				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-				{
-					Block sab = *secondAdjacentBlock;
-					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
-					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-						score += 5000;
-					else
-						score += 10000;
-					return true;
-				}
-			}
-			//bTouchesWall = checkWallCollision(b, Direction::UP);
-			firstAdjacentBlock = getCollisionBlock(b, Direction::UP);
-			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-			{
-				Block fab = *firstAdjacentBlock;
-				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::UP);
-				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-				{
-					Block sab = *secondAdjacentBlock;
-					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
-					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-						score += 5000;
-					else
-						score += 10000;
-					return true;
-				}
-			}
-			//bTouchesWall = checkWallCollision(b, Direction::DOWN);
-			firstAdjacentBlock = getCollisionBlock(b, Direction::DOWN);
-			if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-			{
-				Block fab = *firstAdjacentBlock;
-				firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-				Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::DOWN);
-				if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-				{
-					Block sab = *secondAdjacentBlock;
-					secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
-					if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-						score += 5000;
-					else
-						score += 10000;
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-}
+//Block* Game::adjacentBlockIsDiamond(Block& b)
+//{
+//	Block* collisionBlockRight = getCollisionBlock(b, Direction::RIGHT);
+//	Block* collisionBlockLeft = getCollisionBlock(b, Direction::LEFT);
+//	Block* collisionBlockUp = getCollisionBlock(b, Direction::UP);
+//	Block* collisionBlockDown = getCollisionBlock(b, Direction::DOWN);
+//	if (collisionBlockRight != nullptr && collisionBlockRight->isUnbreakable)
+//		return collisionBlockRight;
+//	else if (collisionBlockLeft != nullptr && collisionBlockLeft->isUnbreakable)
+//		return collisionBlockLeft;
+//	else if (collisionBlockUp != nullptr && collisionBlockUp->isUnbreakable)
+//		return collisionBlockUp;
+//	else if (collisionBlockDown != nullptr && collisionBlockDown->isUnbreakable)
+//		return collisionBlockDown;
+//	return nullptr;
+//}
 
-Block* Game::adjacentBlockIsDiamond(Block& b)
-{
-	Block* collisionBlockRight = getCollisionBlock(b, Direction::RIGHT);
-	Block* collisionBlockLeft = getCollisionBlock(b, Direction::LEFT);
-	Block* collisionBlockUp = getCollisionBlock(b, Direction::UP);
-	Block* collisionBlockDown = getCollisionBlock(b, Direction::DOWN);
-	if (collisionBlockRight != nullptr && collisionBlockRight->isUnbreakable)
-		return collisionBlockRight;
-	else if (collisionBlockLeft != nullptr && collisionBlockLeft->isUnbreakable)
-		return collisionBlockLeft;
-	else if (collisionBlockUp != nullptr && collisionBlockUp->isUnbreakable)
-		return collisionBlockUp;
-	else if (collisionBlockDown != nullptr && collisionBlockDown->isUnbreakable)
-		return collisionBlockDown;
-	return nullptr;
-}
+//bool Game::blockTouchesWall(Block& b)
+//{
+//	return checkWallCollision(b, Direction::RIGHT) || checkWallCollision(b, Direction::LEFT) || checkWallCollision(b, Direction::UP) || checkWallCollision(b, Direction::DOWN);
+//}
 
-bool Game::blockTouchesWall(Block& b)
-{
-	
-	return checkWallCollision(b, Direction::RIGHT) || checkWallCollision(b, Direction::LEFT) || checkWallCollision(b, Direction::UP) || checkWallCollision(b, Direction::DOWN);
-}
-
-int Game::calculateStepRange(Block& block, Direction d)
-{
-	int stepWidth = 0;
-	std::array<float, 2> originalPosition = block.position;
-
-	while (!checkCollisions(block, d))
-	{
-		block.setPositionToMoveTo(d);
-		block.position = block.positionToMoveTo;
-		stepWidth++;
-	}
-
-	block.position = originalPosition;
-	return stepWidth;
-
-}
+//int Game::calculateStepRange(Block& block, Direction d)
+//{
+//	int stepWidth = 0;
+//	std::array<float, 2> originalPosition = block.position;
+//
+//	while (!checkCollisions(block, d))
+//	{
+//		block.setPositionToMoveTo(d);
+//		block.position = block.positionToMoveTo;
+//		stepWidth++;
+//	}
+//
+//	block.position = originalPosition;
+//	return stepWidth;
+//
+//}
 
 
