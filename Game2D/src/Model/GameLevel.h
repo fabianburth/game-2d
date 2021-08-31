@@ -3,6 +3,7 @@
 #define GAMELEVEL_H
 #include <vector>
 #include <array>
+#include <ctime>
 
 #include <GL/glew.h>
 
@@ -13,7 +14,8 @@
 #include "../View/ResourceManager.h"
 #include "Wall.h"
 #include "Enemy.h"
-#include "GameInformation.h"
+#include "../View/GameInformation.h"
+#include "Score.h"
 
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
@@ -25,7 +27,7 @@
 /// 2: an undestroyable diamond block
 /// 3: a sno-bee
 /// 4: pengo
-class GameLevel
+class GameLevel: public Subject<GameLevel>
 {
 public:
     // level state
@@ -37,15 +39,24 @@ public:
     Wall RightWall;
     Wall TopWall;
     Wall BottomWall;
-    std::vector<Block> Bricks;
-    int score;
+    std::vector<Block> Blocks;
+    Score score;
+    //int score;
+    // Clock to track how long it takes the player to finish the level (relevant for score)
+    std::clock_t startClockLevel;
+    // Clock to track how much time has passed since the last enemy was killed (relevant for enemy state)
+    std::clock_t startClockEnemyKill;
     //GameObject d;
-    GameInformation P1;
-    GameInformation Score;
+    //GameInformation P1;
+    //GameInformation Score;
     bool diamondBlocksAligned = false;
     // constructor
     GameLevel();
     ~GameLevel();
+
+    void registerObserver(Observer<GameLevel> *o) override;
+    void removeObserver(Observer<GameLevel> *o) override;
+    void notifyObservers() override;
     // loads level from file
     void Load(const char* file, unsigned int levelWidth, unsigned int levelHeight);
     // render level
@@ -53,9 +64,13 @@ public:
     // check if the level is completed (all non-solid tiles are destroyed)
     bool IsCompleted();
 
+    // Method which is called every game loop iteration which does some checks and updates the game state under certain conditions
+    // @param dt: The time passed since the last game loop iteration
+    void updateGameState(float dt);
+
 
     //! Following methods are moved from the Controller (Game) to this Model (GameLevel) to abide with MVC
-    // Checks whether the given gameObject is colliding with another brick or a wall when moving one unit to the given direction
+    // Checks whether the given gameObject is colliding with another block or a wall when moving one unit to the given direction
     // @param gameObject: The GameObject to check the collision for
     // @param direction: The Direction in which collision has to be checked
     // @return true, if there is a collision, false otherwise
@@ -83,7 +98,32 @@ public:
     // @param two: The GameObject to check the collision
     bool checkCollisionPrecise(GameObject& one, GameObject& two);
 
+    // Removes the enemy from the vector of active enemies
+    // @param enemy: A pointer to the enemy to be removed
+    void killEnemy(Enemy* enemy);
+
+    // Spawns one of the currently frozen enemies
+    // @return a pointer to the frozen enemy
+    Enemy* spawnEnemy();
+
+    // Checks whether an enemy of type boxer exists at the moment
+    // @return true, if one exists, false otherwise
+    bool boxerExists();
+
+    // Sets one of the remaining active enemies to type boxer if possible
+    void trySettingBoxer();
+
+    // Processes an attack of the Player (=Pressing LeftCtrl) and hence determines whether a block is pushed or destroyed or whether a wall will wobble
+    void processPengoAttack();
+
+    // Processes movement of the Player (=Pressing WASD) and hence determines where Pengo will go
+    void processPengoMovement(Direction d);
+
+
+
 private:
+    std::vector<Observer<GameLevel>*> observers;
+
     // initialize level from tile data
     void init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight);
 
@@ -117,14 +157,21 @@ private:
     // @return: The index of the direction in a direction vector
     int getDirectionIndex(std::vector<int> chances);
 
-    // Auxiliary method which checks whether 3 diamond blocks got aligned
-    // @return true, if 3 diamond blocks are aligned, false otherwise
-    bool checkThreeDiamonds();
+    // Auxiliary method which checks whether 3 diamond blocks got aligned and updates the score if so
+    void checkThreeDiamonds();
 
     // Auxiliary method which checks whether a block touches a wall
     // @param b: The block to check whether it touches the wall
     // @return true, if it touches the wall, false otherwise
     bool blockTouchesWall(Block& b);
+
+    // Auxiliary method which determines and update the game state concerning bots behavior, movement and their interaction with the player and the environment
+    // @param dt: The time passed since the last game loop iteration
+    void determineBotBehavior(float dt);
+
+    // Auxiliary method which updates the game state concerning block movement and their interaction with the environment
+    // @param dt: The time passed since the last game loop iteration
+    void updateBlockInteractions(float dt);
 };
 
 #endif

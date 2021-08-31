@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include "../View/Texture.h"
+#include "Texture.h"
 
 class DisplayBlock
 {

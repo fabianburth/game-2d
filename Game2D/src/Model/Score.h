@@ -5,8 +5,20 @@
 #ifndef GAME2D_SCORE_H
 #define GAME2D_SCORE_H
 
+#include "Block.h"
+
 
 class Score {
+public:
+    int score;
+
+    void addLevelCompletion(double levelDuration);
+    void addDiamondsTouchingWall();
+    void addDiamondsNotTouchingWall();
+    void addWalkedOverStunnedEnemy();
+    void addCrushedEnemy(int killedWithOneMove);
+    void addDestroyBlock(Block* block);
+
 
 };
 

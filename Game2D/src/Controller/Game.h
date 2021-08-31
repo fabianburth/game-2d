@@ -8,16 +8,13 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 #include <cstdlib>
-#include "../View/PengoAnimator.h"
-#include "../View/BlockAnimator.h"
-#include "../View/WallAnimator.h"
 #include "../Model/GameLevel.h"
 #include "../Model/Player.h"
 #include "../View/SpriteRenderer.h"
 #include "../Model/Wall.h"
-#include "../View/EnemyAnimator.h"
 #include <string>
 #include <ctime>
+#include <algorithm>
 
 // Represents the current state of the game
 enum class GameState 
@@ -33,25 +30,18 @@ const float EPSILON = 0.01;
 // Game holds all game-related state and functionality.
 // Combines all game-related data into a single class for
 // easy access to each of the components and manageability.
-class Game
+class Game : public Observer<GameLevel>
 {
 public:
     // game state
     GameState    PengoState;
-    Player* Pengo;
+    //Player* Pengo;
     SpriteRenderer* Renderer;
-    PengoAnimator* pengoAnimator;
-    BlockAnimator* blockAnimator;
-    WallAnimator* wallAnimator;
-    std::vector<BlockAnimator*> blockAnimators;
-    std::vector<EnemyAnimator*> enemyAnimators;
     bool         Keys[1024];
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;
     unsigned int            Level;
     unsigned int score = 0;
-    std::clock_t startClockLevel;
-    std::clock_t startClockEnemyKill;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
@@ -62,14 +52,16 @@ public:
     void Update(float dt);
     void Render();
 
+    void update(GameLevel* s) override;
+
 private:
-    // Checks whether the given gameObject is colliding with another brick or a wall when moving one unit to the given direction
+    // Checks whether the given gameObject is colliding with another block or a wall when moving one unit to the given direction
     // @param gameObject: The GameObject to check the collision for
     // @param direction: The Direction in which collision has to be checked
     // @return true, if there is a collision, false otherwise
     // bool checkCollisions(GameObject& gameObject, Direction d);
 
-    // Checks whether the given gameObject is colliding with another brick or a wall when moving one unit to the given direction AND 
+    // Checks whether the given gameObject is colliding with another block or a wall when moving one unit to the given direction AND
     // initiates a corresponding action 
     // @param gameObject: The GameObject to check the collision for
     // @param direction: The Direction in which collision has to be checked
@@ -108,11 +100,12 @@ private:
     // std::vector<Direction> getInitialDirections(Enemy& enemy);
     // int getDirectionIndex(std::vector<int> chances);
     // bool isMovementPossible(Enemy& enemy, Direction d);
-    void killEnemy(Enemy* enemy);
-    void spawnEnemy();
-    bool boxerExists();
-    void trySettingBoxer();
-    void initNextLevel();
+    void removeAnimatorOfKilledEnemy(Enemy* enemy);
+    void createAnimatorForSpawnedEnemy(Enemy* enemy);
+    // bool boxerExists();
+    // void trySettingBoxer();
+    void initLevel();
+    void initStates();
     // bool checkThreeDiamonds();
     // Block* adjacentBlockIsDiamond(Block& b);
     // bool blockTouchesWall(Block& b);

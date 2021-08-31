@@ -16,11 +16,11 @@ set(SOURCES
         Game2D/src/View/Application.cpp
         Game2D/src/Model/Block.cpp
         Game2D/src/View/BlockAnimator.cpp
-        Game2D/src/Model/DisplayBlock.cpp
+        Game2D/src/View/DisplayBlock.cpp
         Game2D/src/Model/Enemy.cpp
         Game2D/src/View/EnemyAnimator.cpp
         Game2D/src/Controller/Game.cpp
-        Game2D/src/Model/GameInformation.cpp
+        Game2D/src/View/GameInformation.cpp
         Game2D/src/Model/GameLevel.cpp
         Game2D/src/Model/GameObject.cpp
         Game2D/src/View/PengoAnimator.cpp
@@ -31,7 +31,7 @@ set(SOURCES
         Game2D/src/View/Texture.cpp
         Game2D/src/Model/Wall.cpp
         Game2D/src/View/WallAnimator.cpp
-)
+        Game2D/src/View/GameView.cpp Game2D/src/View/GameView.h Game2D/src/Model/Score.cpp Game2D/src/Model/Score.h)
 
 find_package(OpenGL REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS})

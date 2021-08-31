@@ -70,7 +70,7 @@ static Direction oppositeDirection(Direction direction)
 }
 
 // TODO
-// Make a subclass "Bricks" of GameObject and implement replace [bool Destroyed] with a enum class to clean up the observer pattern
+// Make a subclass "Blocks" of GameObject and implement replace [bool Destroyed] with a enum class to clean up the observer pattern
 // Add the observer upon creation of the objects instead of in the Game class
 // Add another Animator class for the Wall
 
