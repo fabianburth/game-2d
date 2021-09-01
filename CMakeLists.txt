@@ -3,14 +3,18 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(Game2D)
 
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra")
+if(UNIX)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+endif()
 
-add_subdirectory(Dependencies/glfw-3.3.4)
-add_subdirectory(Dependencies/glew-2.2.0/build/cmake)
 
-include_directories(Dependencies/glew-2.2.0/include)
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS})
+
+add_subdirectory(Dependencies)
+add_subdirectory(Tests)
 
 set(SOURCES
         Game2D/src/View/Application.cpp
@@ -33,9 +37,8 @@ set(SOURCES
         Game2D/src/View/WallAnimator.cpp
         Game2D/src/View/GameView.cpp Game2D/src/View/GameView.h Game2D/src/Model/Score.cpp Game2D/src/Model/Score.h)
 
-find_package(OpenGL REQUIRED)
-include_directories( ${OPENGL_INCLUDE_DIRS})
+add_executable(${PROJECT_NAME} ${SOURCES} ${BACKWARD_ENABLE})
 
-add_executable(Game2D ${SOURCES})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glew_s glfw)
 
-target_link_libraries(Game2D ${OPENGL_LIBRARIES} glew_s glfw)
+add_backward(${PROJECT_NAME})
