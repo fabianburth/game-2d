@@ -12,7 +12,7 @@ GameLevel::~GameLevel() {
 
 void GameLevel::Load(const char *file, unsigned int levelWidth, unsigned int levelHeight) {
     // clear old data
-    this->Bricks.clear();
+    this->Blocks.clear();
     // load from file
     unsigned int tileCode; // (=number of block, e.g. 1 for ice block)
     GameLevel level;
@@ -38,20 +38,27 @@ void GameLevel::Load(const char *file, unsigned int levelWidth, unsigned int lev
 //    for (GameObject& wall : this->Walls)
 //            wall.Draw(renderer);
 //
-//    for (Block& tile : this->Bricks)
+//    for (Block& tile : this->Blocks)
 //        if (tile.state != BlockState::BROKEN)
 //            tile.Draw(renderer);
 //
 //    P->Draw(renderer);
 //}
 
-bool GameLevel::IsCompleted() // NOT INTENTED TO WORK LIKE THAT FOR PENGO
+bool GameLevel::IsCompleted()
 {
-    return this->Enemies.empty();
+    if(this->Enemies.empty()){
+        double levelDuration = ((std::clock() - startClockLevel) / (double) CLOCKS_PER_SEC);
+        this->score.addLevelCompletion(levelDuration);
+
+        return true;
+    }
 }
 
-void
-GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight) {
+void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight) {
+    // starts clocks to track duration to finish the level and the duration between killing enemies
+    startClockLevel = std::clock();
+    startClockEnemyKill = std::clock();
     // calculate dimensions
     std::reverse(tileData.begin(), tileData.end());
     unsigned int height = tileData.size();
@@ -63,14 +70,13 @@ GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int le
     TopWall = Wall(WallSide::TOP);
     // initialize game information (1P, Score), maybe more later
     //d = GameObject({ (-0.5f * unit_width + width * unit_width) - 0.5f * unit_width , -0.5f * unit_height + 17 * unit_height }, ResourceManager::GetTexture("one"), { 0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width, (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height});
-    this->score = 0;
-    P1 = GameInformation({(-0.5f * unit_width + 0.5f * unit_width), -0.5f * unit_height + 17 * unit_height},
-                         {0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width,
-                          (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height}, 2);
-    P1.show("1P");
-    Score = GameInformation({(-0.5f * unit_width + 4.5f * unit_width), -0.5f * unit_height + 17 * unit_height},
-                            {0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width,
-                             (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height}, 6);
+//    P1 = GameInformation({(-0.5f * unit_width + 0.5f * unit_width), -0.5f * unit_height + 17 * unit_height},
+//                         {0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width,
+//                          (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height}, 2);
+//    P1.show("1P");
+//    Score = GameInformation({(-0.5f * unit_width + 4.5f * unit_width), -0.5f * unit_height + 17 * unit_height},
+//                            {0.5f, 0.5f, (0.5f * (-1 + 0.5f * unit_width)) + 0.5f * unit_width,
+//                             (0.5f * (-1 + 0.5f * unit_height)) + 0.5f * unit_height}, 6);
     //Score.show("12345");
     // initialize level wall (same for every level)
     // Left and Right Wall
@@ -116,12 +122,12 @@ GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int le
             {
                 std::array<float, 2> pos = {unit_width * x, unit_height * y};
                 Block obj(pos, ResourceManager::GetTexture("iceblock"), false, nullptr);
-                this->Bricks.push_back(obj);
+                this->Blocks.push_back(obj);
             } else if (tileData[y][x] == 2)    // solid diamond block
             {
                 std::array<float, 2> pos = {unit_width * x, unit_height * y};
                 Block obj(pos, ResourceManager::GetTexture("diamondblock"), true, nullptr);
-                this->Bricks.push_back(obj);
+                this->Blocks.push_back(obj);
             } else if (tileData[y][x] == 3) {
                 std::array<float, 2> pos = {unit_width * x, unit_height * y};
                 std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
@@ -132,7 +138,7 @@ GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int le
                 this->frozenEnemies.push_back(enemy);
 
                 Block obj(pos, ResourceManager::GetTexture("iceblock"), false, enemy);
-                this->Bricks.push_back(obj);
+                this->Blocks.push_back(obj);
             } else if (tileData[y][x] == 4) {
                 std::array<float, 2> pos = {unit_width * x, unit_height * y};
                 std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
@@ -161,7 +167,7 @@ GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int le
 }
 
 bool GameLevel::checkCollisions(GameObject &gameObject, Direction d) {
-    for (Block &block : this->Bricks) {
+    for (Block &block : this->Blocks) {
         if (block.state != BlockState::BROKEN) {
             if (checkBlockCollision(gameObject, block, d) || checkWallCollision(gameObject, d)) {
                 return true;
@@ -237,7 +243,7 @@ bool GameLevel::checkWallCollision(GameObject &one, Direction d) {
 }
 
 Block *GameLevel::getCollisionBlock(GameObject &gameObject, Direction d) {
-    for (Block &block : this->Bricks) {
+    for (Block &block : this->Blocks) {
         if (block.state != BlockState::BROKEN) {
             if (checkBlockCollision(gameObject, block, d)) {
                 return &block;
@@ -389,93 +395,317 @@ int GameLevel::getDirectionIndex(std::vector<int> chances) {
 // ----------------------------------------------------------------------------
 
 
-bool GameLevel::checkThreeDiamonds() {
+void GameLevel::checkThreeDiamonds() {
+
+    if (this->diamondBlocksAligned) {
+        return;
+    }
     int amountAdjacentDiamonds = 0;
     bool bTouchesWall = false;
     bool firstAdjacentBlockTouchesWall = false;
     bool secondAdjacentBlockTouchesWall = false;
 
-    for (Block& b : this->Bricks)
-    {
-        if (b.isUnbreakable)
-        {
+    for (Block &b : this->Blocks) {
+        if (b.isUnbreakable) {
             bTouchesWall = blockTouchesWall(b);
-            Block* firstAdjacentBlock = getCollisionBlock(b, Direction::RIGHT);
-            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-            {
+            Block *firstAdjacentBlock = getCollisionBlock(b, Direction::RIGHT);
+            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable) {
                 Block fab = *firstAdjacentBlock;
                 firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-                Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::RIGHT);
-                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-                {
+                Block *secondAdjacentBlock = getCollisionBlock(fab, Direction::RIGHT);
+                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable) {
                     Block sab = *secondAdjacentBlock;
                     secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
                     if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-                        score += 5000;
+                        this->score.addDiamondsTouchingWall();
                     else
-                        score += 10000;
-                    return true;
+                        this->score.addDiamondsNotTouchingWall();
+                    this->diamondBlocksAligned = true;
+                    return;
                 }
             }
             //bTouchesWall = checkWallCollision(b, Direction::LEFT);
             firstAdjacentBlock = getCollisionBlock(b, Direction::LEFT);
-            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-            {
+            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable) {
                 Block fab = *firstAdjacentBlock;
                 firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-                Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::LEFT);
-                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-                {
+                Block *secondAdjacentBlock = getCollisionBlock(fab, Direction::LEFT);
+                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable) {
                     Block sab = *secondAdjacentBlock;
                     secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
                     if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-                        score += 5000;
+                        this->score.addDiamondsTouchingWall();
                     else
-                        score += 10000;
-                    return true;
+                        this->score.addDiamondsNotTouchingWall();
+                    this->diamondBlocksAligned = true;
+                    return;
                 }
             }
             //bTouchesWall = checkWallCollision(b, Direction::UP);
             firstAdjacentBlock = getCollisionBlock(b, Direction::UP);
-            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-            {
+            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable) {
                 Block fab = *firstAdjacentBlock;
                 firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-                Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::UP);
-                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-                {
+                Block *secondAdjacentBlock = getCollisionBlock(fab, Direction::UP);
+                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable) {
                     Block sab = *secondAdjacentBlock;
                     secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
                     if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-                        score += 5000;
+                        this->score.addDiamondsTouchingWall();
                     else
-                        score += 10000;
-                    return true;
+                        this->score.addDiamondsNotTouchingWall();
+                    this->diamondBlocksAligned = true;
+                    return;
                 }
             }
             //bTouchesWall = checkWallCollision(b, Direction::DOWN);
             firstAdjacentBlock = getCollisionBlock(b, Direction::DOWN);
-            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable)
-            {
+            if (firstAdjacentBlock != nullptr && firstAdjacentBlock->isUnbreakable) {
                 Block fab = *firstAdjacentBlock;
                 firstAdjacentBlockTouchesWall = blockTouchesWall(fab);
-                Block* secondAdjacentBlock = getCollisionBlock(fab, Direction::DOWN);
-                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable)
-                {
+                Block *secondAdjacentBlock = getCollisionBlock(fab, Direction::DOWN);
+                if (secondAdjacentBlock != nullptr && secondAdjacentBlock->isUnbreakable) {
                     Block sab = *secondAdjacentBlock;
                     secondAdjacentBlockTouchesWall = blockTouchesWall(sab);
                     if (bTouchesWall || firstAdjacentBlockTouchesWall || secondAdjacentBlockTouchesWall)
-                        score += 5000;
+                        this->score.addDiamondsTouchingWall();
                     else
-                        score += 10000;
-                    return true;
+                        this->score.addDiamondsNotTouchingWall();
+                    this->diamondBlocksAligned = true;
+                    return;
                 }
             }
         }
     }
-    return false;
 }
 
 bool GameLevel::blockTouchesWall(Block &b) {
     return checkWallCollision(b, Direction::RIGHT) || checkWallCollision(b, Direction::LEFT) || checkWallCollision(b, Direction::UP) || checkWallCollision(b, Direction::DOWN);
+}
+
+void GameLevel::killEnemy(Enemy *enemy) {
+    this->Enemies.erase(std::remove_if(this->Enemies.begin(), this->Enemies.end(), [&](Enemy *comparison) {
+        return comparison == enemy;
+    }));
+    this->notifyObservers();
+    startClockEnemyKill = std::clock();
+}
+
+Enemy *GameLevel::spawnEnemy() {
+    bool validEnemy = false;
+    Enemy *enemy;
+
+    while (!validEnemy) {
+        enemy = this->frozenEnemies.back();
+        this->frozenEnemies.pop_back();
+        for (Block b : this->Blocks) {
+            if (b.position == enemy->position && b.state != BlockState::BROKEN && b.state != BlockState::BREAKING) {
+                validEnemy = true;
+            }
+
+        }
+        if (this->frozenEnemies.empty() && validEnemy == false)
+            return nullptr;
+    }
+    this->Enemies.push_back(enemy);
+    this->notifyObservers();
+    for (Block &block : this->Blocks) {
+        //if (std::abs(block.position[0] - enemy->position[0]) < EPSILON && std::abs(block.position[1] - enemy->position[1]) < EPSILON)
+        if (block.containedEnemy == enemy) {
+            block.setState(BlockState::BROKEN);
+        }
+    }
+
+    enemy->setState(EnemyState::SPAWNING);
+
+    for (Block &b : this->Blocks) {
+        if ((b.state != BlockState::BROKEN && b.state != BlockState::BREAKING) && b.containedEnemy != nullptr) {
+            b.setState(BlockState::FLASHING);
+        }
+    }
+
+    return enemy;
+}
+
+bool GameLevel::boxerExists() {
+    for (Enemy *e : this->Enemies) {
+        if (e->baseType == "Boxer")
+            return true;
+    }
+    return false;
+}
+
+void GameLevel::updateGameState(float dt) {
+    int pengoLives = this->Pengo.lives;
+
+    this->checkThreeDiamonds();
+
+    if (!this->boxerExists())
+        this->trySettingBoxer();
+
+    if (((std::clock() - startClockEnemyKill) / (double) CLOCKS_PER_SEC) > 60)
+        this->trySettingBoxer();
+
+    this->determineBotBehavior(dt);
+    if (pengoLives > Pengo.lives) {
+        notifyObservers();
+        return;
+    }
+
+    this->updateBlockInteractions(dt);
+    this->Pengo.move(dt);
+
+}
+
+void GameLevel::registerObserver(Observer<GameLevel> *o) {
+    observers.push_back(o);
+}
+
+void GameLevel::removeObserver(Observer<GameLevel> *o) {
+    observers.erase(std::remove_if(observers.begin(), observers.end(),
+                                   [&](Observer<GameLevel> *comparison) {
+                                       return comparison == o;
+                                   }));
+}
+
+void GameLevel::notifyObservers() {
+    for (Observer<GameLevel> *o : observers) {
+        o->update(this);
+    }
+}
+
+void GameLevel::trySettingBoxer() {
+    for (Enemy *e : this->Enemies) {
+        if (e->state == EnemyState::WANDERING) {
+            e->baseType = "Boxer";
+            e->setState(EnemyState::CHASING);
+            return;
+        }
+    }
+}
+
+void GameLevel::determineBotBehavior(float dt) {
+    // bots do stuff
+    for (Enemy *enemy : this->Enemies) {
+        // Behavior if enemies touch Pengo
+        if (this->checkCollisionPrecise(*enemy, this->Pengo)) {
+            // if enemies touch pengo while they are not stunned, pengo dies
+            if (enemy->state != EnemyState::STUNNED) {
+                enemy->setState(EnemyState::BREAKING);
+                --this->Pengo.lives;
+                return;
+            }
+                // if enemies touch pengo while they are stunned, the enemy dies
+            else {
+                this->killEnemy(enemy);
+                this->score.addWalkedOverStunnedEnemy();
+                if (!this->frozenEnemies.empty())
+                    this->spawnEnemy();
+            }
+        }
+
+        // if enemies touch a wall that is wobbly, the enemies shall be stunned
+        if (this->RightWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::RIGHT)
+            || this->LeftWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::LEFT)
+            || this->TopWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::UP)
+            || this->BottomWall.state == WallState::WOBBLY && checkWallCollisionPrecise(*enemy, Direction::DOWN)) {
+            enemy->setState(EnemyState::STUNNED);
+        }
+
+        if (enemy->ready) {
+            std::vector<Direction> directions = getInitialDirections(*enemy);
+            std::vector<int> chances = enemy->getProbabilityArray(directions);
+            int index = getDirectionIndex(chances);
+            // cover the case when there is no direction to go to
+            // for example, if you pushed a block and it happens to be currently flying by the only direction this enemy could go to
+            // or you trap the enemy
+            if (directions.empty())
+                continue;
+
+            Direction direction = directions.at(index);
+
+            enemy->setDirection(direction);
+            if (enemy->state == EnemyState::CHASING) {
+                Block *block = getCollisionBlock(*enemy, direction);
+                if (block != nullptr) {
+                    block->setState(BlockState::BREAKING);
+                    enemy->setState(EnemyState::BREAKING);
+                } else {
+                    enemy->setPositionToMoveTo();
+                }
+            } else {
+                enemy->setPositionToMoveTo();
+            }
+        }
+        enemy->move(dt);
+    }
+}
+
+void GameLevel::updateBlockInteractions(float dt) {
+    for (Block &block : this->Blocks) {
+        if (block.position != block.positionToMoveTo) {
+            for (Enemy *e : this->Enemies) {
+                if (this->checkCollisionPrecise(*e, block)) {
+                    this->killEnemy(e);
+                    this->score.addCrushedEnemy(block.killedWithOneMove);
+                    ++block.killedWithOneMove;
+
+                    if (!this->frozenEnemies.empty())
+                        this->spawnEnemy();
+                }
+            }
+            block.move(dt);
+        }
+    }
+}
+
+void GameLevel::processPengoAttack() {
+    if (this->checkCollisions(Pengo, Pengo.direction)) {
+        Block *block = getCollisionBlock(Pengo, Pengo.direction);
+        // Behavior if the collision is with an adjacent block
+        if (block != nullptr) {
+            // Behavior if there actually is a block directly behind the adjacent one
+            if (this->checkCollisions(*block, Pengo.direction)) {
+                // Pengo always tries to break it (Pengo Animation)
+                Pengo.setState(PengoState::BREAK);
+                // Block only breaks if it's not solid (= not a diamond block)
+                if (!block->isUnbreakable) {
+                    block->setState(BlockState::BREAKING);
+                    score.addDestroyBlock(block);
+                }
+                return;
+            }
+            // Behavior if there is no block directly behind the adjacent one
+            else {
+                Pengo.setState(PengoState::PUSH);
+                block->push(Pengo.direction, calculateStepRange(*block, Pengo.direction));
+                return;
+            }
+        }
+        // Behavior if the collision is with a wall
+        else //if(checkWallCollision(*P, P->direction))
+        {
+            Pengo.setState(PengoState::BREAK);
+
+            if (Pengo.direction == Direction::UP) {
+                this->TopWall.setState(WallState::WOBBLY);
+            } else if (Pengo.direction == Direction::DOWN) {
+                this->BottomWall.setState(WallState::WOBBLY);
+            } else if (Pengo.direction == Direction::LEFT) {
+                this->LeftWall.setState(WallState::WOBBLY);
+            } else if (Pengo.direction == Direction::RIGHT) {
+                this->RightWall.setState(WallState::WOBBLY);
+            }
+            return;
+        }
+    }
+
+}
+
+void GameLevel::processPengoMovement(Direction d) {
+    Pengo.setDirection(d);
+    Pengo.setState(PengoState::WALK);
+    if (!this->checkCollisions(Pengo, d)) {
+        Pengo.setPositionToMoveTo();
+    }
 }

@@ -1,8 +1,9 @@
 #include "EnemyAnimator.h"
 
 
-EnemyAnimator::EnemyAnimator(Enemy* enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)
-	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration)
+EnemyAnimator::EnemyAnimator(Enemy *enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration, Texture2D sprite)
+	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration),
+     sprite{sprite}
 {
 	enemy->registerObserver(this);
 }
@@ -55,16 +56,16 @@ void EnemyAnimator::walk()
 {
 	if (currentAnimationDuration == 0.0f)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 	}
 	else if (currentAnimationDuration > 0.5f * WALK_ANIMATION_DURATION && currentAnimationDuration <= WALK_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
 	}
 	else if (currentAnimationDuration > WALK_ANIMATION_DURATION)
 	{
 		currentAnimationDuration = 0.0f;
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 	}
 }
 
@@ -73,23 +74,23 @@ void EnemyAnimator::breakBlock()
 	enemy->ready = false;
 	if (currentAnimationDuration == 0.0f)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 	}
 	else if (currentAnimationDuration > 0.25f * WALK_ANIMATION_DURATION && currentAnimationDuration <= 0.5f * WALK_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
 	}
 	else if (currentAnimationDuration > 0.5f * WALK_ANIMATION_DURATION && currentAnimationDuration <= 0.75f * WALK_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 	}
 	else if (currentAnimationDuration > 0.75f * WALK_ANIMATION_DURATION && currentAnimationDuration <= WALK_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
 	}
 	else if (currentAnimationDuration > WALK_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 		enemy->setState(EnemyState::CHASING);
 		enemy->setPositionToMoveTo();
 	}
@@ -100,51 +101,51 @@ void EnemyAnimator::stunned()
 	enemy->ready = false;
 	if (currentAnimationDuration == 0.0f)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
 	else if (currentAnimationDuration > (1.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (2.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
 	else if (currentAnimationDuration > (2.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (3.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
 	else if (currentAnimationDuration > (3.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (4.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
 	else if (currentAnimationDuration > (4.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (5.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
 	else if (currentAnimationDuration > (5.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (6.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
 	else if (currentAnimationDuration > (6.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (7.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
 	else if (currentAnimationDuration > (7.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (8.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
 	else if (currentAnimationDuration > (8.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (9.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
 	else if (currentAnimationDuration > (9.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (10.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
 	else if (currentAnimationDuration > (10.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= (11.0f / 12.0f) * STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedRight");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedRight");
 	}
 	else if (currentAnimationDuration > (11.0f / 12.0f) * STUNNED_ANIMATION_DURATION && currentAnimationDuration <= STUNNED_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
+		this->sprite = ResourceManager::GetTexture("enemyStunnedLeft");
 	}
 	else if (currentAnimationDuration > STUNNED_ANIMATION_DURATION)
 	{
@@ -153,7 +154,7 @@ void EnemyAnimator::stunned()
 		else
 			enemy->setState(EnemyState::WANDERING);
 
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 		currentAnimationDuration = 0.0f;
 		enemy->ready = true;
 	}
@@ -165,35 +166,35 @@ void EnemyAnimator::spawning()
 	enemy->ready = false;
 	if (currentAnimationDuration == 0)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn0");
+		this->sprite = ResourceManager::GetTexture("enemySpawn0");
 	}
 	else if (currentAnimationDuration > (1.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (2.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn1");
+		this->sprite = ResourceManager::GetTexture("enemySpawn1");
 	}
 	else if (currentAnimationDuration > (2.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (3.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn2");
+		this->sprite = ResourceManager::GetTexture("enemySpawn2");
 	}
 	else if (currentAnimationDuration > (3.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (4.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn3");
+		this->sprite = ResourceManager::GetTexture("enemySpawn3");
 	}
 	else if (currentAnimationDuration > (4.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (5.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn4");
+		this->sprite = ResourceManager::GetTexture("enemySpawn4");
 	}
 	else if (currentAnimationDuration > (5.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (6.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn5");
+		this->sprite = ResourceManager::GetTexture("enemySpawn5");
 	}
 	else if (currentAnimationDuration > (6.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (7.0f / 8.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn6");
+		this->sprite = ResourceManager::GetTexture("enemySpawn6");
 	}
 	else if (currentAnimationDuration > (7.0f / 8.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn7");
+		this->sprite = ResourceManager::GetTexture("enemySpawn7");
 	}
 	else if (currentAnimationDuration > SPAWNING_ANIMATION_DURATION)
 	{
@@ -202,7 +203,7 @@ void EnemyAnimator::spawning()
 		else
 			enemy->setState(EnemyState::WANDERING);
 
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 		currentAnimationDuration = 0.0f;
 		enemy->ready = true;
 	}
@@ -213,51 +214,51 @@ void EnemyAnimator::spawningFromBlock()
 	enemy->ready = false;
 	if (currentAnimationDuration == 0)
 	{
-		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking0");
+		this->sprite = ResourceManager::GetTexture("iceblockBreaking0");
 	}
 	else if (currentAnimationDuration >= (1.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration < (2.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking1");
+		this->sprite = ResourceManager::GetTexture("iceblockBreaking1");
 	}
 	else if (currentAnimationDuration >= (2.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration < (3.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking2");
+		this->sprite = ResourceManager::GetTexture("iceblockBreaking2");
 	}
 	else if (currentAnimationDuration >= (3.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration < (4.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("iceblockBreaking3");
+		this->sprite = ResourceManager::GetTexture("iceblockBreaking3");
 	}
 	else if (currentAnimationDuration > (4.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (5.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn0");
+		this->sprite = ResourceManager::GetTexture("enemySpawn0");
 	}
 	else if (currentAnimationDuration > (5.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (6.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn1");
+		this->sprite = ResourceManager::GetTexture("enemySpawn1");
 	}
 	else if (currentAnimationDuration > (6.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (7.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn2");
+		this->sprite = ResourceManager::GetTexture("enemySpawn2");
 	}
 	else if (currentAnimationDuration > (7.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (8.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn3");
+		this->sprite = ResourceManager::GetTexture("enemySpawn3");
 	}
 	else if (currentAnimationDuration > (8.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (9.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn4");
+		this->sprite = ResourceManager::GetTexture("enemySpawn4");
 	}
 	else if (currentAnimationDuration > (9.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (10.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn5");
+		this->sprite = ResourceManager::GetTexture("enemySpawn5");
 	}
 	else if (currentAnimationDuration > (10.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= (11.0f / 12.0f) * SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn6");
+		this->sprite = ResourceManager::GetTexture("enemySpawn6");
 	}
 	else if (currentAnimationDuration > (10.0f / 12.0f) * SPAWNING_ANIMATION_DURATION && currentAnimationDuration <= SPAWNING_ANIMATION_DURATION)
 	{
-		enemy->sprite = ResourceManager::GetTexture("enemySpawn7");
+		this->sprite = ResourceManager::GetTexture("enemySpawn7");
 	}
 	else if (currentAnimationDuration > SPAWNING_ANIMATION_DURATION)
 	{
@@ -266,7 +267,7 @@ void EnemyAnimator::spawningFromBlock()
 		else
 			enemy->setState(EnemyState::WANDERING);
 
-		enemy->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
 		currentAnimationDuration = 0.0f;
 		enemy->ready = true;
 	}

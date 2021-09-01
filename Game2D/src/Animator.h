@@ -11,3 +11,4 @@ public:
 	//virtual void update(GameObject gameObject) = 0;
 	virtual void animate(float dt) = 0;
 };
+

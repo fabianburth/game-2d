@@ -43,6 +43,7 @@ public:
 	std::array<float, 2> velocity, positionToMoveTo;
 	bool ready;
 	bool toggleSprite;
+	int lives = 1;
 
 	Player();
 	Player(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity);
@@ -55,7 +56,7 @@ public:
 	void setState(PengoState state);
 	void setPositionToMoveTo();
 	void move(float deltaTime);
-	void swapSprite();
+	//void swapSprite();
 
 //private:
 //	std::vector<std::shared_ptr<Observer>> observers;

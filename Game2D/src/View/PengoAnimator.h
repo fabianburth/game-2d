@@ -9,11 +9,13 @@ class PengoAnimator: public Animator<GameObject>
 {
 public:
 	Player* pengo;
+	Texture2D sprite;
+	bool toggleSprite;
 	const float PUSH_DURATION; 
 	const float WALK_ANIMATION_DURATION;
 	void (PengoAnimator::* currentAnimation)();
 
-	PengoAnimator(Player* pengo, float pushDuration, float walkAnimationDuration);
+	PengoAnimator(Player *pengo, float pushDuration, float walkAnimationDuration, Texture2D sprite);
 	~PengoAnimator();
 	void update(GameObject* s) override;
 	void animate(float dt);
@@ -21,4 +23,5 @@ public:
 	void walk();
 	void pushBlock();
 	void breakBlock();
+	void swapSprite();
 };

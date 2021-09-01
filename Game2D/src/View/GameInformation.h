@@ -4,7 +4,7 @@
 #include <string>
 #include "DisplayBlock.h"
 #include "../Constants.h"
-#include "../View/ResourceManager.h"
+#include "ResourceManager.h"
 #include <ctype.h>
 
 class GameInformation

@@ -4,6 +4,8 @@ SpriteRenderer::SpriteRenderer(Shader& shader)
 {
     this->shader = shader;
     this->initRenderData();
+
+    this->initDisplayInformation();
 }
 
 SpriteRenderer::~SpriteRenderer()
@@ -33,29 +35,31 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, std::array<float, 2> positio
 
 void SpriteRenderer::DrawLevel(GameLevel& gameLevel)
 {
-    for (GameObject& wall : gameLevel.LeftWall.wallComponents)
-        this->DrawObject(wall);
+    for (GameObject& wall : leftWallAnimator->wall->wallComponents)
+        this->DrawSprite(leftWallAnimator->sprite, wall.position, wall.size);
 
-    for (GameObject& wall : gameLevel.RightWall.wallComponents)
-        this->DrawObject(wall);
+    for (GameObject& wall : rightWallAnimator->wall->wallComponents)
+        this->DrawSprite(rightWallAnimator->sprite, wall.position, wall.size);
 
-    for (GameObject& wall : gameLevel.TopWall.wallComponents)
-        this->DrawObject(wall);
+    for (GameObject& wall : topWallAnimator->wall->wallComponents)
+        this->DrawSprite(topWallAnimator->sprite, wall.position, wall.size);
 
-    for (GameObject& wall : gameLevel.BottomWall.wallComponents)
-        this->DrawObject(wall);
+    for (GameObject& wall : bottomWallAnimator->wall->wallComponents)
+        this->DrawSprite(bottomWallAnimator->sprite, wall.position, wall.size);
 
-    for (Block& tile : gameLevel.Bricks)
-        if (tile.state != BlockState::BROKEN)
-            this->DrawObject(tile);
+    for (BlockAnimator* blockAnimator : blockAnimators)
+        if (blockAnimator->block->state != BlockState::BROKEN)
+            this->DrawSprite(blockAnimator->sprite, blockAnimator->block->position, blockAnimator->block->size);
 
-    for (Enemy* enemy : gameLevel.Enemies)
-        this->DrawObject(*enemy);
+    for (EnemyAnimator* enemyAnimator : enemyAnimators)
+        this->DrawSprite(enemyAnimator->sprite, enemyAnimator->enemy->position, enemyAnimator->enemy->size);
 
-    this->DrawObject(gameLevel.Pengo);
+    this->DrawSprite(pengoAnimator->sprite, pengoAnimator->pengo->position, pengoAnimator->pengo->size);
     //this->DrawObject(gameLevel.d);
-    this->DrawDisplayElement(gameLevel.P1);
-    this->DrawDisplayElement(gameLevel.Score);
+    this->P1.show("1P");
+    this->DrawDisplayElement(this->P1);
+    this->Score.show(std::to_string(gameLevel.score.score));
+    this->DrawDisplayElement(this->Score);
 }
 
 void SpriteRenderer::initRenderData()
@@ -96,6 +100,59 @@ void SpriteRenderer::DrawDisplayElement(GameInformation& gameInformation)
     for (DisplayBlock* d : gameInformation.displayBlocks)
     {
         this->DrawSprite(d->sprite, d->position, d->size);
+    }
+}
+
+void SpriteRenderer::updateView(float dt) {
+    this->pengoAnimator->animate(dt);
+
+    this->bottomWallAnimator->animate(dt);
+    this->topWallAnimator->animate(dt);
+    this->leftWallAnimator->animate(dt);
+    this->rightWallAnimator->animate(dt);
+
+    for (BlockAnimator *ba : this->blockAnimators)
+        ba->animate(dt);
+    for (EnemyAnimator *ea : this->enemyAnimators)
+        ea->animate(dt);
+}
+
+void SpriteRenderer::initDisplayInformation() {
+    this->P1 = GameInformation({(-0.5f * Constants::WIDTH_UNIT + 0.5f * Constants::WIDTH_UNIT), -0.5f * Constants::HEIGHT_UNIT + 17 * Constants::HEIGHT_UNIT},
+                         {0.5f, 0.5f, (0.5f * (-1 + 0.5f * Constants::WIDTH_UNIT)) + 0.5f * Constants::WIDTH_UNIT,
+                          (0.5f * (-1 + 0.5f * Constants::HEIGHT_UNIT)) + 0.5f * Constants::HEIGHT_UNIT}, 2);
+    //this->P1.show("1P");
+    this->Score = GameInformation({(-0.5f * Constants::WIDTH_UNIT + 4.5f * Constants::WIDTH_UNIT), -0.5f * Constants::HEIGHT_UNIT + 17 * Constants::HEIGHT_UNIT},
+                            {0.5f, 0.5f, (0.5f * (-1 + 0.5f * Constants::WIDTH_UNIT)) + 0.5f * Constants::WIDTH_UNIT,
+                             (0.5f * (-1 + 0.5f * Constants::HEIGHT_UNIT)) + 0.5f * Constants::HEIGHT_UNIT}, 6);
+}
+
+void SpriteRenderer::initLevelView(GameLevel* gameLevel) {
+    //initialize pengo view
+    this->pengoAnimator = new PengoAnimator(&gameLevel->Pengo, 0.5f, 0.25f, ResourceManager::GetTexture("pengoRight"));
+
+    //initialize block views
+    for (Block &b : gameLevel->Blocks){
+        if(!b.isUnbreakable){
+            this->blockAnimators.push_back(new BlockAnimator(&b, 3.0f, 0.5f, ResourceManager::GetTexture("iceblock")));
+        } else if(b.isUnbreakable){
+            this->blockAnimators.push_back(new BlockAnimator(&b, 3.0f, 0.5f, ResourceManager::GetTexture("diamondblock")));
+        }
+    }
+
+    //initialize wall views
+    this->bottomWallAnimator = new WallAnimator(&gameLevel->BottomWall, 0.5f);
+    this->topWallAnimator = new WallAnimator(&gameLevel->TopWall, 0.5f);
+    this->leftWallAnimator = new WallAnimator(&gameLevel->LeftWall, 0.5f);
+    this->rightWallAnimator = new WallAnimator(&gameLevel->RightWall, 0.5f);
+
+    //initialize enemy views
+    for (Enemy *e : gameLevel->Enemies) {
+        if(e->baseType == "Move"){
+            this->enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f, ResourceManager::GetTexture("enemyMove" + stringDirection(Direction::DOWN) + "00")));
+        } else if(e->baseType == "Boxer"){
+            this->enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f, ResourceManager::GetTexture("enemyBoxer" + stringDirection(Direction::DOWN) + "00")));
+        }
     }
 }
 

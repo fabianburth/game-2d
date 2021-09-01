@@ -11,7 +11,11 @@
 #include "Shader.h"
 #include "../Model/GameObject.h"
 #include "../Model/GameLevel.h"
-#include "../Model/GameInformation.h"
+#include "GameInformation.h"
+#include "../View/PengoAnimator.h"
+#include "../View/BlockAnimator.h"
+#include "../View/WallAnimator.h"
+#include "../View/EnemyAnimator.h"
 
 #include <array>
 
@@ -22,6 +26,20 @@
 class SpriteRenderer
 {
 public:
+    //View Objects
+    PengoAnimator* pengoAnimator;
+    //BlockAnimator* blockAnimator;
+    WallAnimator* leftWallAnimator;
+    WallAnimator* rightWallAnimator;
+    WallAnimator* bottomWallAnimator;
+    WallAnimator* topWallAnimator;
+
+    std::vector<BlockAnimator*> blockAnimators;
+    std::vector<EnemyAnimator*> enemyAnimators;
+
+    GameInformation P1;
+    GameInformation Score;
+
     // Constructor (inits shaders/shapes)
     SpriteRenderer(Shader& shader);
     // Destructor
@@ -30,6 +48,10 @@ public:
     void DrawSprite(Texture2D& texture, std::array<float, 2> position, std::array<float, 4> size, std::array<float, 3> color = { 1.0f,1.0f,1.0f });
     
     void DrawLevel(GameLevel& gameLevel);
+
+    void updateView(float dt);
+
+    void initLevelView(GameLevel* gameLevel);
 
 private:
     // Render state
@@ -41,6 +63,8 @@ private:
 
     void DrawObject(GameObject& gameObject);
     void DrawDisplayElement(GameInformation& gameInformation);
+
+    void initDisplayInformation();
 };
 
 #endif

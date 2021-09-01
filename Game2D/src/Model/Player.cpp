@@ -80,19 +80,19 @@ void Player::move(float deltaTime)
     }
 }
 
-void Player::swapSprite()
-{
-    if (toggleSprite)
-    {
-        toggleSprite = false;
-        this->sprite = ResourceManager::GetTexture("pengo" + stringDirection(this->direction));
-    }
-    else
-    {
-        toggleSprite = true;
-        this->sprite = ResourceManager::GetTexture("pengoMove" + stringDirection(this->direction));
-    }
-}
+//void Player::swapSprite()
+//{
+//    if (toggleSprite)
+//    {
+//        toggleSprite = false;
+//        this->sprite = ResourceManager::GetTexture("pengo" + stringDirection(this->direction));
+//    }
+//    else
+//    {
+//        toggleSprite = true;
+//        this->sprite = ResourceManager::GetTexture("pengoMove" + stringDirection(this->direction));
+//    }
+//}
 
 void Player::setPositionToMoveTo()
 {
