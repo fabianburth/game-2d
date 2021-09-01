@@ -2,29 +2,8 @@
 
 Block::Block() {}
 
-Block::Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable, Enemy* containedEnemy)
-    :GameObject{ pos, sprite }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable }, containedEnemy{ containedEnemy }, direction{ Direction::NONE } {}
-
-//void Block::registerObserver(const std::shared_ptr<Observer<Block*>>& observer)
-//{
-//    observers.push_back(observer);
-//}
-//
-//void Block::removeObserver(const std::shared_ptr<Observer<Block*>>& observer)
-//{
-//    observers.erase(std::remove_if(observers.begin(), observers.end(),
-//        [&](const std::shared_ptr<Observer<Block*>>& vergleich) {
-//            return vergleich == observer;
-//        }));
-//}
-//
-//void Block::notifyObservers()
-//{
-//    for (auto& observer : observers)
-//    {
-//        observer->update(this);
-//    }
-//}
+Block::Block(std::array<float, 2> pos, bool isUnbreakable, Enemy* containedEnemy, BlockState state)
+    :GameObject{ pos }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable }, containedEnemy{ containedEnemy }, direction{ Direction::NONE }, state{ state } {}
 
 void Block::setState(BlockState state)
 {

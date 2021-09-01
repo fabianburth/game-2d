@@ -20,6 +20,6 @@ public:
 	void update(GameObject* s);
 	void animate(float dt);
 	void destroyIceblock();
-	void spawnEnemy();
+	//void spawnEnemy();
 	void flash();
 };

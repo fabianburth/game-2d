@@ -119,7 +119,10 @@ public:
     // Processes movement of the Player (=Pressing WASD) and hence determines where Pengo will go
     void processPengoMovement(Direction d);
 
-
+    // Sets the states of blocks and enemies to an level start state 
+    // (Among other reasons, this is functionality is encapsulated in a seperate method and is not part of the init method, because this should be done AFTER
+    // the view is initialized so it gets informed about change of states)
+    void initStates();
 
 private:
     std::vector<Observer<GameLevel>*> observers;

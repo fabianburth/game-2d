@@ -27,18 +27,16 @@ public:
     Direction direction;
     int killedWithOneMove = 0;
 
-    Block();
-    Block(std::array<float, 2> pos, Texture2D sprite, bool isUnbreakable, Enemy* containedEnemy);
+    static constexpr float BREAKING_DURATION = 0.5f;
+    static constexpr float FLASHING_DURATION = 3.0f;
+    float breakingFor = 0.0f;
+    float flashingFor = 0.0f;
 
-    //virtual void registerObserver(const std::shared_ptr<Observer<Block*>>& observer);
-    //virtual void removeObserver(const std::shared_ptr<Observer<Block*>>& observer);
-    //virtual void notifyObservers();
+    Block();
+    Block(std::array<float, 2> pos, bool isUnbreakable, Enemy* containedEnemy, BlockState state);
 
     void setState(BlockState state);
     void setPositionToMoveTo(Direction direction);
     void push(Direction direction, int stepRange);
     void move(float deltaTime);
-
-//private:
-//    std::vector<std::shared_ptr<Observer<Block*>>> observers;
 };

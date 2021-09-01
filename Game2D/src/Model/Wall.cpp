@@ -18,13 +18,13 @@ void Wall::setState(WallState state)
     }
 }
 
-void Wall::setSprite(Texture2D sprite)
-{
-    for (GameObject& wallComponent : wallComponents)
-    {
-        wallComponent.sprite = sprite;
-    }
-}
+//void Wall::setSprite(Texture2D sprite)
+//{
+//    for (GameObject& wallComponent : wallComponents)
+//    {
+//        wallComponent.sprite = sprite;
+//    }
+//}
 
 void Wall::addWallComponent(GameObject component)
 {

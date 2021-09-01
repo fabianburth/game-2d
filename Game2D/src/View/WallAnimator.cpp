@@ -83,7 +83,7 @@ void WallAnimator::wobble()
 	else if (currentAnimationDuration >= WOBBLE_DURATION)
 	{
 		this->sprite = standardSprite;
-		wall->setState(WallState::SOLID);
+		//wall->setState(WallState::SOLID);
 		currentAnimation = nullptr;
 		currentAnimationDuration = 0.0f;
 	}

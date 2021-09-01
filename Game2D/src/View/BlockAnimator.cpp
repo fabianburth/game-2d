@@ -20,10 +20,10 @@ void BlockAnimator::update(GameObject* s)
 		currentAnimationDuration = 0;
 		currentAnimation = &BlockAnimator::destroyIceblock;
 		break;
-	case(BlockState::SPAWNING):
-		currentAnimationDuration = 0;
-		currentAnimation = &BlockAnimator::spawnEnemy;
-		break;
+	//case(BlockState::SPAWNING):
+	//	currentAnimationDuration = 0;
+	//	currentAnimation = &BlockAnimator::spawnEnemy;
+	//	break;
 	case(BlockState::FLASHING):
 		currentAnimationDuration = 0;
 		currentAnimation = &BlockAnimator::flash;
@@ -69,37 +69,37 @@ void BlockAnimator::destroyIceblock()
 	{
 		currentAnimationDuration = 0.0f;
 		currentAnimation = nullptr;
-		this->block->state = BlockState::BROKEN;
+		//this->block->state = BlockState::BROKEN;
 	}
 }
 
-void BlockAnimator::spawnEnemy()
-{
-	if (currentAnimationDuration == 0)
-	{
-		this->sprite = ResourceManager::GetTexture("iceblockBreaking0");
-	}
-	else if (currentAnimationDuration >= (1.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < (2.0f / 4.0f) * BREAKING_DURATION)
-	{
-		this->sprite = ResourceManager::GetTexture("iceblockBreaking1");
-	}
-	else if (currentAnimationDuration >= (2.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < (3.0f / 4.0f) * BREAKING_DURATION)
-	{
-		this->sprite = ResourceManager::GetTexture("iceblockBreaking2");
-	}
-	else if (currentAnimationDuration >= (3.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < BREAKING_DURATION)
-	{
-		this->sprite = ResourceManager::GetTexture("iceblockBreaking3");
-	}
-	else if (currentAnimationDuration >= BREAKING_DURATION)
-	{
-		currentAnimationDuration = 0.0f;
-		currentAnimation = nullptr;
-		this->block->state = BlockState::BROKEN;
-
-		this->block->containedEnemy->setState(EnemyState::SPAWNING);
-	}
-}
+//void BlockAnimator::spawnEnemy()
+//{
+//	if (currentAnimationDuration == 0)
+//	{
+//		this->sprite = ResourceManager::GetTexture("iceblockBreaking0");
+//	}
+//	else if (currentAnimationDuration >= (1.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < (2.0f / 4.0f) * BREAKING_DURATION)
+//	{
+//		this->sprite = ResourceManager::GetTexture("iceblockBreaking1");
+//	}
+//	else if (currentAnimationDuration >= (2.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < (3.0f / 4.0f) * BREAKING_DURATION)
+//	{
+//		this->sprite = ResourceManager::GetTexture("iceblockBreaking2");
+//	}
+//	else if (currentAnimationDuration >= (3.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < BREAKING_DURATION)
+//	{
+//		this->sprite = ResourceManager::GetTexture("iceblockBreaking3");
+//	}
+//	else if (currentAnimationDuration >= BREAKING_DURATION)
+//	{
+//		currentAnimationDuration = 0.0f;
+//		currentAnimation = nullptr;
+//		this->block->state = BlockState::BROKEN;
+//
+//		this->block->containedEnemy->setState(EnemyState::SPAWNING);
+//	}
+//}
 
 void BlockAnimator::flash()
 {
@@ -128,6 +128,6 @@ void BlockAnimator::flash()
 		this->sprite = ResourceManager::GetTexture("iceblock");
 		currentAnimationDuration = 0.0f;
 		currentAnimation = nullptr;
-		this->block->state = BlockState::SOLID;
+		//this->block->state = BlockState::SOLID;
 	}
 }

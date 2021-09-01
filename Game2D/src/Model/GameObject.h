@@ -98,10 +98,10 @@ public:
     //bool        IsUnbreakable = true;
     //bool        Destroyed = false;
     // render state
-    Texture2D   sprite;
+    //Texture2D   sprite;
     // constructor(s)
     GameObject();
-	GameObject(std::array<float, 2> pos, Texture2D sprite, std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f });
+	GameObject(std::array<float, 2> pos, std::array<float, 4> size = { 1.0f, 1.0f, 0.0f, 0.0f });
     //GameObject(std::array<float, 2> pos, std::array<float, 4> size, Texture2D sprite, std::array<float, 3> color = { 1.0f, 1.0f, 1.0f }, std::array<float, 2> velocity = { 0.0f, 0.0f });
 
     void registerObserver (Observer<GameObject>* o) override;

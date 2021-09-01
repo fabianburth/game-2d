@@ -2,10 +2,10 @@
 
 
 GameObject::GameObject()
-    : position({ 0.0f, 0.0f }), sprite() { }
+    : position({ 0.0f, 0.0f }){ }
 
-GameObject::GameObject(std::array<float, 2> pos, Texture2D sprite, std::array<float, 4> size)
-    : position{ pos }, sprite{ sprite }, size{ size }
+GameObject::GameObject(std::array<float, 2> pos, std::array<float, 4> size)
+    : position{ pos }, size{ size }
 {
 }
 

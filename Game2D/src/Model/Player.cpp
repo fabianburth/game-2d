@@ -4,8 +4,8 @@
 
 Player::Player() {}
 
-Player::Player(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity)
-    :GameObject{ pos, sprite }, velocity{ velocity }, positionToMoveTo{ pos }, ready{ true }, toggleSprite{ true } {}
+Player::Player(std::array<float, 2> pos, std::array<float, 2> velocity)
+    :GameObject{ pos }, velocity{ velocity }, positionToMoveTo{ pos }, ready{ true }, toggleSprite{ true } {}
 
 void Player::setDirection(Direction direction)
 {
@@ -76,7 +76,7 @@ void Player::move(float deltaTime)
     }
     else
     {
-        this->ready = true;
+        //this->ready = true;
     }
 }
 

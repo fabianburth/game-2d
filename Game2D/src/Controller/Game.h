@@ -55,60 +55,12 @@ public:
     void update(GameLevel* s) override;
 
 private:
-    // Checks whether the given gameObject is colliding with another block or a wall when moving one unit to the given direction
-    // @param gameObject: The GameObject to check the collision for
-    // @param direction: The Direction in which collision has to be checked
-    // @return true, if there is a collision, false otherwise
-    // bool checkCollisions(GameObject& gameObject, Direction d);
-
-    // Checks whether the given gameObject is colliding with another block or a wall when moving one unit to the given direction AND
-    // initiates a corresponding action 
-    // @param gameObject: The GameObject to check the collision for
-    // @param direction: The Direction in which collision has to be checked
-    // @return true, if there is a collision, false otherwise
-    //bool doCollision(GameObject& gameObject, Direction d);
-
-    // Return the Block with which the given GameObject is colliding
-    // @param gameObject: The GameObject to check the collision for
-    // @param direction: The Direction in which collision has to be checked
-    // @return a pointer to the gameObject with which the given GameObject is colliding or nullptr otherwise
-    // Block* getCollisionBlock(GameObject& gameObject, Direction d);
-
-    // Calculates how many units the given GameObject could move until colliding with another block or the wall (step range)
-    // @param gameObject: The GameObject the step range has to be calculated for
-    // @param direction: The Direction in which the step range has to be checked
-    // int  calculateStepRange(Block& block, Direction d);
-
-    // Auxialiary method for checkCollisions and doCollisions - checks whether GameObject one collides with GameObject two if it is moved
-    // one unit in the given Direction
-    // @param one: The GameObject to be moved
-    // @param two: The GameObject with which collision will be checked
-    // @param d: The Direction to which it would be moved
-    // bool checkBlockCollision(GameObject& one, GameObject& two, Direction d);
-
-    // Auxialiary method for checkCollisions and doCollisions - checks whether GameObject one collides with the Wall if it is moved on unit
-    // in the given Direction
-    // @param one: The GameObject to be moved
-    // @param d: The Direction to which it would be moved
-    // bool checkWallCollision(GameObject& one, Direction d);
-
-    // bool checkWallCollisionPrecise(GameObject& one, Direction d);
-
-    // bool checkCollisionPrecise(GameObject& one, GameObject& two);
-
-    // std::vector<int> getProbabilityArray(Enemy& enemy, std::vector<Direction> directions);
-    // std::vector<Direction> getInitialDirections(Enemy& enemy);
-    // int getDirectionIndex(std::vector<int> chances);
-    // bool isMovementPossible(Enemy& enemy, Direction d);
-    void removeAnimatorOfKilledEnemy(Enemy* enemy);
-    void createAnimatorForSpawnedEnemy(Enemy* enemy);
-    // bool boxerExists();
-    // void trySettingBoxer();
+    // Manages the begin of the level and also the transition to another level
+    // Initiates the initialization of states and also binds all observers necessary 
     void initLevel();
-    void initStates();
-    // bool checkThreeDiamonds();
-    // Block* adjacentBlockIsDiamond(Block& b);
-    // bool blockTouchesWall(Block& b);
+
+    // Carries the score of the finished level over to the next level
+    void carryOverScore();
 };
 
 #endif

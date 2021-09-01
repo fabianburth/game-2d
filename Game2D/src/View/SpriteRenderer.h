@@ -23,7 +23,7 @@
 //const float WIDTH_UNIT = ((2.0f / 448) * 32.0f);
 //const float HEIGHT_UNIT = ((2.0f / 576.0f) * 32.0f);
 
-class SpriteRenderer
+class SpriteRenderer: public Observer<GameLevel>
 {
 public:
     //View Objects
@@ -53,6 +53,8 @@ public:
 
     void initLevelView(GameLevel* gameLevel);
 
+    void update(GameLevel* gameLevel) override;
+
 private:
     // Render state
     Shader       shader;
@@ -61,10 +63,16 @@ private:
     // Thus, it creates the a quad at the bottom left corner
     void initRenderData();
 
-    void DrawObject(GameObject& gameObject);
+    //void DrawObject(GameObject& gameObject);
     void DrawDisplayElement(GameInformation& gameInformation);
 
     void initDisplayInformation();
+
+    void loadSprites();
+
+    void removeAnimatorOfKilledEnemy(Enemy* enemy);
+
+    void createAnimatorForSpawnedEnemy(Enemy* enemy);
 };
 
 #endif

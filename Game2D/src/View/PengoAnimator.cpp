@@ -42,18 +42,18 @@ void PengoAnimator::stand() {
 void PengoAnimator::walk() {
     if (currentAnimationDuration == 0) {
         this->swapSprite();
-    } else if (currentAnimationDuration >= WALK_ANIMATION_DURATION) {
+    } /*else if (currentAnimationDuration >= WALK_ANIMATION_DURATION) {
         pengo->setState(PengoState::STAND);
-    }
+    }*/
 }
 
 void PengoAnimator::pushBlock() {
-    pengo->ready = false;
+    //pengo->ready = false;
     this->sprite = ResourceManager::GetTexture("pengoPush" + stringDirection(pengo->direction));
     if (currentAnimationDuration >= PUSH_DURATION) {
         this->sprite = ResourceManager::GetTexture("pengoPostPush" + stringDirection(pengo->direction));
-        pengo->state = PengoState::STAND;
-        pengo->ready = true;
+        //pengo->state = PengoState::STAND;
+        //pengo->ready = true;
     }
 }
 

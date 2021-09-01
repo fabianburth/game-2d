@@ -45,8 +45,15 @@ public:
 	bool toggleSprite;
 	int lives = 1;
 
+	static constexpr float WALKING_DURATION = 0.25f;
+	static constexpr float PUSHING_DURATION = 0.5f;
+	static constexpr float BREAKING_BLOCK_DURATION = 0.5f;
+	float walkingFor = 0.0f;
+	float pushingFor = 0.0f;
+	float breakingBlockFor = 0.0f;
+
 	Player();
-	Player(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity);
+	Player(std::array<float, 2> pos, std::array<float, 2> velocity);
 
 	//virtual void registerObserver(const std::shared_ptr<Observer>& observer);
 	//virtual void removeObserver(const std::shared_ptr<Observer>& observer);

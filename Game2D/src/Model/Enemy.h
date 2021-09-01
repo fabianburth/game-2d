@@ -1,10 +1,14 @@
 #pragma once
 #include "GameObject.h"
 
-enum class EnemyState
+enum class EnemyType
 {
 	CHASING,
-	WANDERING,
+	WANDERING
+};
+
+enum class EnemyState
+{
 	BREAKING,
 	STUNNED,
 	SPAWNING,
@@ -17,15 +21,23 @@ class Enemy : public GameObject
 public:
 	Direction direction;
 	EnemyState state;
-	std::string baseType;
+	EnemyType type;
 	std::array<float, 2> velocity, positionToMoveTo;
 	bool ready;
 
+	static constexpr float BREAKING_BLOCK_DURATION = 0.5f;
+	static constexpr float STUNN_DURATION = 3.0f;
+	static constexpr float SPAWN_DURATION = 1.5f;
+	float breakingBlockFor = 0.0f;
+	float stunnedFor = 0.0f;
+	float spawningFor = 0.0f;
+
 	Enemy();
-	Enemy(std::array<float, 2> pos, Texture2D sprite, std::array<float, 2> velocity, Direction direction, EnemyState state, std::string baseType, bool ready);
+	Enemy(std::array<float, 2> pos, std::array<float, 2> velocity, Direction direction, EnemyState state, EnemyType type, bool ready);
 
 	void setDirection(Direction direction);
 	void setState(EnemyState state);
+	void setType(EnemyType type);
 	void setPositionToMoveTo();
 	void move(float deltaTime);
 

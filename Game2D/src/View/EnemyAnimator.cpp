@@ -1,11 +1,22 @@
 #include "EnemyAnimator.h"
 
 
-EnemyAnimator::EnemyAnimator(Enemy *enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration, Texture2D sprite)
-	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration),
-     sprite{sprite}
+EnemyAnimator::EnemyAnimator(Enemy *enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)
+	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration)
 {
-	enemy->registerObserver(this);
+	switch (this->enemy->type)
+	{
+	case(EnemyType::WANDERING):
+		spriteType = "Move";
+		break;
+	case(EnemyType::CHASING):
+		spriteType = "Boxer";
+		break;
+	default:
+		break;
+	}
+	this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(Direction::DOWN) + "00");
+	this->enemy->registerObserver(this);
 }
 
 EnemyAnimator::~EnemyAnimator()
@@ -24,13 +35,13 @@ void EnemyAnimator::animate(float dt)
 void EnemyAnimator::update(GameObject* s)
 {
 	//Enemy* enemy = dynamic_cast<Enemy*>(s);
-	switch (enemy->state)
+	switch (this->enemy->state)
 	{
-	case(EnemyState::WANDERING):
-	case(EnemyState::CHASING):
-		currentAnimationDuration = 0.0f;
-		currentAnimation = &EnemyAnimator::walk;
-		break;
+	//case(EnemyState::WANDERING):
+	//case(EnemyState::CHASING):
+	//	currentAnimationDuration = 0.0f;
+	//	currentAnimation = &EnemyAnimator::walk;
+	//	break;
 	case(EnemyState::BREAKING):
 		currentAnimationDuration = 0.0f;
 		currentAnimation = &EnemyAnimator::breakBlock;
@@ -48,24 +59,38 @@ void EnemyAnimator::update(GameObject* s)
 		currentAnimation = &EnemyAnimator::spawning;
 		break;
 	case(EnemyState::NONE):
+		currentAnimationDuration = 0.0f;
+		currentAnimation = &EnemyAnimator::walk;
 		break;
 	}
+
+	switch (this->enemy->type) {
+	case(EnemyType::WANDERING):
+		spriteType = "Move";
+		break;
+	case(EnemyType::CHASING):
+		spriteType = "Boxer";
+		break;
+	default:
+		break;
+	}
+
 }
 
 void EnemyAnimator::walk()
 {
 	if (currentAnimationDuration == 0.0f)
 	{
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
 	}
 	else if (currentAnimationDuration > 0.5f * WALK_ANIMATION_DURATION && currentAnimationDuration <= WALK_ANIMATION_DURATION)
 	{
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "01");
 	}
 	else if (currentAnimationDuration > WALK_ANIMATION_DURATION)
 	{
 		currentAnimationDuration = 0.0f;
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
 	}
 }
 
@@ -74,25 +99,25 @@ void EnemyAnimator::breakBlock()
 	enemy->ready = false;
 	if (currentAnimationDuration == 0.0f)
 	{
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
 	}
 	else if (currentAnimationDuration > 0.25f * WALK_ANIMATION_DURATION && currentAnimationDuration <= 0.5f * WALK_ANIMATION_DURATION)
 	{
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "01");
 	}
 	else if (currentAnimationDuration > 0.5f * WALK_ANIMATION_DURATION && currentAnimationDuration <= 0.75f * WALK_ANIMATION_DURATION)
 	{
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
 	}
 	else if (currentAnimationDuration > 0.75f * WALK_ANIMATION_DURATION && currentAnimationDuration <= WALK_ANIMATION_DURATION)
 	{
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "01");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "01");
 	}
 	else if (currentAnimationDuration > WALK_ANIMATION_DURATION)
 	{
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
-		enemy->setState(EnemyState::CHASING);
-		enemy->setPositionToMoveTo();
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
+		//enemy->setState(EnemyState::CHASING);
+		//enemy->setPositionToMoveTo();
 	}
 }
 
@@ -149,14 +174,14 @@ void EnemyAnimator::stunned()
 	}
 	else if (currentAnimationDuration > STUNNED_ANIMATION_DURATION)
 	{
-		if (enemy->baseType == "Boxer")
+		/*if (this->spriteType == "Boxer")
 			enemy->setState(EnemyState::CHASING);
 		else
-			enemy->setState(EnemyState::WANDERING);
+			enemy->setState(EnemyState::WANDERING);*/
 
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
 		currentAnimationDuration = 0.0f;
-		enemy->ready = true;
+		//enemy->ready = true;
 	}
 
 }
@@ -198,14 +223,14 @@ void EnemyAnimator::spawning()
 	}
 	else if (currentAnimationDuration > SPAWNING_ANIMATION_DURATION)
 	{
-		if (enemy->baseType == "Boxer")
+		/*if (this->spriteType == "Boxer")
 			enemy->setState(EnemyState::CHASING);
 		else
-			enemy->setState(EnemyState::WANDERING);
+			enemy->setState(EnemyState::WANDERING);*/
 
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
 		currentAnimationDuration = 0.0f;
-		enemy->ready = true;
+		//enemy->ready = true;
 	}
 }
 
@@ -262,13 +287,13 @@ void EnemyAnimator::spawningFromBlock()
 	}
 	else if (currentAnimationDuration > SPAWNING_ANIMATION_DURATION)
 	{
-		if (enemy->baseType == "boxer")
+		/*if (this->spriteType == "boxer")
 			enemy->setState(EnemyState::CHASING);
 		else
-			enemy->setState(EnemyState::WANDERING);
+			enemy->setState(EnemyState::WANDERING);*/
 
-		this->sprite = ResourceManager::GetTexture("enemy" + enemy->baseType + stringDirection(enemy->direction) + "00");
+		this->sprite = ResourceManager::GetTexture("enemy" + this->spriteType + stringDirection(enemy->direction) + "00");
 		currentAnimationDuration = 0.0f;
-		enemy->ready = true;
+		//enemy->ready = true;
 	}
 }
