@@ -20,7 +20,7 @@ endif()
 
 add_subdirectory(glfw)
 add_subdirectory(glew/build/cmake)
-add_subdirectory(backward-cpp)
+#add_subdirectory(backward-cpp)
 add_subdirectory(googletest)
 
 include_directories(glew/include)

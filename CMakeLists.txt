@@ -37,8 +37,5 @@ set(SOURCES
         Game2D/src/View/WallAnimator.cpp
         Game2D/src/View/GameView.cpp Game2D/src/View/GameView.h Game2D/src/Model/Score.cpp Game2D/src/Model/Score.h)
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${BACKWARD_ENABLE})
-
+add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glew_s glfw)
-
-add_backward(${PROJECT_NAME})
