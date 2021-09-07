@@ -9,9 +9,8 @@
 
 #include "gtest/gtest.h"
 
-class TestGameLevel: public GameLevel {
-public:
-    bool blockTouchesWall(Block &b);
+struct TestGameLevel : public GameLevel {
+    using GameLevel::blockTouchesWall;
 };
 
 TEST(GameLevel, BlockTouchesWall){
