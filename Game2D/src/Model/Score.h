@@ -10,7 +10,7 @@
 
 class Score {
 public:
-    int score;
+    int score = 0;
 
     void addLevelCompletion(double levelDuration);
     void addDiamondsTouchingWall();

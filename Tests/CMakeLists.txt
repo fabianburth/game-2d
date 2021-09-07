@@ -4,7 +4,7 @@ enable_testing()
 
 set(TEST_SOURCES
 
-)
+        TestGameLevel.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR})
 add_executable(${PROJECT_NAME} main.cpp ${SOURCES} ${TEST_SOURCES})

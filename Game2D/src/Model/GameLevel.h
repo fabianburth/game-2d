@@ -124,7 +124,7 @@ public:
     // the view is initialized so it gets informed about change of states)
     void initStates();
 
-private:
+protected:
     std::vector<Observer<GameLevel>*> observers;
 
     // initialize level from tile data

@@ -64,4 +64,8 @@ set(SOURCES
         Game2D/src/View/GameView.cpp Game2D/src/View/GameView.h Game2D/src/Model/Score.cpp Game2D/src/Model/Score.h)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glew_s glfw)
+#target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+#target_link_directories(${PROJECT_NAME} PRIVATE "$ENV{ProgramFiles\(x86\)}/Microsoft Visual Studio/2019/Community/VC/Tools/Llvm/x64/lib/clang/11.0.0/lib/windows")
+#target_link_libraries(${PROJECT_NAME} PRIVATE clang_rt.asan_dynamic-x86_64 clang_rt.asan_dynamic_runtime_thunk-x86_64)
+#target_link_options(${PROJECT_NAME} PRIVATE /wholearchive:clang_rt.asan_dynamic_runtime_thunk-x86_64.lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES} glew_s glfw)
