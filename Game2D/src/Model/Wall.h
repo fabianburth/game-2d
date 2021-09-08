@@ -3,7 +3,7 @@
 #include <vector>
 #include "GameObject.h"
 #include "../Subject.h"
-#include "../View/ResourceManager.h"
+//#include "../View/ResourceManager.h"
 
 enum class WallState
 {

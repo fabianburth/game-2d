@@ -4,13 +4,13 @@
 #define GAMEOBJECT_H
 
 #include "../Constants.h"
-#include <GL/glew.h>
+//#include <GL/glew.h>
 #include <memory>
 #include <vector>
 #include <array>
 #include <string>
 
-#include "../View/Texture.h"
+//#include "../View/Texture.h"
 #include "../Subject.h"
 
 enum class Direction

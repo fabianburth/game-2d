@@ -26,9 +26,9 @@ void Game::Init() {
 
     // load levels
     GameLevel one;
-    one.Load("../Game2D/res/levels/level1.lvl", 448, 576);
+    one.Load("../Game2D/res/levels/level1.lvl");
     GameLevel two;
-    two.Load("../Game2D/res/levels/level0.lvl", 448, 576);
+    two.Load("../Game2D/res/levels/level0.lvl");
 
     this->Levels.push_back(one);
     this->Levels.push_back(two);

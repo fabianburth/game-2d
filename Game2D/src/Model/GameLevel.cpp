@@ -10,7 +10,7 @@ GameLevel::GameLevel() {
 GameLevel::~GameLevel() {
 }
 
-void GameLevel::Load(const char *file, unsigned int levelWidth, unsigned int levelHeight) {
+void GameLevel::Load(const char *file) {
     // clear old data
     this->Blocks.clear();
     // load from file
@@ -29,7 +29,7 @@ void GameLevel::Load(const char *file, unsigned int levelWidth, unsigned int lev
             tileData.push_back(row);
         }
         if (tileData.size() > 0)
-            this->init(tileData, levelWidth, levelHeight);
+            this->init(tileData);
     }
 }
 
@@ -55,7 +55,7 @@ bool GameLevel::IsCompleted()
     }
 }
 
-void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight) {
+void GameLevel::init(std::vector<std::vector<unsigned int>> tileData) {
     // starts clocks to track duration to finish the level and the duration between killing enemies
     startClockLevel = std::clock();
     startClockEnemyKill = std::clock();
@@ -63,7 +63,6 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
     std::reverse(tileData.begin(), tileData.end());
     unsigned int height = tileData.size();
     unsigned int width = tileData[0].size(); // note we can index vector at [0] since this function is only called if height > 0
-    float unit_width = Constants::WIDTH_UNIT, unit_height = Constants::HEIGHT_UNIT;
     LeftWall = Wall(WallSide::LEFT);
     RightWall = Wall(WallSide::RIGHT);
     BottomWall = Wall(WallSide::BOTTOM);
@@ -73,15 +72,15 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
     // Left and Right Wall
     for (unsigned int x = 0; x < height + 1; ++x) {
         //Left Wall
-        std::array<float, 2> posL = {-0.5f * unit_width, -0.5f * unit_height + unit_height * x};
-        std::array<float, 4> sizeL = {0.5f, 1.0f, 0.5f * (-1 + 0.5f * unit_width), 0};
+        std::array<float, 2> posL = {-0.5f * Constants::WIDTH_UNIT, -0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT * x};
+        std::array<float, 4> sizeL = {0.5f, 1.0f, 0.5f * (-1 + 0.5f * Constants::WIDTH_UNIT), 0};
         GameObject objL(posL, sizeL);
         //objL.isUnbreakable = true;
         this->Walls.push_back(objL);
         this->LeftWall.addWallComponent(objL);
         //Right Wall
-        std::array<float, 2> posR = {width * unit_width, -0.5f * unit_height + unit_height * x};
-        std::array<float, 4> sizeR = {0.5f, 1.0f, 0.5f * (-1 + 0.5f * unit_width), 0};
+        std::array<float, 2> posR = {width * Constants::WIDTH_UNIT, -0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT * x};
+        std::array<float, 4> sizeR = {0.5f, 1.0f, 0.5f * (-1 + 0.5f * Constants::WIDTH_UNIT), 0};
         GameObject objR(posR, sizeR);
         //objR.isUnbreakable = true;
         this->Walls.push_back(objR);
@@ -90,15 +89,15 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
     //Bottom and Top Wall
     for (unsigned int x = 0; x < width; ++x) {
         //Bottom Wall
-        std::array<float, 2> posB = {unit_width * x, height * unit_height};
-        std::array<float, 4> sizeB = {1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * unit_height)};
+        std::array<float, 2> posB = {Constants::WIDTH_UNIT * x, height * Constants::HEIGHT_UNIT};
+        std::array<float, 4> sizeB = {1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * Constants::HEIGHT_UNIT)};
         GameObject objB(posB, sizeB);
         //objB.isUnbreakable = true;
         this->Walls.push_back(objB);
         this->TopWall.addWallComponent(objB);
         //Top Wall
-        std::array<float, 2> posT = {unit_width * x, -0.5f * unit_height};
-        std::array<float, 4> sizeT = {1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * unit_height)};
+        std::array<float, 2> posT = {Constants::WIDTH_UNIT * x, -0.5f * Constants::HEIGHT_UNIT};
+        std::array<float, 4> sizeT = {1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * Constants::HEIGHT_UNIT)};
         GameObject objT(posT, sizeT);
         //objT.isUnbreakable = true;
         this->Walls.push_back(objT);
@@ -111,17 +110,17 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
             // check block type from level data (2D level array)
             if (tileData[y][x] == 1) // breakable iceblock
             {
-                std::array<float, 2> pos = {unit_width * x, unit_height * y};
+                std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};
                 Block obj(pos, false, nullptr, BlockState::SOLID);
                 this->Blocks.push_back(obj);
             } else if (tileData[y][x] == 2)    // unbreakable diamond block
             {
-                std::array<float, 2> pos = {unit_width * x, unit_height * y};
+                std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};
                 Block obj(pos, true, nullptr, BlockState::SOLID);
                 this->Blocks.push_back(obj);
             } else if (tileData[y][x] == 3) // breakable iceblock with enemy frozen in it
             {
-                std::array<float, 2> pos = {unit_width * x, unit_height * y};
+                std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};
                 std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
                 Direction direction = Direction::DOWN;
                 Enemy *enemy = new Enemy(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
@@ -131,19 +130,19 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                 this->Blocks.push_back(obj);
             } else if (tileData[y][x] == 4) // pengo 
             {
-                std::array<float, 2> pos = {unit_width * x, unit_height * y};
+                std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};
                 std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
                 Pengo = Player(pos, velocity);
             } else if (tileData[y][x] == 5) // walking enemy
             {
-                std::array<float, 2> pos = {unit_width * x, unit_height * y};
+                std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};
                 std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
                 Direction direction = Direction::DOWN;
                 Enemy *enemy = new Enemy(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
                 this->Enemies.push_back(enemy);
             } else if (tileData[y][x] == 6) // boxing enemy
             {
-                std::array<float, 2> pos = {unit_width * x, unit_height * y};
+                std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};
                 std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
                 Direction direction = Direction::DOWN;
                 Enemy *enemy = new Enemy(pos, velocity, direction, EnemyState::NONE, EnemyType::CHASING, false);
