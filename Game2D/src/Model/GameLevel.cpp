@@ -250,6 +250,7 @@ int GameLevel::calculateStepRange(Block &block, Direction d) {
     }
 
     block.position = originalPosition;
+    block.positionToMoveTo = block.position;
     return stepWidth;
 }
 
