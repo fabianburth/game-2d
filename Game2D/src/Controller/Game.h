@@ -55,11 +55,13 @@ public:
     void update(GameLevel* s) override;
 
 private:
-    // Manages the begin of the level and also the transition to another level
-    // Initiates the initialization of states and also binds all observers necessary 
+    /**
+     * Manages the begin of the level and also the transition to another level
+     * Initiates the initialization of states and also binds all observers necessary
+     */
     void initLevel();
 
-    // Carries the score of the finished level over to the next level
+    /** Carries the score of the finished level over to the next level */
     void carryOverScore();
 };
 

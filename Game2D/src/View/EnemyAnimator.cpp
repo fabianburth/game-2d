@@ -1,7 +1,7 @@
 #include "EnemyAnimator.h"
 
 
-EnemyAnimator::EnemyAnimator(Enemy *enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)
+EnemyAnimator::EnemyAnimator(std::shared_ptr<Enemy> enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)
 	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration)
 {
 	switch (this->enemy->type)

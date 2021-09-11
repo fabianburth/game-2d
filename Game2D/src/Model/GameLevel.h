@@ -3,6 +3,7 @@
 #define GAMELEVEL_H
 #include <vector>
 #include <array>
+#include <memory>
 #include <ctime>
 
 //#include <GL/glew.h>
@@ -32,8 +33,8 @@ class GameLevel: public Subject<GameLevel>
 public:
     // level state
     Player Pengo;
-    std::vector<Enemy*> Enemies;
-    std::vector<Enemy*> frozenEnemies;
+    std::vector<std::shared_ptr<Enemy>> Enemies;
+    std::vector<std::shared_ptr<Enemy>> frozenEnemies;
     std::vector<GameObject> Walls;
     Wall LeftWall;
     Wall RightWall;
@@ -45,15 +46,16 @@ public:
     Score score;
 
     /** Clock to track how long it takes the player to finish the level (relevant for score) */
-    std::clock_t startClockLevel;
+    std::clock_t startClockLevel = 0;
 
     /** Clock to track how much time has passed since the last enemy was killed (relevant for enemy state) */
-    std::clock_t startClockEnemyKill;
+    std::clock_t startClockEnemyKill = 0;
 
+    /** Is set to true when 3 diamond blocks get aligned */
     bool diamondBlocksAligned = false;
 
-    GameLevel();
-    ~GameLevel();
+    GameLevel() = default;
+    ~GameLevel() = default;
 
     void registerObserver(Observer<GameLevel> *o) override;
     void removeObserver(Observer<GameLevel> *o) override;
@@ -114,7 +116,7 @@ protected:
      * @param d: The Direction to which it would be moved
      * @return true, if the blocks would collide, false otherwise
      */
-    auto checkBlockCollision(GameObject& one, GameObject& two, Direction d) -> bool;
+    static auto checkBlockCollision(GameObject& one, GameObject& two, Direction d) -> bool;
 
     /**
      * Auxiliary method for checkCollisions - checks whether GameObject will be colliding with the wall when moved one unit
@@ -152,7 +154,7 @@ protected:
      * @param chances: A probability vector for this enemy
      * @return: The index of the direction in a direction vector
      */
-    auto getDirectionIndex(std::vector<int> chances) -> int;
+    static auto getDirectionIndex(const std::vector<int>& chances) -> int;
 
     /**
      * Auxiliary method which checks whether 3 diamond blocks got aligned and updates the score if so
@@ -193,7 +195,7 @@ protected:
      * Spawns one of the currently frozen enemies
      * @return a pointer to the frozen enemy
      */
-    auto spawnEnemy() -> Enemy*;
+    auto spawnEnemy() -> void;
 
     /**
      * Checks whether the given gameObject is colliding with another block or a wall when moving one unit to the given direction
@@ -229,7 +231,7 @@ protected:
      * Removes the enemy from the vector of active enemies
      * @param enemy: A pointer to the enemy to be removed
      */
-    auto killEnemy(Enemy* enemy) -> void;
+    auto killEnemy(std::shared_ptr<Enemy>& enemy) -> void;
 };
 
 #endif

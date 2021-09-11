@@ -9,10 +9,6 @@ Game::Game(unsigned int width, unsigned int height)
         : PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
 
 Game::~Game() {
-    //delete Pengo;
-    //delete Renderer;
-    //delete pengoAnimator;
-    //delete blockAnimator;
 }
 
 void Game::Init() {
@@ -88,14 +84,15 @@ void Game::ProcessInput(float dt) {
 }
 
 void Game::Render() {
-    if (this->Levels.size() > this->Level)
+    if (this->Levels.size() > this->Level) {
         this->Renderer->DrawLevel(this->Levels[this->Level]);
+    }
 }
 
 
 void Game::initLevel() {
 
-    if(this->Levels[this->Level].Enemies.empty()){
+    if (this->Levels[this->Level].Enemies.empty()) {
         this->Renderer->blockAnimators.clear();
         this->Renderer->enemyAnimators.clear();
         this->Levels[this->Level].removeObserver(this);
@@ -120,7 +117,7 @@ void Game::update(GameLevel *s) {
 }
 
 void Game::carryOverScore() {
-    this->Levels[this->Level+1].score.score = this->Levels[this->Level].score.score;
+    this->Levels[this->Level + 1].score.score = this->Levels[this->Level].score.score;
 }
 
 

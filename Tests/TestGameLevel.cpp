@@ -18,6 +18,10 @@ struct TestGameLevel : public GameLevel {
     using GameLevel::checkCollisionPrecise;
 
     using GameLevel::calculateStepRange;
+
+    using GameLevel::checkThreeDiamonds;
+
+    using GameLevel::spawnEnemy;
 };
 
 TEST(GameLevel, BlockTouchesWall) {
@@ -149,6 +153,55 @@ TEST(GameLevel, StepRange) {
     EXPECT_EQ(0, testGameLevel.calculateStepRange(testBlock0, Direction::RIGHT));
     EXPECT_EQ(7, testGameLevel.calculateStepRange(testBlock0, Direction::UP));
     EXPECT_EQ(1, testGameLevel.calculateStepRange(testBlock0, Direction::DOWN));
+}
+
+TEST(GameLevel, CheckThreeDiamonds) {
+    TestGameLevel testGameLevel = TestGameLevel();
+
+    Block testBlock0 = Block({ 0, Constants::HEIGHT_UNIT * 2}, true, nullptr, BlockState::SOLID);
+    Block testBlock1 = Block({ Constants::WIDTH_UNIT * 1, Constants::HEIGHT_UNIT * 2}, true, nullptr, BlockState::SOLID);
+    Block testBlock2 = Block({ Constants::WIDTH_UNIT * 2, Constants::HEIGHT_UNIT * 2}, true, nullptr, BlockState::SOLID);
+
+    testGameLevel.Blocks.push_back(testBlock0);
+    testGameLevel.Blocks.push_back(testBlock1);
+    testGameLevel.Blocks.push_back(testBlock2);
+
+    testGameLevel.checkThreeDiamonds();
+    EXPECT_EQ(5000, testGameLevel.score.score);
+    testGameLevel.checkThreeDiamonds();
+    EXPECT_EQ(5000, testGameLevel.score.score);
+
+    //Reset States
+    testGameLevel.diamondBlocksAligned = false;
+    testGameLevel.score.score = 0;
+
+    testGameLevel.Blocks.at(0).position = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 2};
+    testGameLevel.checkThreeDiamonds();
+    EXPECT_EQ(10000, testGameLevel.score.score);
+
+    //Reset States
+    testGameLevel.diamondBlocksAligned = false;
+    testGameLevel.score.score = 0;
+
+    testGameLevel.Blocks.at(0).position = {Constants::WIDTH_UNIT * 4, Constants::HEIGHT_UNIT * 2};
+    testGameLevel.checkThreeDiamonds();
+    EXPECT_EQ(0, testGameLevel.score.score);
+}
+
+TEST(GameLevel, SpawnEnemy) {
+    TestGameLevel testGameLevel = TestGameLevel();
+
+    Enemy* testEnemy0 = new Enemy({0, Constants::HEIGHT_UNIT * 2}, {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT *3},
+                             Direction::DOWN, EnemyState::NONE, EnemyType::WANDERING, false);
+    testGameLevel.frozenEnemies.push_back(testEnemy0);
+    Block testBlock0 = Block({ 0, Constants::HEIGHT_UNIT * 2}, false, testEnemy0, BlockState::SOLID);
+    testGameLevel.Blocks.push_back(testBlock0);
+
+    EXPECT_EQ(testEnemy0, testGameLevel.spawnEnemy());
+    EXPECT_EQ(BlockState::BROKEN,testGameLevel.Blocks.back().state);
+    EXPECT_EQ(EnemyState::SPAWNING, testEnemy0->state);
+    EXPECT_EQ(testEnemy0, testGameLevel.Enemies.back());
+    EXPECT_EQ(true, testGameLevel.frozenEnemies.empty());
 }
 
 

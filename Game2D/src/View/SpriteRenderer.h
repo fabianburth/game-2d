@@ -70,9 +70,9 @@ private:
 
     void loadSprites();
 
-    void removeAnimatorOfKilledEnemy(Enemy* enemy);
+    void removeAnimatorOfKilledEnemy(std::shared_ptr<Enemy>& enemy);
 
-    void createAnimatorForSpawnedEnemy(Enemy* enemy);
+    void createAnimatorForSpawnedEnemy(std::shared_ptr<Enemy>& enemy);
 };
 
 #endif

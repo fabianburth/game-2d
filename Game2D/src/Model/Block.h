@@ -23,7 +23,7 @@ public:
     BlockState state = BlockState::SOLID;
     std::array<float, 2> positionToMoveTo;
     bool isUnbreakable;
-    Enemy* containedEnemy;
+    std::shared_ptr<Enemy> containedEnemy;
     Direction direction;
     int killedWithOneMove = 0;
 
@@ -33,7 +33,7 @@ public:
     float flashingFor = 0.0f;
 
     Block();
-    Block(std::array<float, 2> pos, bool isUnbreakable, Enemy* containedEnemy, BlockState state);
+    Block(std::array<float, 2> pos, bool isUnbreakable, std::shared_ptr<Enemy> containedEnemy, BlockState state);
 
     void setState(BlockState state);
     void setPositionToMoveTo(Direction direction);

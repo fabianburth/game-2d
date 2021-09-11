@@ -236,14 +236,14 @@ void SpriteRenderer::initLevelView(GameLevel* gameLevel) {
     this->rightWallAnimator = new WallAnimator(&gameLevel->RightWall, 0.5f);
 
     //initialize enemy views
-    for (Enemy *e : gameLevel->Enemies) {
+    for (std::shared_ptr<Enemy>& e : gameLevel->Enemies) {
         this->enemyAnimators.push_back(new EnemyAnimator(e, 0.4f, 3.0f, 1.5f));
     }
 }
 
 void SpriteRenderer::update(GameLevel* gameLevel)
 {
-    Enemy* enemy = nullptr;
+    std::shared_ptr<Enemy> enemy = nullptr;
     // Check if an enemy was killed (= if there exists an animator for whose enemy does not exist anymore)
     for (EnemyAnimator* ea : this->enemyAnimators) {
         if (std::find(gameLevel->Enemies.begin(), gameLevel->Enemies.end(), ea->enemy) != gameLevel->Enemies.end()) {
@@ -261,9 +261,9 @@ void SpriteRenderer::update(GameLevel* gameLevel)
 
     // Check if an enemy was spawned (= if there exists an enemy with no animator)
     bool animatorExists = false;
-    for (Enemy* e : gameLevel->Enemies) {
+    for (std::shared_ptr<Enemy>& e : gameLevel->Enemies) {
         for (EnemyAnimator* ea : this->enemyAnimators) {
-            if (ea->enemy == e) {
+            if (ea->enemy->id == e->id) {
                 animatorExists = true;
             }
         }
@@ -281,14 +281,14 @@ void SpriteRenderer::update(GameLevel* gameLevel)
     }
 }
 
-void SpriteRenderer::removeAnimatorOfKilledEnemy(Enemy* enemy) {
+void SpriteRenderer::removeAnimatorOfKilledEnemy(std::shared_ptr<Enemy>& enemy) {
     this->enemyAnimators.erase(std::remove_if(this->enemyAnimators.begin(), this->enemyAnimators.end(),
         [&](EnemyAnimator* ea) {
             return ea->enemy == enemy;
         }));
 }
 
-void SpriteRenderer::createAnimatorForSpawnedEnemy(Enemy* enemy) {
+void SpriteRenderer::createAnimatorForSpawnedEnemy(std::shared_ptr<Enemy>& enemy) {
     //Enemy *enemy = this->Levels[this->Level].createAnimatorForSpawnedEnemy();
     this->enemyAnimators.push_back(new EnemyAnimator(enemy, 0.4f, 3.0f, 1.5f));
 }

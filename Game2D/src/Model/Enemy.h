@@ -19,6 +19,7 @@ enum class EnemyState
 class Enemy : public GameObject
 {
 public:
+    unsigned int id;
 	Direction direction;
 	EnemyState state;
 	EnemyType type;
@@ -46,5 +47,8 @@ public:
 	* @return: A vector containing a probability for each direction in the direction vector
 	*/
 	std::vector<int> getProbabilityArray(std::vector<Direction> directions);
+
+private:
+    static unsigned int nextID;
 
 };

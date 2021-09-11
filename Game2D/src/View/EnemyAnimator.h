@@ -8,7 +8,7 @@
 class EnemyAnimator : public Animator<GameObject>
 {
 public:
-	Enemy* enemy;
+	std::shared_ptr<Enemy> enemy;
 	Texture2D sprite;
 	std::string spriteType;
 	const float WALK_ANIMATION_DURATION;
@@ -16,7 +16,7 @@ public:
 	const float SPAWNING_ANIMATION_DURATION;
 	void (EnemyAnimator::* currentAnimation)() = nullptr;
 
-	EnemyAnimator(Enemy *enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration);
+	EnemyAnimator(std::shared_ptr<Enemy> enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration);
 	~EnemyAnimator();
 	void update(GameObject* s) override;
 	void animate(float dt);
