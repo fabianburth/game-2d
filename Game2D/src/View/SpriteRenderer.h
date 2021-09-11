@@ -41,6 +41,7 @@ public:
     GameInformation Score;
 
     // Constructor (inits shaders/shapes)
+    SpriteRenderer() = default;
     SpriteRenderer(Shader& shader);
     // Destructor
     ~SpriteRenderer();

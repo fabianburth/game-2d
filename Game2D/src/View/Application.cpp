@@ -7,8 +7,9 @@
 #include <iostream>
 
 // GLFW function declarations
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+auto framebuffer_size_callback(GLFWwindow *window, int width, int height) -> void;
+
+auto key_callback(GLFWwindow *window, int key, int scancode, int action, int mode) -> void;
 
 // The Width of the screen
 const unsigned int SCREEN_WIDTH = 448;
@@ -17,8 +18,7 @@ const unsigned int SCREEN_HEIGHT = 576;
 
 Game Pengo(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-int main(int argc, char* argv[])
-{
+auto main() -> int {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -28,15 +28,14 @@ int main(int argc, char* argv[])
 #endif
     glfwWindowHint(GLFW_RESIZABLE, false);
 
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pengo", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pengo", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
 
     // glew: load all OpenGL function pointers
     // ---------------------------------------
     glewExperimental = true;
-    if (glewInit() != GLEW_OK)
-    {
+    if (glewInit() != GLEW_OK) {
         std::cout << "Failed to initialize GLEW" << std::endl;
         return -1;
     }
@@ -59,8 +58,7 @@ int main(int argc, char* argv[])
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
 
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // calculate delta time
         // --------------------
         float currentFrame = glfwGetTime();
@@ -93,22 +91,21 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode) {
     // when a user presses the escape key, we set the WindowShouldClose property to true, closing the application
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
-    if (key >= 0 && key < 1024)
-    {
-        if (action == GLFW_PRESS)
+    }
+    if (key >= 0 && key < 1024) {
+        if (action == GLFW_PRESS) {
             Pengo.Keys[key] = true;
-        else if (action == GLFW_RELEASE)
+        } else if (action == GLFW_RELEASE) {
             Pengo.Keys[key] = false;
+        }
     }
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
+void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);

@@ -31,6 +31,8 @@ void WallAnimator::update(Wall* s)
             currentAnimationDuration = 0.0f;
             currentAnimation = &WallAnimator::wobble;
             break;
+        default:
+            break;
     }
 
 //	if (s->state == WallState::WOBBLY)

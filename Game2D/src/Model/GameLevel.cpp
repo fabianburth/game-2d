@@ -376,7 +376,6 @@ auto GameLevel::checkThreeDiamonds() -> void {
     if (this->diamondBlocksAligned) {
         return;
     }
-    int amountAdjacentDiamonds = 0;
     bool bTouchesWall = false;
     bool firstAdjacentBlockTouchesWall = false;
     bool secondAdjacentBlockTouchesWall = false;

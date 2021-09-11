@@ -9,6 +9,7 @@ Game::Game(unsigned int width, unsigned int height)
         : PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
 
 Game::~Game() {
+    delete this->Renderer;
 }
 
 void Game::Init() {

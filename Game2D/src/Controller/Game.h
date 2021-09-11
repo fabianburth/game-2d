@@ -35,7 +35,6 @@ class Game : public Observer<GameLevel>
 public:
     // game state
     GameState    PengoState;
-    //Player* Pengo;
     SpriteRenderer* Renderer;
     bool         Keys[1024];
     unsigned int Width, Height;
