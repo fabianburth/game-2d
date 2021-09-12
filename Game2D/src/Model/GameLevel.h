@@ -193,7 +193,6 @@ protected:
 
     /**
      * Spawns one of the currently frozen enemies
-     * @return a pointer to the frozen enemy
      */
     auto spawnEnemy() -> void;
 

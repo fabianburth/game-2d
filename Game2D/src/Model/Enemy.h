@@ -36,17 +36,17 @@ public:
 	Enemy();
 	Enemy(std::array<float, 2> pos, std::array<float, 2> velocity, Direction direction, EnemyState state, EnemyType type, bool ready);
 
-	void setDirection(Direction direction);
-	void setState(EnemyState state);
-	void setType(EnemyType type);
-	void setPositionToMoveTo();
-	void move(float deltaTime);
+	auto setDirection(Direction direction) -> void;
+	auto setState(EnemyState state) -> void;
+	auto setType(EnemyType type) -> void;
+	auto setPositionToMoveTo() -> void;
+	auto move(float deltaTime) -> void;
 
 	/** Auxiliary method which generates a vector containing probabilities for the possible directions
-	* @param directions: A vector containing all possible directions for the enemy to move to
+	* @param directions: A vector containing all possible directions for the enemy to move to, usually the result of the GameLevel::getInitialDirections-Method
 	* @return: A vector containing a probability for each direction in the direction vector
 	*/
-	std::vector<int> getProbabilityArray(std::vector<Direction> directions);
+	auto getProbabilityArray(std::vector<Direction> directions) -> std::vector<int>;
 
 private:
     static unsigned int nextID;

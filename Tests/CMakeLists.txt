@@ -2,7 +2,7 @@ enable_testing()
 
 set(TEST_SOURCES
         TestGameLevel.cpp
-)
+        TestEnemy.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${OPENGL_INCLUDE_DIRS})

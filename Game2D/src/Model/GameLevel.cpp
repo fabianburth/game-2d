@@ -114,7 +114,7 @@ auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
             {
                 std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};
                 std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
-                Pengo = Player(pos, velocity);
+                this->Pengo = Player(pos, velocity);
             } else if (tileData[y][x] == 5) // walking enemy
             {
                 std::array<float, 2> pos = {Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y};

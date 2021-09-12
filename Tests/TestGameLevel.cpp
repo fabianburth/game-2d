@@ -2,6 +2,7 @@
 // Created by burth on 07.09.2021.
 //
 #include "../Game2D/src/Model/GameLevel.h"
+#include <memory>
 
 
 #include "gtest/gtest.h"
@@ -22,6 +23,14 @@ struct TestGameLevel : public GameLevel {
     using GameLevel::checkThreeDiamonds;
 
     using GameLevel::spawnEnemy;
+
+    using GameLevel::getInitialDirections;
+
+    using GameLevel::getDirectionIndex;
+
+    using GameLevel::trySettingBoxer;
+
+    using GameLevel::boxerExists;
 };
 
 TEST(GameLevel, BlockTouchesWall) {
@@ -191,17 +200,102 @@ TEST(GameLevel, CheckThreeDiamonds) {
 TEST(GameLevel, SpawnEnemy) {
     TestGameLevel testGameLevel = TestGameLevel();
 
-    Enemy* testEnemy0 = new Enemy({0, Constants::HEIGHT_UNIT * 2}, {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT *3},
-                             Direction::DOWN, EnemyState::NONE, EnemyType::WANDERING, false);
+    std::array<float, 2> pos = {Constants::WIDTH_UNIT * 0, Constants::HEIGHT_UNIT * 2};
+    std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
+    Direction direction = Direction::DOWN;
+    std::shared_ptr<Enemy> testEnemy0 = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
     testGameLevel.frozenEnemies.push_back(testEnemy0);
     Block testBlock0 = Block({ 0, Constants::HEIGHT_UNIT * 2}, false, testEnemy0, BlockState::SOLID);
     testGameLevel.Blocks.push_back(testBlock0);
 
-    EXPECT_EQ(testEnemy0, testGameLevel.spawnEnemy());
+    pos = {Constants::WIDTH_UNIT * 7, Constants::HEIGHT_UNIT * 4};
+    velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
+    direction = Direction::DOWN;
+    std::shared_ptr<Enemy> testEnemy1 = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
+    testGameLevel.frozenEnemies.push_back(testEnemy1);
+    Block testBlock1 = Block({ Constants::WIDTH_UNIT * 7, Constants::HEIGHT_UNIT * 4}, false, testEnemy1, BlockState::SOLID);
+    testGameLevel.Blocks.push_back(testBlock1);
+
+
+    testGameLevel.spawnEnemy();
     EXPECT_EQ(BlockState::BROKEN,testGameLevel.Blocks.back().state);
-    EXPECT_EQ(EnemyState::SPAWNING, testEnemy0->state);
-    EXPECT_EQ(testEnemy0, testGameLevel.Enemies.back());
-    EXPECT_EQ(true, testGameLevel.frozenEnemies.empty());
+    EXPECT_EQ(EnemyState::SPAWNING, testEnemy1->state);
+    EXPECT_EQ(testEnemy1, testGameLevel.Enemies.back());
+    EXPECT_EQ(testEnemy0, testGameLevel.frozenEnemies.back());
+    EXPECT_EQ(BlockState::FLASHING, testGameLevel.Blocks.front().state);
 }
+
+TEST(GameLevel, InitialDirections){
+    std::vector<Direction> expectedDirections;
+    TestGameLevel testGameLevel = TestGameLevel();
+
+    //upper right corner
+    testGameLevel.Pengo = Player({Constants::WIDTH_UNIT * 12, Constants::HEIGHT_UNIT * 14}, {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3});
+
+    //bottom left corner - wandering enemy
+    std::array<float, 2> pos = {Constants::WIDTH_UNIT * 0, Constants::HEIGHT_UNIT * 0};
+    std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
+    Direction direction = Direction::DOWN;
+    std::shared_ptr<Enemy> testEnemy0 = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
+    testGameLevel.Enemies.push_back(testEnemy0);
+
+    Block testBlock0 = Block({Constants::WIDTH_UNIT * 1, Constants::HEIGHT_UNIT * 0}, false, nullptr, BlockState::SOLID);
+    testGameLevel.Blocks.push_back(testBlock0);
+
+    expectedDirections = {Direction::UP};
+    EXPECT_EQ(expectedDirections, testGameLevel.getInitialDirections(*testEnemy0));
+    expectedDirections.clear();
+
+    //middle - wandering enemy
+    pos = {Constants::WIDTH_UNIT * 6, Constants::HEIGHT_UNIT * 7};
+    velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
+    direction = Direction::DOWN;
+    std::shared_ptr<Enemy> testEnemy1 = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
+    testGameLevel.Enemies.push_back(testEnemy1);
+
+    expectedDirections = {Direction::DOWN, Direction::RIGHT, Direction::LEFT, Direction::UP};
+    EXPECT_EQ(expectedDirections, testGameLevel.getInitialDirections(*testEnemy1));
+    expectedDirections.clear();
+
+    // lower right area - chasing enemy
+    pos = {Constants::WIDTH_UNIT * 11, Constants::HEIGHT_UNIT * 1};
+    velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
+    direction = Direction::DOWN;
+    std::shared_ptr<Enemy> testEnemy2 = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::CHASING, false);
+    testGameLevel.Enemies.push_back(testEnemy2);
+
+    //below chasing enemy
+    Block testBlock1 = Block({Constants::WIDTH_UNIT * 11, Constants::HEIGHT_UNIT * 0}, false, nullptr, BlockState::SOLID);
+    testGameLevel.Blocks.push_back(testBlock1);
+    //right to the chasing enemy
+    Block testBlock2 = Block({Constants::WIDTH_UNIT * 10, Constants::HEIGHT_UNIT * 1}, false, nullptr, BlockState::SOLID);
+    testGameLevel.Blocks.push_back(testBlock2);
+
+    expectedDirections = {Direction::UP, Direction::RIGHT, Direction::LEFT, Direction::DOWN};
+    EXPECT_EQ(expectedDirections, testGameLevel.getInitialDirections(*testEnemy2));
+    expectedDirections.clear();
+}
+
+TEST(GameLevel, DirectionIndex) {
+    std::vector<int> probabilities = {90, 94, 98, 100};
+    TestGameLevel::getDirectionIndex(probabilities);
+
+    EXPECT_GE(3, TestGameLevel::getDirectionIndex(probabilities));
+}
+
+TEST(GameLevel, Boxer) {
+    TestGameLevel testGameLevel = TestGameLevel();
+
+    std::array<float, 2> pos = {Constants::WIDTH_UNIT * 0, Constants::HEIGHT_UNIT * 0};
+    std::array<float, 2> velocity = {Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3};
+    Direction direction = Direction::DOWN;
+    std::shared_ptr<Enemy> testEnemy0 = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
+    testGameLevel.Enemies.push_back(testEnemy0);
+
+    testGameLevel.trySettingBoxer();
+    EXPECT_EQ(true, testGameLevel.boxerExists());
+}
+
+
 
 
