@@ -3,7 +3,7 @@
 Block::Block() {}
 
 Block::Block(std::array<float, 2> pos, bool isUnbreakable, std::shared_ptr<Enemy> containedEnemy, BlockState state)
-    :GameObject{ pos }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable }, containedEnemy{ containedEnemy }, direction{ Direction::NONE }, state{ state } {}
+    :GameObject{ pos }, state{ state }, positionToMoveTo{ pos }, isUnbreakable{ isUnbreakable }, containedEnemy{ containedEnemy }, direction{ Direction::NONE } {}
 
 void Block::setState(BlockState state)
 {

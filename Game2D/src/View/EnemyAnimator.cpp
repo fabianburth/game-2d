@@ -1,4 +1,5 @@
 #include "EnemyAnimator.h"
+#include "../util.h"
 
 
 EnemyAnimator::EnemyAnimator(std::shared_ptr<Enemy> enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)

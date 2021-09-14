@@ -11,7 +11,7 @@ class GameInformation
 {
 public:
 	std::array<float, 2> position;
-	int amountDisplayBlocks;
+	unsigned int amountDisplayBlocks;
 	std::array<float, 4> size;
 
 	std::string text;

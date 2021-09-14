@@ -1,7 +1,7 @@
 #include "BlockAnimator.h"
 
 BlockAnimator::BlockAnimator(Block *block, float flashingDuration, float breakingDuration, Texture2D sprite)
-	:BREAKING_DURATION{breakingDuration}, FLASHING_DURATION{flashingDuration}, sprite{sprite}
+	:sprite{sprite}, BREAKING_DURATION{breakingDuration}, FLASHING_DURATION{flashingDuration}
 {
 	this->block = block;
 	this->block->registerObserver(this);

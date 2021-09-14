@@ -3,7 +3,7 @@
 GameInformation::GameInformation() {}
 
 GameInformation::GameInformation(std::array<float, 2> position, std::array<float, 4> size, int amountDisplayBlocks)
-	:position{ position }, size{ size }, amountDisplayBlocks{ amountDisplayBlocks }
+	:position{ position }, amountDisplayBlocks{ static_cast<unsigned int>(amountDisplayBlocks) }, size{ size }
 {
 	for (int i = 0; i < amountDisplayBlocks; ++i)
 	{
@@ -16,7 +16,7 @@ void GameInformation::show(std::string text)
 	if (text.empty() || text.length() > amountDisplayBlocks)
 		return;
 
-	for (int i = 0; i < text.length(); ++i)
+	for (unsigned int i = 0; i < text.length(); ++i)
 	{
 		std::string c{ text.at(i) };
 		if (text == "1P" && c == "1")
