@@ -49,9 +49,8 @@ set(SOURCES
         ${CMAKE_SOURCE_DIR}/Game2D/src/View/Texture.cpp
         ${CMAKE_SOURCE_DIR}/Game2D/src/Model/Wall.cpp
         ${CMAKE_SOURCE_DIR}/Game2D/src/View/WallAnimator.cpp
-        ${CMAKE_SOURCE_DIR}/Game2D/src/View/GameView.cpp
         ${CMAKE_SOURCE_DIR}/Game2D/src/Model/Score.cpp
-)
+        ${CMAKE_SOURCE_DIR}/Game2D/src/util.cpp)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/Dependencies/glfw)
 add_subdirectory(${CMAKE_SOURCE_DIR}/Dependencies/glew/build/cmake)

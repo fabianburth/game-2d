@@ -4,36 +4,7 @@
 #include <vector>
 
 #include "GameObject.h"
-
-enum class PengoState
-{
-	STAND,
-	WALK,
-	PUSH,
-	BREAK
-};
-
-static std::string stringState(PengoState state)
-{
-	switch (state)
-	{
-	case PengoState::STAND:
-		return "Stand";
-		break;
-	case PengoState::WALK:
-		return "Walk";
-		break;
-	case PengoState::PUSH:
-		return "Push";
-		break;
-	case PengoState::BREAK:
-		return "Break";
-		break;
-	default:
-		return "";
-		break;
-	}
-}
+#include "../util.h"
 
 class Player : public GameObject
 {

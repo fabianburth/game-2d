@@ -1,7 +1,7 @@
 #include "PengoAnimator.h"
 
 PengoAnimator::PengoAnimator(Player *pengo, float pushDuration, float walkAnimationDuration, Texture2D sprite)
-        : pengo(pengo), PUSH_DURATION(pushDuration), WALK_ANIMATION_DURATION(walkAnimationDuration), currentAnimation(&PengoAnimator::stand), sprite{sprite}, toggleSprite{true} {
+        : pengo(pengo), sprite{sprite}, toggleSprite{true}, PUSH_DURATION(pushDuration), WALK_ANIMATION_DURATION(walkAnimationDuration), currentAnimation(&PengoAnimator::stand) {
     pengo->registerObserver(this);
 }
 
