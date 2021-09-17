@@ -19,7 +19,7 @@ message(STATUS "Checking if glew is build")
 if (NOT EXISTS "${FILE}")
     if(UNIX)
         message(STATUS "Building Glew")
-        execute_process(COMMAND make -C ${CMAKE_SOURCE_DIR}/glew/auto)
+        execute_process(COMMAND make -C ${CMAKE_SOURCE_DIR}/Dependencies/glew/auto)
     else()
         message(FATAL_ERROR "Please build GLEW first:\n"
                 "1. Open Git Bash in Dependencies/glew/auto\n"
@@ -57,9 +57,13 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/Dependencies/glfw)
 add_subdirectory(${CMAKE_SOURCE_DIR}/Dependencies/glew/build/cmake)
 #add_subdirectory(backward-cpp)
 add_subdirectory(${CMAKE_SOURCE_DIR}/Dependencies/googletest)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Dependencies/libsndfile)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Dependencies/openal-soft)
 add_subdirectory(${CMAKE_SOURCE_DIR}/Tests)
 
 include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR}/Dependencies/libsndfile/include)
+include_directories(${CMAKE_SOURCE_DIR}/Dependencies/openal-soft/include/AL)
 include_directories(${CMAKE_SOURCE_DIR}/Dependencies/glew/include)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
@@ -68,4 +72,4 @@ add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/Game2D/src/View/Application.c
 #target_link_directories(${PROJECT_NAME} PRIVATE "$ENV{ProgramFiles\(x86\)}/Microsoft Visual Studio/2019/Community/VC/Tools/Llvm/x64/lib/clang/11.0.0/lib/windows")
 #target_link_libraries(${PROJECT_NAME} PRIVATE clang_rt.asan_dynamic-x86_64 clang_rt.asan_dynamic_runtime_thunk-x86_64)
 #target_link_options(${PROJECT_NAME} PRIVATE /wholearchive:clang_rt.asan_dynamic_runtime_thunk-x86_64.lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES} glew_s glfw)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES} glew_s glfw OpenAL sndfile)
