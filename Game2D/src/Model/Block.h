@@ -5,6 +5,7 @@
 
 #include "GameObject.h"
 #include "Enemy.h"
+#include "../util.h"
 
 enum class BlockState
 {

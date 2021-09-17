@@ -5,7 +5,7 @@ unsigned int Enemy::nextID = 0;
 Enemy::Enemy() {}
 
 Enemy::Enemy(std::array<float, 2> pos, std::array<float, 2> velocity, Direction direction, EnemyState state, EnemyType type, bool ready)
-        : GameObject{pos}, id{nextID}, velocity{velocity}, positionToMoveTo{pos}, direction{direction}, state{state}, type{type}, ready{ready} {
+        : GameObject{pos}, id{nextID}, direction{direction}, state{state}, type{type}, velocity{velocity}, positionToMoveTo{pos}, ready{ready} {
     nextID++;
 }
 
