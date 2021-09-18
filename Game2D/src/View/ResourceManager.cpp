@@ -132,7 +132,7 @@ Texture2D ResourceManager::loadTextureFromFile(const char* ImageFile)
     //Everything is in memory now, the file can be closed
     fclose(file);
     //and so can the image data
-    delete(data);
+    delete[](data);
 
     return texture;
 }
