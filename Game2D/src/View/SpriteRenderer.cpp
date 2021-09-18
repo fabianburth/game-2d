@@ -2,6 +2,8 @@
 
 SpriteRenderer::SpriteRenderer(Shader& shader) : shader(shader)
 {
+    //this->soundDevice = SoundDevice::get();
+    //SoundBuffer::get()->addSoundEffect("../Game2D/res/soundeffects/PushIceBlock.mp3", "pushIceBlock");
     this->initRenderData();
 
     this->initDisplayInformation();
