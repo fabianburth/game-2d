@@ -14,6 +14,7 @@ void PengoAnimator::animate(float dt) {
 }
 
 void PengoAnimator::update(GameObject *s) {
+    //SoundSource mySpeaker = SoundSource();
     //Player *pengo = dynamic_cast<Player *>(s);
     switch (pengo->state) {
         case (PengoState::STAND):
@@ -25,6 +26,7 @@ void PengoAnimator::update(GameObject *s) {
             currentAnimation = &PengoAnimator::walk;
             break;
         case (PengoState::PUSH):
+            //mySpeaker.Play(SoundBuffer::get()->p_SoundEffectBuffers["pushIceBlock"]);
             currentAnimationDuration = 0.0f;
             currentAnimation = &PengoAnimator::pushBlock;
             break;
