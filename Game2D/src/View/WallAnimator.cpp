@@ -1,4 +1,5 @@
 #include "WallAnimator.h"
+#include "SoundManager.h"
 
 WallAnimator::WallAnimator(Wall* wall, float wobbleDuration)
 	:wall{wall}, WOBBLE_DURATION{wobbleDuration}

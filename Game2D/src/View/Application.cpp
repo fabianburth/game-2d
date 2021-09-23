@@ -58,12 +58,15 @@ auto main() -> int {
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
 
+
     while (!glfwWindowShouldClose(window)) {
         // calculate delta time
         // --------------------
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+
         glfwPollEvents();
 
         // manage user input

@@ -17,6 +17,7 @@
 #include "Enemy.h"
 //#include "../View/GameInformation.h"
 #include "Score.h"
+#include "../util.h"
 
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
@@ -42,6 +43,8 @@ public:
     Wall BottomWall;
     std::vector<Block> Blocks;
 
+    /** Is set to the primary event in specific situations */
+    Events event;
     /** Keeps track of the players score and provides useful methods */
     Score score;
 
@@ -54,12 +57,16 @@ public:
     /** Is set to true when 3 diamond blocks get aligned */
     bool diamondBlocksAligned = false;
 
+
+
     GameLevel() = default;
     ~GameLevel() = default;
 
     void registerObserver(Observer<GameLevel> *o) override;
     void removeObserver(Observer<GameLevel> *o) override;
     void notifyObservers() override;
+
+    auto setEvent(Events e) -> void;
 
     /**
      * Loads level from file
@@ -97,7 +104,7 @@ public:
      */
     auto initStates() -> void;
 
-protected:
+//protected:
     std::vector<Observer<GameLevel>*> observers;
 
     /**

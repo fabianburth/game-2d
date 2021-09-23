@@ -12,6 +12,7 @@
 #include "../Model/Player.h"
 #include "../View/SpriteRenderer.h"
 #include "../Model/Wall.h"
+#include "../View/SoundModule.h"
 #include <string>
 #include <ctime>
 #include <algorithm>
@@ -36,6 +37,7 @@ public:
     // game state
     GameState    PengoState;
     SpriteRenderer* Renderer;
+    SoundModule* soundModule;
     bool         Keys[1024];
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;

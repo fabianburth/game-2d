@@ -16,8 +16,7 @@
 #include "../View/BlockAnimator.h"
 #include "../View/WallAnimator.h"
 #include "../View/EnemyAnimator.h"
-#include "../View/SoundDevice.h"
-#include "../View/SoundBuffer.h"
+#include "../View/SoundManager.h"
 
 #include <array>
 

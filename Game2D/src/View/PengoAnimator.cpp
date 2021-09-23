@@ -1,4 +1,5 @@
 #include "PengoAnimator.h"
+#include "SoundManager.h"
 
 PengoAnimator::PengoAnimator(Player *pengo, float pushDuration, float walkAnimationDuration, Texture2D sprite)
         : pengo(pengo), sprite{sprite}, toggleSprite{true}, PUSH_DURATION(pushDuration), WALK_ANIMATION_DURATION(walkAnimationDuration), currentAnimation(&PengoAnimator::stand) {
@@ -26,7 +27,6 @@ void PengoAnimator::update(GameObject *s) {
             currentAnimation = &PengoAnimator::walk;
             break;
         case (PengoState::PUSH):
-            //mySpeaker.Play(SoundBuffer::get()->p_SoundEffectBuffers["pushIceBlock"]);
             currentAnimationDuration = 0.0f;
             currentAnimation = &PengoAnimator::pushBlock;
             break;

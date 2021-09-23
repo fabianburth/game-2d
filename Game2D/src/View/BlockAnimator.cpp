@@ -1,4 +1,5 @@
 #include "BlockAnimator.h"
+#include "SoundManager.h"
 
 BlockAnimator::BlockAnimator(Block *block, float flashingDuration, float breakingDuration, Texture2D sprite)
 	:sprite{sprite}, BREAKING_DURATION{breakingDuration}, FLASHING_DURATION{flashingDuration}
