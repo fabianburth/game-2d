@@ -1,6 +1,7 @@
 #pragma once
 #include "../util.h"
 #include "GameObject.h"
+#include "../util.h"
 
 enum class EnemyType { CHASING, WANDERING };
 

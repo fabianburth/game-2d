@@ -5,6 +5,8 @@
 #include "ResourceManager.h"
 
 #include <any>
+#include "../View/SoundSource.h"
+#include "../View/SoundBuffer.h"
 
 class PengoAnimator : public Animator<GameObject> {
   public:
