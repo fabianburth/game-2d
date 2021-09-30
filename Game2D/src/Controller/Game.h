@@ -39,6 +39,11 @@ class Game : public Observer<GameLevel> {
     unsigned int score = 0;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
+    ~Game() override;
+    Game(const Game &) = default;
+    Game(Game &&) noexcept = default;
+    auto operator=(const Game &) -> Game & = default;
+    auto operator=(Game &&) noexcept -> Game & = default;
     // initialize game state (load all shaders/textures/levels)
     void Init();
     // game loop
@@ -46,7 +51,7 @@ class Game : public Observer<GameLevel> {
     void Update(float dt);
     void Render();
 
-    void update(GameLevel *) override{};
+    void update(GameLevel * /*s*/) override{};
 
   private:
     /**

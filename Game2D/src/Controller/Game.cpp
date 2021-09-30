@@ -9,6 +9,11 @@
 Game::Game(unsigned int width, unsigned int height) :
     PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
 
+Game::~Game() {
+    delete this->Renderer;
+    delete this->soundModule;
+}
+
 void Game::Init() {
     // load shaders
     ResourceManager::LoadShader("../Game2D/res/shaders/sprites.vs", "../Game2D/res/shaders/sprites.fs", "sprite");
@@ -55,7 +60,7 @@ void Game::Update(float dt) {
     }
 }
 
-void Game::ProcessInput(float dt) {
+void Game::ProcessInput(float  /*dt*/) {
     if (this->PengoState == GameState::GAME_ACTIVE) {
         if (this->Levels[this->Level].Pengo.ready) {
             if (this->Keys[GLFW_KEY_LEFT_CONTROL]) {
