@@ -1,17 +1,15 @@
-#pragma once
-
 #ifndef GAMEOBJECT_H
-    #define GAMEOBJECT_H
+#define GAMEOBJECT_H
 
-    #include "../Constants.h"
-    //#include <GL/glew.h>
-    #include <array>
-    #include <memory>
-    #include <string>
-    #include <vector>
+#include "../Constants.h"
+//#include <GL/glew.h>
+#include <array>
+#include <memory>
+#include <string>
+#include <vector>
 
-    //#include "../View/Texture.h"
-    #include "../Subject.h"
+//#include "../View/Texture.h"
+#include "../Subject.h"
 
 
 /**

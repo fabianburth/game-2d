@@ -1,23 +1,22 @@
-#pragma once
 #ifndef GAMELEVEL_H
-    #define GAMELEVEL_H
-    #include <array>
-    #include <ctime>
-    #include <memory>
-    #include <vector>
+#define GAMELEVEL_H
+#include <array>
+#include <ctime>
+#include <memory>
+#include <vector>
 
 //#include <GL/glew.h>
 
-    #include "../Constants.h"
-    #include "Block.h"
-    #include "GameObject.h"
-    #include "Player.h"
-    //#include "../View/ResourceManager.h"
-    #include "Enemy.h"
-    #include "Wall.h"
-    //#include "../View/GameInformation.h"
-    #include "../util.h"
-    #include "Score.h"
+#include "../Constants.h"
+#include "Block.h"
+#include "GameObject.h"
+#include "Player.h"
+//#include "../View/ResourceManager.h"
+#include "Enemy.h"
+#include "Wall.h"
+//#include "../View/GameInformation.h"
+#include "../util.h"
+#include "Score.h"
 
 
 /// GameLevel holds all Tiles as part of a Breakout level and

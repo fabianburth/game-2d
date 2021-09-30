@@ -6,12 +6,12 @@
 //#include <AL\al.h>
 //#include <stdio.h>
 //
-//SoundDevice *SoundDevice::get() {
+// SoundDevice *SoundDevice::get() {
 //    static SoundDevice *snd_device = new SoundDevice();
 //    return snd_device;
 //}
 //
-//SoundDevice::SoundDevice() {
+// SoundDevice::SoundDevice() {
 //    p_ALCDevice = alcOpenDevice(nullptr); // nullptr = get default device
 //    if (!p_ALCDevice)
 //        throw ("failed to get sound device");
@@ -31,7 +31,7 @@
 //    printf("Opened \"%s\"\n", name);
 //}
 //
-//SoundDevice::~SoundDevice() {
+// SoundDevice::~SoundDevice() {
 //    if (!alcMakeContextCurrent(nullptr))
 //        throw ("failed to set context to nullptr");
 //

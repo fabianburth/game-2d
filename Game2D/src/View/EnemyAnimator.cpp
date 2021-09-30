@@ -1,4 +1,5 @@
 #include "EnemyAnimator.h"
+
 #include "../util.h"
 
 #include <utility>

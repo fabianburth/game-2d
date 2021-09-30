@@ -5,7 +5,7 @@
 //#include "SoundSource.h"
 //#include <iostream>
 //
-//SoundSource::SoundSource() {
+// SoundSource::SoundSource() {
 //    alGenSources(1, &p_Source);
 //    alSourcef(p_Source, AL_PITCH, p_Pitch);
 //    alSourcef(p_Source, AL_GAIN, p_Gain);
@@ -15,11 +15,11 @@
 //    alSourcei(p_Source, AL_BUFFER, p_Buffer);
 //}
 //
-//SoundSource::~SoundSource() {
+// SoundSource::~SoundSource() {
 //    alDeleteSources(1, &p_Source);
 //}
 //
-//void SoundSource::Play(const ALuint buffer_to_play) {
+// void SoundSource::Play(const ALuint buffer_to_play) {
 //    if (buffer_to_play != p_Buffer) {
 //        p_Buffer = buffer_to_play;
 //        alSourcei(p_Source, AL_BUFFER, (ALint) p_Buffer);

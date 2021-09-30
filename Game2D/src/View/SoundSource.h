@@ -7,15 +7,15 @@
 //
 //#include <AL\al.h>
 //
-//class SoundSource {
-//public:
+// class SoundSource {
+// public:
 //    SoundSource();
 //
 //    ~SoundSource();
 //
 //    void Play(const ALuint buffer_to_play);
 //
-//private:
+// private:
 //    ALuint p_Source;
 //    float p_Pitch = 1.f;
 //    float p_Gain = 1.f;

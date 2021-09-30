@@ -64,17 +64,17 @@ void BlockAnimator::destroyIceblock() {
 //		this->sprite = ResourceManager::GetTexture("iceblockBreaking0");
 //	}
 //	else if (currentAnimationDuration >= (1.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < (2.0f / 4.0f) *
-//BREAKING_DURATION)
+// BREAKING_DURATION)
 //	{
 //		this->sprite = ResourceManager::GetTexture("iceblockBreaking1");
 //	}
 //	else if (currentAnimationDuration >= (2.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration < (3.0f / 4.0f) *
-//BREAKING_DURATION)
+// BREAKING_DURATION)
 //	{
 //		this->sprite = ResourceManager::GetTexture("iceblockBreaking2");
 //	}
 //	else if (currentAnimationDuration >= (3.0f / 4.0f) * BREAKING_DURATION && currentAnimationDuration <
-//BREAKING_DURATION)
+// BREAKING_DURATION)
 //	{
 //		this->sprite = ResourceManager::GetTexture("iceblockBreaking3");
 //	}

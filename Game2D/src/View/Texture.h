@@ -1,13 +1,11 @@
-#pragma once
-
 #ifndef TEXTURE_H
-    #define TEXTURE_H
+#define TEXTURE_H
 
-    #include <GL/glew.h>
+#include <GL/glew.h>
 
-    #define FOURCC_DXT1 0x31545844// Equivalent to "DXT1" in ASCII
-    #define FOURCC_DXT3 0x33545844// Equivalent to "DXT3" in ASCII
-    #define FOURCC_DXT5 0x35545844// Equivalent to "DXT5" in ASCII
+#define FOURCC_DXT1 0x31545844// Equivalent to "DXT1" in ASCII
+#define FOURCC_DXT3 0x33545844// Equivalent to "DXT3" in ASCII
+#define FOURCC_DXT5 0x35545844// Equivalent to "DXT5" in ASCII
 
 // Texture2D is able to store and configure a texture in OpenGL.
 // It also hosts utility functions for easy management.

@@ -1,10 +1,8 @@
-#pragma once
-
 #ifndef SHADER_H
-    #define SHADER_H
+#define SHADER_H
 
-    #include <GL/glew.h>
-    #include <string>
+#include <GL/glew.h>
+#include <string>
 
 
 // General purpsoe shader object. Compiles from file, generates

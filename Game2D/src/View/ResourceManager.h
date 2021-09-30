@@ -1,13 +1,12 @@
-#pragma once
 #ifndef RESOURCE_MANAGER_H
-    #define RESOURCE_MANAGER_H
+#define RESOURCE_MANAGER_H
 
-    #include "Shader.h"
-    #include "Texture.h"
+#include "Shader.h"
+#include "Texture.h"
 
-    #include <GL/glew.h>
-    #include <map>
-    #include <string>
+#include <GL/glew.h>
+#include <map>
+#include <string>
 
 // A static singleton ResourceManager class that hosts several
 // functions to load Textures and Shaders. Each loaded texture

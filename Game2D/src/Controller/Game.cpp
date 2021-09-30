@@ -60,7 +60,7 @@ void Game::Update(float dt) {
     }
 }
 
-void Game::ProcessInput(float  /*dt*/) {
+void Game::ProcessInput(float /*dt*/) {
     if (this->PengoState == GameState::GAME_ACTIVE) {
         if (this->Levels[this->Level].Pengo.ready) {
             if (this->Keys[GLFW_KEY_LEFT_CONTROL]) {

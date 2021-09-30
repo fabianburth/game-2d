@@ -1,21 +1,19 @@
-#pragma once
-
 #ifndef GAME_H
-    #define GAME_H
+#define GAME_H
 
-    #include "../Constants.h"
-    #include "../Model/GameLevel.h"
-    #include "../Model/Player.h"
-    #include "../Model/Wall.h"
-    #include "../View/SoundModule.h"
-    #include "../View/SpriteRenderer.h"
+#include "../Constants.h"
+#include "../Model/GameLevel.h"
+#include "../Model/Player.h"
+#include "../Model/Wall.h"
+#include "../View/SoundModule.h"
+#include "../View/SpriteRenderer.h"
 
-    #include <GL/glew.h>
-    #include <GLFW/glfw3.h>
-    #include <algorithm>
-    #include <cstdlib>
-    #include <ctime>
-    #include <string>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <string>
 
 // Represents the current state of the game
 enum class GameState { GAME_ACTIVE, GAME_MENU, GAME_WIN };

@@ -1,22 +1,20 @@
-#pragma once
-
 #ifndef SPRITE_RENDERER_H
-    #define SPRITE_RENDERER_H
+#define SPRITE_RENDERER_H
 
-    #include "../Constants.h"
-    #include "../Model/GameLevel.h"
-    #include "../Model/GameObject.h"
-    #include "../View/BlockAnimator.h"
-    #include "../View/EnemyAnimator.h"
-    #include "../View/PengoAnimator.h"
-    #include "../View/SoundManager.h"
-    #include "../View/WallAnimator.h"
-    #include "GameInformation.h"
-    #include "Shader.h"
-    #include "Texture.h"
+#include "../Constants.h"
+#include "../Model/GameLevel.h"
+#include "../Model/GameObject.h"
+#include "../View/BlockAnimator.h"
+#include "../View/EnemyAnimator.h"
+#include "../View/PengoAnimator.h"
+#include "../View/SoundManager.h"
+#include "../View/WallAnimator.h"
+#include "GameInformation.h"
+#include "Shader.h"
+#include "Texture.h"
 
-    #include <GL/glew.h>
-    #include <array>
+#include <GL/glew.h>
+#include <array>
 
 // Units
 // const float WIDTH_UNIT = ((2.0f / 448) * 32.0f);
