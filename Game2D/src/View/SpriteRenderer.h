@@ -41,7 +41,7 @@ class SpriteRenderer : public Observer<GameLevel> {
     SpriteRenderer() = default;
     explicit SpriteRenderer(Shader &shader);
     // Destructor
-    ~SpriteRenderer();
+    ~SpriteRenderer() override;
     SpriteRenderer(const SpriteRenderer &) = default;
     SpriteRenderer(SpriteRenderer &&) noexcept = default;
     auto operator=(const SpriteRenderer &) -> SpriteRenderer & = default;

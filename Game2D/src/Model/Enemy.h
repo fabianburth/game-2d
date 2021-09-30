@@ -37,7 +37,7 @@ class Enemy : public GameObject {
      * the GameLevel::getInitialDirections-Method
      * @return: A vector containing a probability for each direction in the direction vector
      */
-    auto getProbabilityArray(std::vector<Direction> directions) const -> std::vector<int>;
+    [[nodiscard]] auto getProbabilityArray(std::vector<Direction> directions) const -> std::vector<int>;
 
   private:
     static unsigned int nextID;

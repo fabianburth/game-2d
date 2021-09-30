@@ -17,7 +17,7 @@ class Block : public GameObject {
     std::array<float, 2> positionToMoveTo{};
     bool isUnbreakable{};
     std::shared_ptr<Enemy> containedEnemy;
-    Direction direction;
+    Direction direction{};
     int killedWithOneMove = 0;
 
     static constexpr float BREAKING_DURATION = 0.5f;
