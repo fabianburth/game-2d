@@ -16,9 +16,8 @@ public:
 	void (BlockAnimator::* currentAnimation)() = nullptr;
 
 	BlockAnimator(Block *block, float flashingDuration, float breakingDuration, Texture2D sprite);
-	~BlockAnimator();
-	void update(GameObject* s);
-	void animate(float dt);
+	void update(GameObject* s) override;
+	void animate(float dt) override;
 	void destroyIceblock();
 	//void spawnEnemy();
 	void flash();

@@ -59,7 +59,7 @@ auto main() -> int {
     float lastFrame = 0.0f;
 
 
-    while (!glfwWindowShouldClose(window)) {
+    while (glfwWindowShouldClose(window) == 0) {
         // calculate delta time
         // --------------------
         float currentFrame = glfwGetTime();

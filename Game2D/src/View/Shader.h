@@ -18,9 +18,9 @@ public:
     // state
     unsigned int ID;
     // constructor
-    Shader() { }
+    Shader() = default;
     // sets the current shader as active
-    Shader& Use();
+    auto Use() -> Shader&;
     // compiles the shader from given source code
     void    Compile(const char* vertexSource, const char* fragmentSource);
     // utility functions

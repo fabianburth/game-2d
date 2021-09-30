@@ -18,7 +18,7 @@
 #define fourccDPDS 'sdpd'
 #endif
 
-SoundManager* SoundManager::soundManager = nullptr;
+/*SoundManager* SoundManager::soundManager = nullptr;
 
 SoundManager::SoundManager()
 {
@@ -194,4 +194,4 @@ HRESULT SoundManager::stop(std::string name)
         return hr;
 
     return 0;
-}
+}*/

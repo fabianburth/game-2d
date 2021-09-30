@@ -6,15 +6,12 @@ PengoAnimator::PengoAnimator(Player *pengo, float pushDuration, float walkAnimat
     pengo->registerObserver(this);
 }
 
-PengoAnimator::~PengoAnimator() {
-}
-
 void PengoAnimator::animate(float dt) {
     (*this.*currentAnimation)();
     currentAnimationDuration += dt;
 }
 
-void PengoAnimator::update(GameObject *s) {
+void PengoAnimator::update(GameObject * /*s*/) {
     //SoundSource mySpeaker = SoundSource();
     //Player *pengo = dynamic_cast<Player *>(s);
     switch (pengo->state) {

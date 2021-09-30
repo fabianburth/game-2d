@@ -23,11 +23,11 @@ class GameObject : public Subject<GameObject> {
 public:
     // object state
     std::array<float, 2> position;
-    std::array<float, 4> size;
+    std::array<float, 4> size{};
 
     GameObject();
 
-    GameObject(std::array<float, 2> pos, std::array<float, 4> size = {1.0f, 1.0f, 0.0f, 0.0f});
+    explicit GameObject(std::array<float, 2> pos, std::array<float, 4> size = {1.0f, 1.0f, 0.0f, 0.0f});
 
     void registerObserver(Observer<GameObject> *o) override;
     void removeObserver(Observer<GameObject> *o) override;

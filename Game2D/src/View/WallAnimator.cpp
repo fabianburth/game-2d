@@ -21,11 +21,7 @@ WallAnimator::WallAnimator(Wall* wall, float wobbleDuration)
 	wall->registerObserver(this);
 }
 
-WallAnimator::~WallAnimator()
-{
-}
-
-void WallAnimator::update(Wall* s)
+void WallAnimator::update(Wall*  /*s*/)
 {
     switch(wall->state){
         case(WallState::WOBBLY):

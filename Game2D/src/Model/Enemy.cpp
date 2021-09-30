@@ -2,31 +2,29 @@
 
 unsigned int Enemy::nextID = 0;
 
-Enemy::Enemy() {}
-
 Enemy::Enemy(std::array<float, 2> pos, std::array<float, 2> velocity, Direction direction, EnemyState state, EnemyType type, bool ready)
         : GameObject{pos}, id{nextID}, direction{direction}, state{state}, type{type}, velocity{velocity}, positionToMoveTo{pos}, ready{ready} {
     nextID++;
 }
 
-void Enemy::setDirection(Direction direction) {
-    if (this->direction != direction) {
-        this->direction = direction;
+void Enemy::setDirection(Direction enemyDirection) {
+    if (this->direction != enemyDirection) {
+        this->direction = enemyDirection;
         this->notifyObservers();
     }
 }
 
-void Enemy::setState(EnemyState state) {
-    if (this->state != state) {
-        this->state = state;
+void Enemy::setState(EnemyState enemyState) {
+    if (this->state != enemyState) {
+        this->state = enemyState;
         this->notifyObservers();
     }
 }
 
-void Enemy::setType(EnemyType type)
+void Enemy::setType(EnemyType enemyType)
 {
-    if (this->type != type) {
-        this->type = type;
+    if (this->type != enemyType) {
+        this->type = enemyType;
         this->notifyObservers();
     }
 }
@@ -60,8 +58,9 @@ void Enemy::move(float deltaTime) {
             this->position[0] = this->positionToMoveTo[0];
             //setState(PengoState::STAND);
             this->ready = true;
-        } else
+        } else {
             this->position[0] += this->velocity[0] * deltaTime;
+}
     }
         //Movement to the left
     else if (this->position[0] > this->positionToMoveTo[0]) {
@@ -69,8 +68,9 @@ void Enemy::move(float deltaTime) {
             this->position[0] = this->positionToMoveTo[0];
             //setState(PengoState::STAND);
             this->ready = true;
-        } else
+        } else {
             this->position[0] -= this->velocity[0] * deltaTime;
+}
     }
         //Movement up
     else if (this->position[1] < this->positionToMoveTo[1]) {
@@ -78,8 +78,9 @@ void Enemy::move(float deltaTime) {
             this->position[1] = this->positionToMoveTo[1];
             //setState(PengoState::STAND);
             this->ready = true;
-        } else
+        } else {
             this->position[1] += this->velocity[1] * deltaTime;
+}
     }
         //Movement down
     else if (this->position[1] > this->positionToMoveTo[1]) {
@@ -87,17 +88,18 @@ void Enemy::move(float deltaTime) {
             this->position[1] = this->positionToMoveTo[1];
             //setState(PengoState::STAND);
             this->ready = true;
-        } else
+        } else {
             this->position[1] -= this->velocity[1] * deltaTime;
+}
     } else {
         this->ready = true;
     }
 }
 
-std::vector<int> Enemy::getProbabilityArray(std::vector<Direction> directions) {
+auto Enemy::getProbabilityArray(std::vector<Direction> directions) const -> std::vector<int> {
     std::vector<int> probabilities;
-    bool currentDirectionPossible;
-    bool oppositeDirectionPossible;
+    bool currentDirectionPossible = false;
+    bool oppositeDirectionPossible = false;
     switch (directions.size()) {
         case 4:
             probabilities.push_back(90);
@@ -112,11 +114,11 @@ std::vector<int> Enemy::getProbabilityArray(std::vector<Direction> directions) {
                 probabilities.push_back(80);
                 probabilities.push_back(98);
                 probabilities.push_back(100);
-            } else if (currentDirectionPossible && !oppositeDirectionPossible) {
+            } else if (currentDirectionPossible) {
                 probabilities.push_back(80);
                 probabilities.push_back(90);
                 probabilities.push_back(100);
-            } else if (!currentDirectionPossible && oppositeDirectionPossible) {
+            } else if (oppositeDirectionPossible) {
                 probabilities.push_back(49);
                 probabilities.push_back(98);
                 probabilities.push_back(100);
@@ -128,10 +130,10 @@ std::vector<int> Enemy::getProbabilityArray(std::vector<Direction> directions) {
             if (currentDirectionPossible && oppositeDirectionPossible) {
                 probabilities.push_back(98);
                 probabilities.push_back(100);
-            } else if (currentDirectionPossible && !oppositeDirectionPossible) {
+            } else if (currentDirectionPossible) {
                 probabilities.push_back(80);
                 probabilities.push_back(100);
-            } else if (!currentDirectionPossible && oppositeDirectionPossible) {
+            } else if (oppositeDirectionPossible) {
                 probabilities.push_back(98);
                 probabilities.push_back(100);
             }

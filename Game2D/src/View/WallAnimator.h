@@ -16,7 +16,6 @@ public:
 	void (WallAnimator::* currentAnimation)() = nullptr;
 
 	WallAnimator(Wall* wall, float wobbleDuration);
-	~WallAnimator();
 	void update(Wall* s) override;
 	void animate(float dt) override;
 	void wobble();

@@ -17,9 +17,8 @@ public:
 	void (EnemyAnimator::* currentAnimation)() = nullptr;
 
 	EnemyAnimator(std::shared_ptr<Enemy> enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration);
-	~EnemyAnimator();
 	void update(GameObject* s) override;
-	void animate(float dt);
+	void animate(float dt) override;
 	void walk();
 	void breakBlock();
 	void stunned();

@@ -2,17 +2,12 @@
 #include "SoundManager.h"
 
 BlockAnimator::BlockAnimator(Block *block, float flashingDuration, float breakingDuration, Texture2D sprite)
-	:sprite{sprite}, BREAKING_DURATION{breakingDuration}, FLASHING_DURATION{flashingDuration}
+	:block(block), sprite{sprite}, BREAKING_DURATION{breakingDuration}, FLASHING_DURATION{flashingDuration}
 {
-	this->block = block;
 	this->block->registerObserver(this);
 }
 
-BlockAnimator::~BlockAnimator()
-{
-}
-
-void BlockAnimator::update(GameObject* s)
+void BlockAnimator::update(GameObject*  /*s*/)
 {
 	//Block* block = dynamic_cast<Block*>(s);
 	switch (block->state)

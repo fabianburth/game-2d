@@ -1,9 +1,10 @@
 #include "EnemyAnimator.h"
-#include "../util.h"
+
+#include <utility>
 
 
 EnemyAnimator::EnemyAnimator(std::shared_ptr<Enemy> enemy, float walkAnimationDuration, float stunnedAnimationDuration, float spawningAnimationDuration)
-	:enemy(enemy), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration)
+	:enemy(std::move(enemy)), WALK_ANIMATION_DURATION(walkAnimationDuration), STUNNED_ANIMATION_DURATION(stunnedAnimationDuration), SPAWNING_ANIMATION_DURATION(spawningAnimationDuration)
 {
 	switch (this->enemy->type)
 	{
@@ -20,10 +21,6 @@ EnemyAnimator::EnemyAnimator(std::shared_ptr<Enemy> enemy, float walkAnimationDu
 	this->enemy->registerObserver(this);
 }
 
-EnemyAnimator::~EnemyAnimator()
-{
-}
-
 void EnemyAnimator::animate(float dt)
 {
 	if (currentAnimation != nullptr)
@@ -33,7 +30,7 @@ void EnemyAnimator::animate(float dt)
 	}
 }
 
-void EnemyAnimator::update(GameObject* s)
+void EnemyAnimator::update(GameObject*  /*s*/)
 {
 	//Enemy* enemy = dynamic_cast<Enemy*>(s);
 	switch (this->enemy->state)

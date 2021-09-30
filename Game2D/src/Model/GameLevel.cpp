@@ -8,7 +8,7 @@ auto GameLevel::Load(const char* file) -> void {
 	// clear old data
 	this->Blocks.clear();
 	// load from file
-	unsigned int tileCode; // (=number of block, e.g. 1 for ice block)
+	unsigned int tileCode = 0; // (=number of block, e.g. 1 for ice block)
 	GameLevel level;
 	std::string line;
 	std::ifstream fstream(file);
@@ -31,7 +31,7 @@ auto GameLevel::Load(const char* file) -> void {
 
 auto GameLevel::IsCompleted() -> bool {
 	if (this->Enemies.empty()) {
-		double levelDuration = ((std::clock() - startClockLevel) / (double)CLOCKS_PER_SEC);
+		double levelDuration = (static_cast<double>(std::clock() - startClockLevel) / (double)CLOCKS_PER_SEC);
 		this->score.addLevelCompletion(levelDuration);
 
 		return true;
@@ -56,14 +56,14 @@ auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
 	// Left and Right Wall
 	for (unsigned int x = 0; x < height + 1; ++x) {
 		//Left Wall
-		std::array<float, 2> posL = { -0.5f * Constants::WIDTH_UNIT, -0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT * x };
+		std::array<float, 2> posL = { -0.5f * Constants::WIDTH_UNIT, -0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT * static_cast<float>(x) };
 		std::array<float, 4> sizeL = { 0.5f, 1.0f, 0.5f * (-1 + 0.5f * Constants::WIDTH_UNIT), 0 };
 		GameObject objL(posL, sizeL);
 		//objL.isUnbreakable = true;
 		this->Walls.push_back(objL);
 		this->LeftWall.addWallComponent(objL);
 		//Right Wall
-		std::array<float, 2> posR = { width * Constants::WIDTH_UNIT, -0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT * x };
+		std::array<float, 2> posR = { static_cast<float>(width) * Constants::WIDTH_UNIT, -0.5f * Constants::HEIGHT_UNIT + Constants::HEIGHT_UNIT * static_cast<float>(x) };
 		std::array<float, 4> sizeR = { 0.5f, 1.0f, 0.5f * (-1 + 0.5f * Constants::WIDTH_UNIT), 0 };
 		GameObject objR(posR, sizeR);
 		//objR.isUnbreakable = true;
@@ -73,14 +73,14 @@ auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
 	//Bottom and Top Wall
 	for (unsigned int x = 0; x < width; ++x) {
 		//Bottom Wall
-		std::array<float, 2> posB = { Constants::WIDTH_UNIT * x, height * Constants::HEIGHT_UNIT };
+		std::array<float, 2> posB = { Constants::WIDTH_UNIT * static_cast<float>(x), static_cast<float>(height) * Constants::HEIGHT_UNIT };
 		std::array<float, 4> sizeB = { 1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * Constants::HEIGHT_UNIT) };
 		GameObject objB(posB, sizeB);
 		//objB.isUnbreakable = true;
 		this->Walls.push_back(objB);
 		this->TopWall.addWallComponent(objB);
 		//Top Wall
-		std::array<float, 2> posT = { Constants::WIDTH_UNIT * x, -0.5f * Constants::HEIGHT_UNIT };
+		std::array<float, 2> posT = { Constants::WIDTH_UNIT * static_cast<float>(x), -0.5f * Constants::HEIGHT_UNIT };
 		std::array<float, 4> sizeT = { 1.0f, 0.5f, 0, 0.5f * (-1 + 0.5f * Constants::HEIGHT_UNIT) };
 		GameObject objT(posT, sizeT);
 		//objT.isUnbreakable = true;
@@ -94,17 +94,17 @@ auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
 			// check block type from level data (2D level array)
 			if (tileData[y][x] == 1) // breakable iceblock
 			{
-				std::array<float, 2> pos = { Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y };
+				std::array<float, 2> pos = { Constants::WIDTH_UNIT * static_cast<float>(x), Constants::HEIGHT_UNIT * static_cast<float>(y) };
 				this->Blocks.emplace_back(pos, false, nullptr, BlockState::SOLID);
 			}
 			else if (tileData[y][x] == 2)    // unbreakable diamond block
 			{
-				std::array<float, 2> pos = { Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y };
+				std::array<float, 2> pos = { Constants::WIDTH_UNIT * static_cast<float>(x), Constants::HEIGHT_UNIT * static_cast<float>(y) };
 				this->Blocks.emplace_back(pos, true, nullptr, BlockState::SOLID);
 			}
 			else if (tileData[y][x] == 3) // breakable iceblock with enemy frozen in it
 			{
-				std::array<float, 2> pos = { Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y };
+				std::array<float, 2> pos = { Constants::WIDTH_UNIT * static_cast<float>(x), Constants::HEIGHT_UNIT * static_cast<float>(y) };
 				std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3 };
 				Direction direction = Direction::DOWN;
 				std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
@@ -115,13 +115,13 @@ auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
 			}
 			else if (tileData[y][x] == 4) // pengo 
 			{
-				std::array<float, 2> pos = { Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y };
+				std::array<float, 2> pos = { Constants::WIDTH_UNIT * static_cast<float>(x), Constants::HEIGHT_UNIT * static_cast<float>(y) };
 				std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3 };
 				this->Pengo = Player(pos, velocity);
 			}
 			else if (tileData[y][x] == 5) // walking enemy
 			{
-				std::array<float, 2> pos = { Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y };
+				std::array<float, 2> pos = { Constants::WIDTH_UNIT * static_cast<float>(x), Constants::HEIGHT_UNIT * static_cast<float>(y) };
 				std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3 };
 				Direction direction = Direction::DOWN;
 				std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::WANDERING, false);
@@ -129,7 +129,7 @@ auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
 			}
 			else if (tileData[y][x] == 6) // boxing enemy
 			{
-				std::array<float, 2> pos = { Constants::WIDTH_UNIT * x, Constants::HEIGHT_UNIT * y };
+				std::array<float, 2> pos = { Constants::WIDTH_UNIT * static_cast<float>(x), Constants::HEIGHT_UNIT * static_cast<float>(y) };
 				std::array<float, 2> velocity = { Constants::WIDTH_UNIT * 3, Constants::HEIGHT_UNIT * 3 };
 				Direction direction = Direction::DOWN;
 				std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>(pos, velocity, direction, EnemyState::NONE, EnemyType::CHASING, false);
@@ -271,7 +271,7 @@ auto GameLevel::checkWallCollisionPrecise(GameObject& one, Direction d) -> bool 
 	return collision;
 }
 
-bool GameLevel::checkCollisionPrecise(GameObject& one, GameObject& two) {
+auto GameLevel::checkCollisionPrecise(GameObject& one, GameObject& two) -> bool {
 	bool collisionX =
 		one.position[0] + Constants::WIDTH_UNIT - two.position[0] > Constants::EPSILON && two.position[0] + Constants::WIDTH_UNIT - one.position[0] > Constants::EPSILON;
 	bool collisionY =
@@ -647,7 +647,7 @@ auto GameLevel::updateGameState(float dt) -> void {
 		this->trySettingBoxer();
 	}
 
-	if (((std::clock() - startClockEnemyKill) / (double)CLOCKS_PER_SEC) > 60) {
+	if (static_cast<float>((std::clock() - startClockEnemyKill) / (double)CLOCKS_PER_SEC) > 60) {
 		this->trySettingBoxer();
 		this->setEvent(Events::SUDDEN_DEATH);
 	}

@@ -11,6 +11,6 @@ public:
 	SoundModule();
 
 private:
-	SoundManager* soundManager;
+	//SoundManager* soundManager;
 	void initGameSounds();
 };

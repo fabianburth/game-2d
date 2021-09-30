@@ -23,17 +23,17 @@ class Wall: public Subject<Wall>
 {
 public:
 	WallState state = WallState::SOLID;
-	WallSide side;
+	WallSide side{};
 	std::vector<GameObject> wallComponents;
 
 	static constexpr float WOBBLY_DURATION = 0.5f;
 	float wobblyFor = 0.0f;
 
-	Wall();
-	Wall(WallSide side);
-	void setState(WallState state);
+	Wall() = default;
+	explicit Wall(WallSide side);
+	void setState(WallState wallState);
 	//void setSprite(Texture2D sprite);
-	void addWallComponent(GameObject component);
+	void addWallComponent(const GameObject& component);
 
 	void registerObserver(Observer<Wall>* o) override;
 	void removeObserver(Observer<Wall>* o) override;

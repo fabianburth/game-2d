@@ -44,7 +44,7 @@ public:
     std::vector<Block> Blocks;
 
     /** Is set to the primary event in specific situations */
-    Events event;
+    Events event{};
     /** Keeps track of the players score and provides useful methods */
     Score score;
 
@@ -60,7 +60,6 @@ public:
 
 
     GameLevel() = default;
-    ~GameLevel() = default;
 
     void registerObserver(Observer<GameLevel> *o) override;
     void removeObserver(Observer<GameLevel> *o) override;
@@ -132,7 +131,7 @@ public:
      * @param d: The Direction to which it would be moved
      * @return true, if it would collide with the wall, false otherwise
      */
-    auto checkWallCollision(GameObject& one, Direction d) -> bool;
+    static auto checkWallCollision(GameObject& one, Direction d) -> bool;
 
     /**
      * Auxiliary method, checks whether the given gameObject is touching the wall at the given side (used to check every game loop iteration, whether enemies are touching the wall
@@ -141,7 +140,7 @@ public:
      * @param direction: The Direction in which collision has to be checked
      * @return true, if it is touching the wall, false otherwise
      */
-    auto checkWallCollisionPrecise(GameObject& one, Direction d) -> bool;
+    static auto checkWallCollisionPrecise(GameObject& one, Direction d) -> bool;
 
     /**
      * Auxiliary method which returns a vector containing all directions which are possible for the enemy to move to
@@ -173,7 +172,7 @@ public:
      * @param b: The block to check whether it touches the wall
      * @return true, if it touches the wall, false otherwise
      */
-    auto blockTouchesWall(Block& b) -> bool;
+    static auto blockTouchesWall(Block& b) -> bool;
 
     /**
      * Auxiliary method which determines and update the game state concerning bots behavior, movement and their interaction with the player and the environment
@@ -231,7 +230,7 @@ public:
      * @param two: The GameObject to check the collision
      * @param one: The GameObject to check the collision
      */
-    auto checkCollisionPrecise(GameObject& one, GameObject& two) -> bool;
+    static auto checkCollisionPrecise(GameObject& one, GameObject& two) -> bool;
 
     /**
      * Removes the enemy from the vector of active enemies

@@ -10,10 +10,10 @@ public:
 	//  |-----|
 	//  |     |
 	//  x-----|
-	std::array<float, 2> position;
-	std::array<float, 4> size;
+	std::array<float, 2> position{};
+	std::array<float, 4> size{};
 	Texture2D sprite;
 
-	DisplayBlock();
+	DisplayBlock() = default;
 	DisplayBlock(std::array<float, 2> position, std::array<float, 4> size, Texture2D sprite);
 };

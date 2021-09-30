@@ -25,7 +25,7 @@ enum class GameState
     GAME_WIN
 };
 
-const float EPSILON = 0.01;
+constexpr float EPSILON = 0.01;
 
 
 // Game holds all game-related state and functionality.
@@ -36,16 +36,15 @@ class Game : public Observer<GameLevel>
 public:
     // game state
     GameState    PengoState;
-    SpriteRenderer* Renderer;
-    SoundModule* soundModule;
-    bool         Keys[1024];
+    SpriteRenderer* Renderer{};
+    SoundModule* soundModule{};
+    std::array<bool, 1024> Keys;
     unsigned int Width, Height;
     std::vector<GameLevel>  Levels;
-    unsigned int            Level;
+    unsigned int            Level{};
     unsigned int score = 0;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
-    ~Game();
     // initialize game state (load all shaders/textures/levels)
     void Init();
     // game loop
@@ -53,7 +52,7 @@ public:
     void Update(float dt);
     void Render();
 
-    void update(GameLevel* s) override;
+    void update(GameLevel*) override {};
 
 private:
     /**

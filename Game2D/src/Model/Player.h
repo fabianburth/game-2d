@@ -11,9 +11,8 @@ class Player : public GameObject
 public:
 	Direction direction = Direction::NONE;
 	PengoState state = PengoState::STAND;
-	std::array<float, 2> velocity, positionToMoveTo;
-	bool ready;
-	bool toggleSprite;
+	std::array<float, 2> velocity{}, positionToMoveTo{};
+	bool ready{};
 	int lives = 1;
 
 	static constexpr float WALKING_DURATION = 0.25f;
@@ -23,15 +22,15 @@ public:
 	float pushingFor = 0.0f;
 	float breakingBlockFor = 0.0f;
 
-	Player();
+	Player() = default;
 	Player(std::array<float, 2> pos, std::array<float, 2> velocity);
 
 	//virtual void registerObserver(const std::shared_ptr<Observer>& observer);
 	//virtual void removeObserver(const std::shared_ptr<Observer>& observer);
 	//virtual void notifyObservers();
 
-	void setDirection(Direction direction);
-	void setState(PengoState state);
+	void setDirection(Direction playerDirection);
+	void setState(PengoState pengoState);
 	void setPositionToMoveTo();
 	void move(float deltaTime);
 	//void swapSprite();

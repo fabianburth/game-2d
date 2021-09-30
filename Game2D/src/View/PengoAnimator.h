@@ -16,9 +16,8 @@ public:
 	void (PengoAnimator::* currentAnimation)();
 
 	PengoAnimator(Player *pengo, float pushDuration, float walkAnimationDuration, Texture2D sprite);
-	~PengoAnimator();
 	void update(GameObject* s) override;
-	void animate(float dt);
+	void animate(float dt) override;
 	void stand();
 	void walk();
 	void pushBlock();

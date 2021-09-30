@@ -8,10 +8,6 @@
 Game::Game(unsigned int width, unsigned int height)
         : PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
 
-Game::~Game() {
-    delete this->Renderer;
-}
-
 void Game::Init() {
     // load shaders
     ResourceManager::LoadShader("../Game2D/res/shaders/sprites.vs", "../Game2D/res/shaders/sprites.fs", "sprite");
@@ -20,7 +16,7 @@ void Game::Init() {
     // set render-specific controls
     Shader shader = ResourceManager::GetShader("sprite");
     this->Renderer = new SpriteRenderer(shader);
-    this->soundModule = new SoundModule();
+    //this->soundModule = new SoundModule();
 
     // load levels
     GameLevel one;
@@ -115,9 +111,6 @@ void Game::initLevel() {
     this->Levels[this->Level].registerObserver(this->soundModule);
     this->Renderer->initLevelView(&this->Levels[this->Level]);
     this->Levels[this->Level].initStates();
-}
-
-void Game::update(GameLevel *s) {
 }
 
 void Game::carryOverScore() {

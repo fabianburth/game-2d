@@ -35,24 +35,31 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, std::array<float, 2> positio
 
 void SpriteRenderer::DrawLevel(GameLevel& gameLevel)
 {
-    for (GameObject& wall : leftWallAnimator->wall->wallComponents)
+    for (GameObject& wall : leftWallAnimator->wall->wallComponents) {
         this->DrawSprite(leftWallAnimator->sprite, wall.position, wall.size);
+}
 
-    for (GameObject& wall : rightWallAnimator->wall->wallComponents)
+    for (GameObject& wall : rightWallAnimator->wall->wallComponents) {
         this->DrawSprite(rightWallAnimator->sprite, wall.position, wall.size);
+}
 
-    for (GameObject& wall : topWallAnimator->wall->wallComponents)
+    for (GameObject& wall : topWallAnimator->wall->wallComponents) {
         this->DrawSprite(topWallAnimator->sprite, wall.position, wall.size);
+}
 
-    for (GameObject& wall : bottomWallAnimator->wall->wallComponents)
+    for (GameObject& wall : bottomWallAnimator->wall->wallComponents) {
         this->DrawSprite(bottomWallAnimator->sprite, wall.position, wall.size);
+}
 
-    for (BlockAnimator* blockAnimator : blockAnimators)
-        if (blockAnimator->block->state != BlockState::BROKEN)
+    for (BlockAnimator* blockAnimator : blockAnimators) {
+        if (blockAnimator->block->state != BlockState::BROKEN) {
             this->DrawSprite(blockAnimator->sprite, blockAnimator->block->position, blockAnimator->block->size);
+}
+}
 
-    for (EnemyAnimator* enemyAnimator : enemyAnimators)
+    for (EnemyAnimator* enemyAnimator : enemyAnimators) {
         this->DrawSprite(enemyAnimator->sprite, enemyAnimator->enemy->position, enemyAnimator->enemy->size);
+}
 
     this->DrawSprite(pengoAnimator->sprite, pengoAnimator->pengo->position, pengoAnimator->pengo->size);
     //this->DrawObject(gameLevel.d);
@@ -65,8 +72,8 @@ void SpriteRenderer::DrawLevel(GameLevel& gameLevel)
 void SpriteRenderer::initRenderData()
 {
     // configure VAO/VBO
-    unsigned int VBO;
-    float vertices[] = {
+    unsigned int VBO = 0;
+    std::array vertices = {
             // clang-format off
             // pos                                                                                                                            // tex
             //x                                                             //y
@@ -84,7 +91,7 @@ void SpriteRenderer::initRenderData()
     glGenBuffers(1, &VBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
     glBindVertexArray(this->quadVAO);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
@@ -113,10 +120,12 @@ void SpriteRenderer::updateView(float dt) {
     this->leftWallAnimator->animate(dt);
     this->rightWallAnimator->animate(dt);
 
-    for (BlockAnimator *ba : this->blockAnimators)
+    for (BlockAnimator *ba : this->blockAnimators) {
         ba->animate(dt);
-    for (EnemyAnimator *ea : this->enemyAnimators)
+}
+    for (EnemyAnimator *ea : this->enemyAnimators) {
         ea->animate(dt);
+}
 }
 
 void SpriteRenderer::initDisplayInformation() {
@@ -248,10 +257,9 @@ void SpriteRenderer::update(GameLevel* gameLevel)
         if (std::find(gameLevel->Enemies.begin(), gameLevel->Enemies.end(), ea->enemy) != gameLevel->Enemies.end()) {
             continue;
         }
-        else {
-            enemy = ea->enemy;
+                    enemy = ea->enemy;
             break;
-        }
+
     }
     if (enemy != nullptr) {
         removeAnimatorOfKilledEnemy(enemy);
@@ -270,9 +278,8 @@ void SpriteRenderer::update(GameLevel* gameLevel)
             enemy = e;
             break;
         }
-        else {
-            animatorExists = false;
-        }
+                    animatorExists = false;
+
     }
 
     if (enemy != nullptr) {
@@ -284,7 +291,7 @@ void SpriteRenderer::removeAnimatorOfKilledEnemy(std::shared_ptr<Enemy>& enemy) 
     this->enemyAnimators.erase(std::remove_if(this->enemyAnimators.begin(), this->enemyAnimators.end(),
         [&](EnemyAnimator* ea) {
             return ea->enemy == enemy;
-        }));
+        }), this->enemyAnimators.end());
 }
 
 void SpriteRenderer::createAnimatorForSpawnedEnemy(std::shared_ptr<Enemy>& enemy) {

@@ -29,12 +29,12 @@ class SpriteRenderer: public Observer<GameLevel>
 public:
     //SoundDevice * soundDevice;
     //View Objects
-    PengoAnimator* pengoAnimator;
+    PengoAnimator* pengoAnimator{};
     //BlockAnimator* blockAnimator;
-    WallAnimator* leftWallAnimator;
-    WallAnimator* rightWallAnimator;
-    WallAnimator* bottomWallAnimator;
-    WallAnimator* topWallAnimator;
+    WallAnimator* leftWallAnimator{};
+    WallAnimator* rightWallAnimator{};
+    WallAnimator* bottomWallAnimator{};
+    WallAnimator* topWallAnimator{};
 
     std::vector<BlockAnimator*> blockAnimators;
     std::vector<EnemyAnimator*> enemyAnimators;
@@ -44,9 +44,13 @@ public:
 
     // Constructor (inits shaders/shapes)
     SpriteRenderer() = default;
-    SpriteRenderer(Shader& shader);
+    explicit SpriteRenderer(Shader& shader);
     // Destructor
     ~SpriteRenderer();
+    SpriteRenderer(const SpriteRenderer&) = default;
+    SpriteRenderer(SpriteRenderer&&) noexcept = default;
+    auto operator=(const SpriteRenderer&) -> SpriteRenderer& = default;
+    auto operator=(SpriteRenderer&&) noexcept -> SpriteRenderer& = default;
     // Renders a defined quad textured with given sprite
     void DrawSprite(Texture2D& texture, std::array<float, 2> position, std::array<float, 4> size, std::array<float, 3> color = { 1.0f,1.0f,1.0f });
     
@@ -60,8 +64,8 @@ public:
 
 private:
     // Render state
-    Shader       shader;
-    unsigned int quadVAO;
+    Shader       shader{};
+    unsigned int quadVAO{};
     // Initializes and configures the quad's buffer and vertex attributes
     // Thus, it creates the a quad at the bottom left corner
     void initRenderData();
@@ -71,7 +75,7 @@ private:
 
     void initDisplayInformation();
 
-    void loadSprites();
+    static void loadSprites();
 
     void removeAnimatorOfKilledEnemy(std::shared_ptr<Enemy>& enemy);
 

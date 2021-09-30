@@ -4,7 +4,7 @@
 
 
 Texture2D::Texture2D()
-    : Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_BGR), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR)
+    : Width(0), Internal_Format(GL_RGB), Image_Format(GL_BGR), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR)
 {
     glGenTextures(1, &this->ID);
 }
@@ -12,7 +12,6 @@ Texture2D::Texture2D()
 void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char* data)
 {
     this->Width = width;
-    this->Height = height;
     // create Texture
     glBindTexture(GL_TEXTURE_2D, this->ID);
     glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, width, height, 0, this->Image_Format, GL_UNSIGNED_BYTE, data);
@@ -25,10 +24,9 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture2D::GenerateFromCompressed(unsigned int fourCC, unsigned int height, unsigned int width, unsigned int linearSize, unsigned int mipMapCount, unsigned char* data)
+void Texture2D::GenerateFromCompressed(unsigned int fourCC, unsigned int height, unsigned int width, unsigned int linearSize, unsigned int mipMapCount, unsigned char* data) const
 {
-    unsigned int components = (fourCC == FOURCC_DXT1) ? 3 : 4;
-    unsigned int format;
+    unsigned int format = 0;
     switch (fourCC)
     {
     case FOURCC_DXT1:
@@ -50,7 +48,7 @@ void Texture2D::GenerateFromCompressed(unsigned int fourCC, unsigned int height,
     unsigned int offset = 0;
 
     /* load the mipmaps */
-    for (unsigned int level = 0; level < mipMapCount && (width || height); ++level)
+    for (unsigned int level = 0; level < mipMapCount && ((width != 0u) || (height != 0u)); ++level)
     {
         unsigned int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
         glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height,

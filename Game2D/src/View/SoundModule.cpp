@@ -1,6 +1,6 @@
 #include "SoundModule.h"
 
-void SoundModule::update(GameLevel* gameLevel)
+/*void SoundModule::update(GameLevel* gameLevel)
 {
 	switch (gameLevel->event)
 	{
@@ -66,3 +66,4 @@ void SoundModule::initGameSounds()
 	this->soundManager->loadAudioData(_TEXT("res\\sounds\\BackgroundTheme.wav"), "backgroundTheme", true);
 	this->soundManager->play("backgroundTheme");
 }
+*/
