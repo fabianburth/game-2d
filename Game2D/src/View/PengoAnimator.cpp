@@ -1,8 +1,10 @@
 #include "PengoAnimator.h"
+
 #include "SoundManager.h"
 
-PengoAnimator::PengoAnimator(Player *pengo, float pushDuration, float walkAnimationDuration, Texture2D sprite)
-        : pengo(pengo), sprite{sprite}, toggleSprite{true}, PUSH_DURATION(pushDuration), WALK_ANIMATION_DURATION(walkAnimationDuration), currentAnimation(&PengoAnimator::stand) {
+PengoAnimator::PengoAnimator(Player *pengo, float pushDuration, float walkAnimationDuration, Texture2D sprite) :
+    pengo(pengo), sprite{sprite}, toggleSprite{true}, PUSH_DURATION(pushDuration),
+    WALK_ANIMATION_DURATION(walkAnimationDuration), currentAnimation(&PengoAnimator::stand) {
     pengo->registerObserver(this);
 }
 
@@ -12,8 +14,8 @@ void PengoAnimator::animate(float dt) {
 }
 
 void PengoAnimator::update(GameObject * /*s*/) {
-    //SoundSource mySpeaker = SoundSource();
-    //Player *pengo = dynamic_cast<Player *>(s);
+    // SoundSource mySpeaker = SoundSource();
+    // Player *pengo = dynamic_cast<Player *>(s);
     switch (pengo->state) {
         case (PengoState::STAND):
             currentAnimationDuration = 0.0f;
@@ -35,7 +37,7 @@ void PengoAnimator::update(GameObject * /*s*/) {
 }
 
 void PengoAnimator::stand() {
-    //Last Sprite just stays active
+    // Last Sprite just stays active
 }
 
 void PengoAnimator::walk() {
@@ -47,12 +49,12 @@ void PengoAnimator::walk() {
 }
 
 void PengoAnimator::pushBlock() {
-    //pengo->ready = false;
+    // pengo->ready = false;
     this->sprite = ResourceManager::GetTexture("pengoPush" + stringDirection(pengo->direction));
     if (currentAnimationDuration >= PUSH_DURATION) {
         this->sprite = ResourceManager::GetTexture("pengoPostPush" + stringDirection(pengo->direction));
-        //pengo->state = PengoState::STAND;
-        //pengo->ready = true;
+        // pengo->state = PengoState::STAND;
+        // pengo->ready = true;
     }
 }
 
@@ -60,7 +62,8 @@ void PengoAnimator::breakBlock() {
     pengo->ready = false;
     if (currentAnimationDuration == 0) {
         this->sprite = ResourceManager::GetTexture("pengoPush" + stringDirection(pengo->direction));
-    } else if (currentAnimationDuration >= (1.0f / 3.0f) * PUSH_DURATION && currentAnimationDuration < (2.0f / 3.0f) * PUSH_DURATION) {
+    } else if (currentAnimationDuration >= (1.0f / 3.0f) * PUSH_DURATION &&
+               currentAnimationDuration < (2.0f / 3.0f) * PUSH_DURATION) {
         this->sprite = ResourceManager::GetTexture("pengoPostPush" + stringDirection(pengo->direction));
     } else if (currentAnimationDuration >= (2.0f / 3.0f) * PUSH_DURATION && currentAnimationDuration < PUSH_DURATION) {
         this->sprite = ResourceManager::GetTexture("pengoPush" + stringDirection(pengo->direction));
@@ -72,13 +75,10 @@ void PengoAnimator::breakBlock() {
 }
 
 void PengoAnimator::swapSprite() {
-    if (toggleSprite)
-    {
+    if (toggleSprite) {
         toggleSprite = false;
         this->sprite = ResourceManager::GetTexture("pengo" + stringDirection(this->pengo->direction));
-    }
-    else
-    {
+    } else {
         toggleSprite = true;
         this->sprite = ResourceManager::GetTexture("pengoMove" + stringDirection(this->pengo->direction));
     }

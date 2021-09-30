@@ -17,7 +17,7 @@ void Score::addLevelCompletion(double levelDuration) {
         this->score += 10;
     } else {
         this->score += 0;
-}
+    }
 }
 
 void Score::addDiamondsTouchingWall() {
@@ -53,5 +53,5 @@ void Score::addDestroyBlock(Block *block) {
         score += 30;
     } else {
         score += 500;
-}
+    }
 }

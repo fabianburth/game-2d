@@ -1,12 +1,13 @@
 #include "Game.h"
-#include "../View/ResourceManager.h"
-#include <array>
 
+#include "../View/ResourceManager.h"
+
+#include <array>
 #include <iostream>
 // Game-related State data
 
-Game::Game(unsigned int width, unsigned int height)
-        : PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
+Game::Game(unsigned int width, unsigned int height) :
+    PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
 
 void Game::Init() {
     // load shaders
@@ -16,7 +17,7 @@ void Game::Init() {
     // set render-specific controls
     Shader shader = ResourceManager::GetShader("sprite");
     this->Renderer = new SpriteRenderer(shader);
-    //this->soundModule = new SoundModule();
+    // this->soundModule = new SoundModule();
 
     // load levels
     GameLevel one;
@@ -116,5 +117,3 @@ void Game::initLevel() {
 void Game::carryOverScore() {
     this->Levels[this->Level + 1].score.score = this->Levels[this->Level].score.score;
 }
-
-
