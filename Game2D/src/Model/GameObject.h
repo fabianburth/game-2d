@@ -1,14 +1,11 @@
 #pragma once
 
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
-
 #include "../Constants.h"
 //#include <GL/glew.h>
-#include <memory>
-#include <vector>
 #include <array>
+#include <memory>
 #include <string>
+#include <vector>
 
 //#include "../View/Texture.h"
 #include "../Subject.h"
@@ -20,7 +17,7 @@
  * minimal of state as described within GameObject.
  */
 class GameObject : public Subject<GameObject> {
-public:
+  public:
     // object state
     std::array<float, 2> position;
     std::array<float, 4> size;
@@ -33,8 +30,6 @@ public:
     void removeObserver(Observer<GameObject> *o) override;
     void notifyObservers() override;
 
-private:
+  private:
     std::vector<Observer<GameObject> *> observers;
 };
-
-#endif

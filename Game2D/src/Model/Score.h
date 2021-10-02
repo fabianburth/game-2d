@@ -1,15 +1,13 @@
 //
 // Created by burth on 27.08.2021.
 //
-
-#ifndef GAME2D_SCORE_H
-#define GAME2D_SCORE_H
+#pragma once
 
 #include "Block.h"
 
 
 class Score {
-public:
+  public:
     int score = 0;
 
     void addLevelCompletion(double levelDuration);
@@ -17,10 +15,5 @@ public:
     void addDiamondsNotTouchingWall();
     void addWalkedOverStunnedEnemy();
     void addCrushedEnemy(int killedWithOneMove);
-    void addDestroyBlock(Block* block);
-
-
+    void addDestroyBlock(Block *block);
 };
-
-
-#endif //GAME2D_SCORE_H

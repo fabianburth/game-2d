@@ -1,12 +1,13 @@
 #include "Game.h"
-#include "../View/ResourceManager.h"
-#include <array>
 
+#include "../View/ResourceManager.h"
+
+#include <array>
 #include <iostream>
 // Game-related State data
 
-Game::Game(unsigned int width, unsigned int height)
-        : PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
+Game::Game(unsigned int width, unsigned int height) :
+    PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
 
 Game::~Game() {
     delete this->Renderer;
@@ -117,11 +118,8 @@ void Game::initLevel() {
     this->Levels[this->Level].initStates();
 }
 
-void Game::update(GameLevel *s) {
-}
+void Game::update(GameLevel *s) {}
 
 void Game::carryOverScore() {
     this->Levels[this->Level + 1].score.score = this->Levels[this->Level].score.score;
 }
-
-
