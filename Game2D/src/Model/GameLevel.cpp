@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-auto GameLevel::Load(const char *file) -> void {
+void GameLevel::Load(const char *file) {
     // clear old data
     this->Blocks.clear();
     // load from file
@@ -29,7 +29,7 @@ auto GameLevel::Load(const char *file) -> void {
     }
 }
 
-auto GameLevel::IsCompleted() -> bool {
+bool GameLevel::IsCompleted() {
     if (this->Enemies.empty()) {
         double levelDuration = ((std::clock() - startClockLevel) / (double) CLOCKS_PER_SEC);
         this->score.addLevelCompletion(levelDuration);
@@ -39,7 +39,7 @@ auto GameLevel::IsCompleted() -> bool {
     return false;
 }
 
-auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
+void GameLevel::init(std::vector<std::vector<unsigned int>> tileData) {
     // starts clocks to track duration to finish the level and the duration between killing enemies
     startClockLevel = std::clock();
     startClockEnemyKill = std::clock();
@@ -140,7 +140,7 @@ auto GameLevel::init(std::vector<std::vector<unsigned int>> tileData) -> void {
     }
 }
 
-auto GameLevel::checkCollisions(GameObject &gameObject, Direction d) -> bool {
+bool GameLevel::checkCollisions(GameObject &gameObject, Direction d) {
     for (Block &block : this->Blocks) {
         if (block.state != BlockState::BROKEN) {
             if (checkBlockCollision(gameObject, block, d) || checkWallCollision(gameObject, d)) {
@@ -151,7 +151,7 @@ auto GameLevel::checkCollisions(GameObject &gameObject, Direction d) -> bool {
     return false;
 }
 
-auto GameLevel::checkBlockCollision(GameObject &one, GameObject &two, Direction d) -> bool {
+bool GameLevel::checkBlockCollision(GameObject &one, GameObject &two, Direction d) {
     bool collisionX = false;
     bool collisionY = false;
 
@@ -192,7 +192,7 @@ auto GameLevel::checkBlockCollision(GameObject &one, GameObject &two, Direction 
     return collisionX && collisionY;
 }
 
-auto GameLevel::checkWallCollision(GameObject &one, Direction d) -> bool {
+bool GameLevel::checkWallCollision(GameObject &one, Direction d) {
     bool collision = false;
 
     switch (d) {
@@ -224,7 +224,7 @@ auto GameLevel::checkWallCollision(GameObject &one, Direction d) -> bool {
     return collision;
 }
 
-auto GameLevel::getCollisionBlock(GameObject &gameObject, Direction d) -> Block * {
+Block* GameLevel::getCollisionBlock(GameObject &gameObject, Direction d) {
     for (Block &block : this->Blocks) {
         if (block.state != BlockState::BROKEN) {
             if (checkBlockCollision(gameObject, block, d)) {
@@ -235,7 +235,7 @@ auto GameLevel::getCollisionBlock(GameObject &gameObject, Direction d) -> Block 
     return nullptr;
 }
 
-auto GameLevel::calculateStepRange(Block &block, Direction d) -> int {
+int GameLevel::calculateStepRange(Block &block, Direction d) {
     int stepWidth = 0;
     std::array<float, 2> originalPosition = block.position;
 
@@ -250,28 +250,20 @@ auto GameLevel::calculateStepRange(Block &block, Direction d) -> int {
     return stepWidth;
 }
 
-auto GameLevel::checkWallCollisionPrecise(GameObject &one, Direction d) -> bool {
+bool GameLevel::checkWallCollisionPrecise(GameObject &one, Direction d) {
     bool collision = false;
 
     switch (d) {
         case Direction::RIGHT:
-            // collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] + Constants::WIDTH_UNIT < 1.0f -
-            // 0.5f * Constants::WIDTH_UNIT );
             collision = ((12 * Constants::WIDTH_UNIT) - one.position[0]) <= Constants::EPSILON;
             break;
         case Direction::LEFT:
-            // collision = !((-1.0f + 0.5f * Constants::WIDTH_UNIT) + one.position[0] - Constants::WIDTH_UNIT >= -1.0f +
-            // 0.5f * Constants::WIDTH_UNIT);
             collision = 0 + one.position[0] <= Constants::EPSILON;
             break;
         case Direction::UP:
-            // collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] + Constants::HEIGHT_UNIT < 1.0f -
-            // 2 * Constants::HEIGHT_UNIT - 0.5f * Constants::HEIGHT_UNIT);
             collision = ((14 * Constants::HEIGHT_UNIT) - one.position[1]) <= Constants::EPSILON;
             break;
         case Direction::DOWN:
-            // collision = !((-1.0f + 0.5f * Constants::HEIGHT_UNIT) + one.position[1] - Constants::HEIGHT_UNIT >=
-            // (-1.0f + 0.5f * Constants::HEIGHT_UNIT));
             collision = 0 + one.position[1] <= Constants::EPSILON;
             break;
         default:
@@ -292,7 +284,7 @@ bool GameLevel::checkCollisionPrecise(GameObject &one, GameObject &two) {
 // ----------------------------------------------------------------------------
 // Methods to determine enemy behavior
 // ----------------------------------------------------------------------------
-auto GameLevel::getInitialDirections(Enemy &enemy) -> std::vector<Direction> {
+std::vector<Direction> GameLevel::getInitialDirections(Enemy &enemy) {
 
     // Build array for determining a direction with certain propabilities
     std::vector<Direction> allDirections{Direction::RIGHT, Direction::LEFT, Direction::UP, Direction::DOWN};
@@ -372,7 +364,7 @@ auto GameLevel::getInitialDirections(Enemy &enemy) -> std::vector<Direction> {
     return directions;
 }
 
-auto GameLevel::getDirectionIndex(const std::vector<int> &chances) -> int {
+int GameLevel::getDirectionIndex(const std::vector<int> &chances) {
     int index = 0;
     int randomNumber = std::rand() % 100;
     for (int chance : chances) {
@@ -385,7 +377,7 @@ auto GameLevel::getDirectionIndex(const std::vector<int> &chances) -> int {
 // ----------------------------------------------------------------------------
 
 
-auto GameLevel::checkThreeDiamonds() -> void {
+void GameLevel::checkThreeDiamonds() {
 
     if (this->diamondBlocksAligned) {
         return;
@@ -476,12 +468,12 @@ auto GameLevel::checkThreeDiamonds() -> void {
     }
 }
 
-auto GameLevel::blockTouchesWall(Block &b) -> bool {
+bool GameLevel::blockTouchesWall(Block &b) {
     return checkWallCollision(b, Direction::RIGHT) || checkWallCollision(b, Direction::LEFT) ||
            checkWallCollision(b, Direction::UP) || checkWallCollision(b, Direction::DOWN);
 }
 
-auto GameLevel::killEnemy(std::shared_ptr<Enemy> &enemy) -> void {
+void GameLevel::killEnemy(std::shared_ptr<Enemy> &enemy) {
     this->Enemies.erase(std::remove_if(std::begin(this->Enemies), std::end(this->Enemies),
                                        [&](const std::shared_ptr<Enemy> &comparison) { return comparison == enemy; }),
                         std::end(this->Enemies));
@@ -490,7 +482,7 @@ auto GameLevel::killEnemy(std::shared_ptr<Enemy> &enemy) -> void {
     startClockEnemyKill = std::clock();
 }
 
-auto GameLevel::spawnEnemy() -> void {
+void GameLevel::spawnEnemy() {
     bool validEnemy = false;
     std::shared_ptr<Enemy> enemy;
     while (!validEnemy) {
@@ -508,8 +500,6 @@ auto GameLevel::spawnEnemy() -> void {
     this->Enemies.push_back(enemy);
     this->setEvent(Events::ENEMY_SPAWNED);
     for (Block &block : this->Blocks) {
-        // if (std::abs(block.position[0] - enemy->position[0]) < EPSILON && std::abs(block.position[1] -
-        // enemy->position[1]) < EPSILON)
         if (block.containedEnemy == enemy) {
             block.setState(BlockState::BROKEN);
         }
@@ -524,12 +514,12 @@ auto GameLevel::spawnEnemy() -> void {
     }
 }
 
-auto GameLevel::boxerExists() -> bool {
+bool GameLevel::boxerExists() {
     return std::any_of(std::begin(this->Enemies), std::end(this->Enemies),
                        [&](const std::shared_ptr<Enemy> &e) { return e->type == EnemyType::CHASING; });
 }
 
-auto GameLevel::updateGameState(float dt) -> void {
+void GameLevel::updateGameState(float dt) {
     int pengoLives = this->Pengo.lives;
 
     for (Block &b : this->Blocks) {
@@ -586,24 +576,24 @@ auto GameLevel::updateGameState(float dt) -> void {
     }
 
     switch (this->Pengo.state) {
-        case PengoState::WALK:
+        case pengoState::WALK:
             if (Pengo.walkingFor >= Player::WALKING_DURATION) {
-                Pengo.setState(PengoState::STAND);
+                Pengo.setState(pengoState::STAND);
                 Pengo.walkingFor = 0.0f;
             }
             Pengo.walkingFor += dt;
             break;
-        case PengoState::PUSH:
+        case pengoState::PUSH:
             if (Pengo.pushingFor >= Player::PUSHING_DURATION) {
-                Pengo.setState(PengoState::STAND);
+                Pengo.setState(pengoState::STAND);
                 Pengo.ready = true;
                 Pengo.pushingFor = 0.0f;
             }
             Pengo.pushingFor += dt;
             break;
-        case PengoState::BREAK:
+        case pengoState::BREAK:
             if (Pengo.breakingBlockFor >= Player::BREAKING_BLOCK_DURATION) {
-                Pengo.setState(PengoState::STAND);
+                Pengo.setState(pengoState::STAND);
                 Pengo.ready = true;
                 Pengo.breakingBlockFor = 0.0f;
             }
@@ -664,30 +654,30 @@ auto GameLevel::updateGameState(float dt) -> void {
     this->Pengo.move(dt);
 }
 
-auto GameLevel::registerObserver(Observer<GameLevel> *o) -> void {
+void GameLevel::registerObserver(Observer<GameLevel> *o) {
     observers.push_back(o);
 }
 
-auto GameLevel::removeObserver(Observer<GameLevel> *o) -> void {
+void GameLevel::removeObserver(Observer<GameLevel> *o) {
     observers.erase(std::remove_if(observers.begin(), observers.end(),
                                    [&](Observer<GameLevel> *comparison) { return comparison == o; }),
                     observers.end());
 }
 
-auto GameLevel::notifyObservers() -> void {
+void GameLevel::notifyObservers() {
     for (Observer<GameLevel> *o : observers) {
         o->update(this);
     }
 }
 
-auto GameLevel::setEvent(Events e) -> void {
+void GameLevel::setEvent(Events e) {
     if (this->event != e) {
         this->event = e;
     }
     this->notifyObservers();
 }
 
-auto GameLevel::trySettingBoxer() -> void {
+void GameLevel::trySettingBoxer() {
     for (std::shared_ptr<Enemy> &e : this->Enemies) {
         if (e->type == EnemyType::WANDERING) {
             e->setType(EnemyType::CHASING);
@@ -696,7 +686,7 @@ auto GameLevel::trySettingBoxer() -> void {
     }
 }
 
-auto GameLevel::determineBotBehavior(float dt) -> void {
+void GameLevel::determineBotBehavior(float dt) {
     // bots do stuff
     for (std::shared_ptr<Enemy> &enemy : this->Enemies) {
         if (enemy == nullptr) {
@@ -758,7 +748,7 @@ auto GameLevel::determineBotBehavior(float dt) -> void {
     }
 }
 
-auto GameLevel::updateBlockInteractions(float dt) -> void {
+void GameLevel::updateBlockInteractions(float dt) {
     for (Block &block : this->Blocks) {
         if (block.position != block.positionToMoveTo) {
             for (std::shared_ptr<Enemy> &e : this->Enemies) {
@@ -781,7 +771,7 @@ auto GameLevel::updateBlockInteractions(float dt) -> void {
     }
 }
 
-auto GameLevel::processPengoAttack() -> void {
+void GameLevel::processPengoAttack() {
     if (this->checkCollisions(Pengo, Pengo.direction)) {
         Block *block = getCollisionBlock(Pengo, Pengo.direction);
         // Behavior if the collision is with an adjacent block
@@ -789,7 +779,7 @@ auto GameLevel::processPengoAttack() -> void {
             // Behavior if there actually is a block directly behind the adjacent one
             if (this->checkCollisions(*block, Pengo.direction)) {
                 // Pengo always tries to break it (Pengo Animation)
-                Pengo.setState(PengoState::BREAK);
+                Pengo.setState(pengoState::BREAK);
                 Pengo.ready = false;
                 // Block only breaks if it's not solid (= not a diamond block)
                 if (!block->isUnbreakable) {
@@ -801,13 +791,13 @@ auto GameLevel::processPengoAttack() -> void {
             }
             // Behavior if there is no block directly behind the adjacent one
             Pengo.ready = false;
-            Pengo.setState(PengoState::PUSH);
+            Pengo.setState(pengoState::PUSH);
             block->push(Pengo.direction, calculateStepRange(*block, Pengo.direction));
             this->setEvent(Events::PUSH_BLOCK);
             return;
         }
         // Behavior if the collision is with a wall
-        Pengo.setState(PengoState::BREAK);
+        Pengo.setState(pengoState::BREAK);
         this->setEvent(Events::WOBBLE_WALL);
         Pengo.ready = false;
 
@@ -824,15 +814,15 @@ auto GameLevel::processPengoAttack() -> void {
     }
 }
 
-auto GameLevel::processPengoMovement(Direction d) -> void {
+void GameLevel::processPengoMovement(Direction d) {
     Pengo.setDirection(d);
-    Pengo.setState(PengoState::WALK);
+    Pengo.setState(pengoState::WALK);
     if (!this->checkCollisions(Pengo, d)) {
         Pengo.setPositionToMoveTo();
     }
 }
 
-auto GameLevel::initStates() -> void {
+void GameLevel::initStates() {
     // Every block that contains an enemy has to indicate this at the start of the game
     for (Block &b : this->Blocks) {
         if ((b.state != BlockState::BROKEN && b.state != BlockState::BREAKING) && b.containedEnemy != nullptr) {

@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-Shader &Shader::Use() {
+Shader &Shader::use() {
     glUseProgram(this->ID);
     return *this;
 }
 
-void Shader::Compile(const char *vertexSource, const char *fragmentSource) {
+void Shader::compile(const char *vertexSource, const char *fragmentSource) {
     unsigned int sVertex, sFragment, gShader;
     // vertex Shader
     sVertex = glCreateShader(GL_VERTEX_SHADER);
@@ -30,33 +30,33 @@ void Shader::Compile(const char *vertexSource, const char *fragmentSource) {
     glDeleteShader(sFragment);
 }
 
-void Shader::SetFloat(const char *name, float value, bool useShader) {
+void Shader::setFloat(const char *name, float value, bool useShader) {
     if (useShader)
-        this->Use();
+        this->use();
     glUniform1f(glGetUniformLocation(this->ID, name), value);
 }
 
-void Shader::SetInteger(const char *name, int value, bool useShader) {
+void Shader::setInteger(const char *name, int value, bool useShader) {
     if (useShader)
-        this->Use();
+        this->use();
     glUniform1i(glGetUniformLocation(this->ID, name), value);
 }
 
-void Shader::SetVector2f(const char *name, float x, float y, bool useShader) {
+void Shader::setVector2f(const char *name, float x, float y, bool useShader) {
     if (useShader)
-        this->Use();
+        this->use();
     glUniform2f(glGetUniformLocation(this->ID, name), x, y);
 }
 
-void Shader::SetVector3f(const char *name, float x, float y, float z, bool useShader) {
+void Shader::setVector3f(const char *name, float x, float y, float z, bool useShader) {
     if (useShader)
-        this->Use();
+        this->use();
     glUniform3f(glGetUniformLocation(this->ID, name), x, y, z);
 }
 
-void Shader::SetVector4f(const char *name, float x, float y, float z, float w, bool useShader) {
+void Shader::setVector4f(const char *name, float x, float y, float z, float w, bool useShader) {
     if (useShader)
-        this->Use();
+        this->use();
     glUniform4f(glGetUniformLocation(this->ID, name), x, y, z, w);
 }
 

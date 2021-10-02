@@ -6,7 +6,7 @@ GameInformation::GameInformation(std::array<float, 2> position, std::array<float
     position{position}, amountDisplayBlocks{static_cast<unsigned int>(amountDisplayBlocks)}, size{size} {
     for (int i = 0; i < amountDisplayBlocks; ++i) {
         displayBlocks.push_back(new DisplayBlock({position[0] - i * (0.5f * Constants::WIDTH_UNIT), position[1]}, size,
-                                                 ResourceManager::GetTexture("placeholder")));
+                                                 ResourceManager::getTexture("placeholder")));
     }
 }
 
@@ -18,6 +18,6 @@ void GameInformation::show(std::string text) {
         std::string c{text.at(i)};
         if (text == "1P" && c == "1")
             c = "One";
-        displayBlocks.at(text.length() - 1 - i)->sprite = ResourceManager::GetTexture(c);
+        displayBlocks.at(text.length() - 1 - i)->sprite = ResourceManager::getTexture(c);
     }
 }

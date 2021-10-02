@@ -6,15 +6,15 @@ WallAnimator::WallAnimator(Wall *wall, float wobbleDuration) : wall{wall}, WOBBL
     switch (wall->side) {
         case (WallSide::TOP):
         case (WallSide::BOTTOM):
-            standardSprite = ResourceManager::GetTexture("wallBT");
-            wobblySprite0 = ResourceManager::GetTexture("wallBT_00");
-            wobblySprite1 = ResourceManager::GetTexture("wallBT_01");
+            standardSprite = ResourceManager::getTexture("wallBT");
+            wobblySprite0 = ResourceManager::getTexture("wallBT_00");
+            wobblySprite1 = ResourceManager::getTexture("wallBT_01");
             break;
         case (WallSide::LEFT):
         case (WallSide::RIGHT):
-            standardSprite = ResourceManager::GetTexture("wallLR");
-            wobblySprite0 = ResourceManager::GetTexture("wallLR_00");
-            wobblySprite1 = ResourceManager::GetTexture("wallLR_01");
+            standardSprite = ResourceManager::getTexture("wallLR");
+            wobblySprite0 = ResourceManager::getTexture("wallLR_00");
+            wobblySprite1 = ResourceManager::getTexture("wallLR_01");
     }
     this->sprite = this->standardSprite;
     wall->registerObserver(this);

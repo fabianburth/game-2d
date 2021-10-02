@@ -1,7 +1,3 @@
-//
-// Created by burth on 14.09.2021.
-//
-
 #include "util.h"
 
 
@@ -49,18 +45,18 @@ auto oppositeDirection(Direction direction) -> Direction {
     }
 }
 
-auto stringState(PengoState state) -> std::string {
+auto stringState(pengoState state) -> std::string {
     switch (state) {
-        case PengoState::STAND:
+        case pengoState::STAND:
             return "Stand";
             break;
-        case PengoState::WALK:
+        case pengoState::WALK:
             return "Walk";
             break;
-        case PengoState::PUSH:
+        case pengoState::PUSH:
             return "Push";
             break;
-        case PengoState::BREAK:
+        case pengoState::BREAK:
             return "Break";
             break;
         default:

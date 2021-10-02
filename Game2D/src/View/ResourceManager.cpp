@@ -6,39 +6,39 @@
 #include <sstream>
 
 // Instantiate static variables
-std::map<std::string, Texture2D> ResourceManager::Textures;
-std::map<std::string, Shader> ResourceManager::Shaders;
+std::map<std::string, Texture2D> ResourceManager::textures;
+std::map<std::string, Shader> ResourceManager::shaders;
 
 
-Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderFile, std::string name) {
-    Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile);
-    return Shaders[name];
+Shader ResourceManager::loadShader(const char *vShaderFile, const char *fShaderFile, std::string name) {
+    shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile);
+    return shaders[name];
 }
 
-Shader ResourceManager::GetShader(std::string name) {
-    return Shaders[name];
+Shader ResourceManager::getShader(std::string name) {
+    return shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const char *ImageFile, std::string name) {
-    Textures[name] = loadTextureFromFile(ImageFile);
-    return Textures[name];
+Texture2D ResourceManager::loadTexture(const char *ImageFile, std::string name) {
+    textures[name] = loadTextureFromFile(ImageFile);
+    return textures[name];
 }
 
-Texture2D ResourceManager::LoadCompressedTexture(const char *file, std::string name) {
-    Textures[name] = loadTextureFromCompressedFile(file);
-    return Textures[name];
+Texture2D ResourceManager::loadCompressedTexture(const char *file, std::string name) {
+    textures[name] = loadTextureFromCompressedFile(file);
+    return textures[name];
 }
 
-Texture2D ResourceManager::GetTexture(std::string name) {
-    return Textures[name];
+Texture2D ResourceManager::getTexture(std::string name) {
+    return textures[name];
 }
 
-void ResourceManager::Clear() {
+void ResourceManager::clear() {
     // (properly) delete all shaders
-    for (auto iter : Shaders)
+    for (auto iter : shaders)
         glDeleteProgram(iter.second.ID);
     // (properly) delete all textures
-    for (auto iter : Textures)
+    for (auto iter : textures)
         glDeleteTextures(1, &iter.second.ID);
 }
 
@@ -67,7 +67,7 @@ Shader ResourceManager::loadShaderFromFile(const char *vShaderFile, const char *
     const char *fShaderCode = fragmentCode.c_str();
     // 2. now create shader object from source code
     Shader shader;
-    shader.Compile(vShaderCode, fShaderCode);
+    shader.compile(vShaderCode, fShaderCode);
     return shader;
 }
 
@@ -115,7 +115,7 @@ Texture2D ResourceManager::loadTextureFromFile(const char *ImageFile) {
     fread(data, 1, imageSize, file);
 
     // now generate texture
-    texture.Generate(width, height, data);
+    texture.generate(width, height, data);
 
     // Everything is in memory now, the file can be closed
     fclose(file);
@@ -161,7 +161,7 @@ Texture2D ResourceManager::loadTextureFromCompressedFile(const char *file) {
     buffer = (unsigned char *) malloc(bufsize * sizeof(unsigned char));
     fread(buffer, 1, bufsize, fp);
 
-    texture.GenerateFromCompressed(fourCC, height, width, linearSize, mipMapCount, buffer);
+    texture.generateFromCompressed(fourCC, height, width, linearSize, mipMapCount, buffer);
     /* close the file pointer */
     fclose(fp);
     delete (buffer);

@@ -30,13 +30,9 @@ SoundManager::SoundManager() {
 
     if (FAILED(hr = pXAudio2->CreateMasteringVoice(&pMasterVoice)))
         return;
-
-    // std::string initSourceVoiceAudioName = "destroyBlock";
-    // loadAudioData(_TEXT("res\\sounds\\PushIceBlock.wav"), initSourceVoiceAudioName);
-    // createSourceVoice(audios[initSourceVoiceAudioName].wfx);
 }
 
-HRESULT SoundManager::FindChunk(HANDLE hFile, DWORD fourcc, DWORD &dwChunkSize, DWORD &dwChunkDataPosition) {
+HRESULT SoundManager::findChunk(HANDLE hFile, DWORD fourcc, DWORD &dwChunkSize, DWORD &dwChunkDataPosition) {
     HRESULT hr = S_OK;
     if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, 0, NULL, FILE_BEGIN))
         return HRESULT_FROM_WIN32(GetLastError());
@@ -86,7 +82,7 @@ HRESULT SoundManager::FindChunk(HANDLE hFile, DWORD fourcc, DWORD &dwChunkSize, 
     return S_OK;
 }
 
-HRESULT SoundManager::ReadChunkData(HANDLE hFile, void *buffer, DWORD buffersize, DWORD bufferoffset) {
+HRESULT SoundManager::readChunkData(HANDLE hFile, void *buffer, DWORD buffersize, DWORD bufferoffset) {
     HRESULT hr = S_OK;
     if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, bufferoffset, NULL, FILE_BEGIN))
         return HRESULT_FROM_WIN32(GetLastError());
@@ -110,7 +106,7 @@ HRESULT SoundManager::loadAudioData(const TCHAR *filePath, std::string name, boo
 #ifdef _XBOX
     // char* strFileName = "game:\\media\\MusicMono.wav";
 #else
-    const TCHAR *strFileName = filePath;//_TEXT("media\\MusicMono.wav");
+    const TCHAR *strFileName = filePath;
 #endif
     // Open the file
     HANDLE hFile = CreateFile(strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
@@ -125,20 +121,20 @@ HRESULT SoundManager::loadAudioData(const TCHAR *filePath, std::string name, boo
     DWORD dwChunkSize;
     DWORD dwChunkPosition;
     // check the file type, should be fourccWAVE or 'XWMA'
-    FindChunk(hFile, fourccRIFF, dwChunkSize, dwChunkPosition);
+    findChunk(hFile, fourccRIFF, dwChunkSize, dwChunkPosition);
     DWORD filetype;
-    ReadChunkData(hFile, &filetype, sizeof(DWORD), dwChunkPosition);
+    readChunkData(hFile, &filetype, sizeof(DWORD), dwChunkPosition);
     if (filetype != fourccWAVE)
         return S_FALSE;
 
     // Locate the 'fmt ' chunk, and copy its contents into a WAVEFORMATEXTENSIBLE structure
-    FindChunk(hFile, fourccFMT, dwChunkSize, dwChunkPosition);
-    ReadChunkData(hFile, &audios[name].wfx, dwChunkSize, dwChunkPosition);
+    findChunk(hFile, fourccFMT, dwChunkSize, dwChunkPosition);
+    readChunkData(hFile, &audios[name].wfx, dwChunkSize, dwChunkPosition);
 
     // fill out the audio data buffer with the contents of the fourccDATA chunk
-    FindChunk(hFile, fourccDATA, dwChunkSize, dwChunkPosition);
+    findChunk(hFile, fourccDATA, dwChunkSize, dwChunkPosition);
     BYTE *pDataBuffer = new BYTE[dwChunkSize];
-    ReadChunkData(hFile, pDataBuffer, dwChunkSize, dwChunkPosition);
+    readChunkData(hFile, pDataBuffer, dwChunkSize, dwChunkPosition);
 
     audios[name].buffer.AudioBytes = dwChunkSize;// size of the audio buffer in bytes
     audios[name].buffer.pAudioData = pDataBuffer;// buffer containing audio data
@@ -158,8 +154,6 @@ HRESULT SoundManager::loadAudioData(const TCHAR *filePath, std::string name, boo
 
 
 HRESULT SoundManager::play(std::string name) {
-    // if (FAILED(hr = pSourceVoice->SubmitSourceBuffer(&audios.at(name).buffer)))
-    //    return hr;
     if (FAILED(hr = soundeffect[name]->SubmitSourceBuffer(&audios.at(name).buffer)))
         return hr;
 

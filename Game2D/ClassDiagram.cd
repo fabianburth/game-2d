@@ -7,13 +7,6 @@
       <FileName>src\Animator.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Game" Collapsed="true">
-    <Position X="12.75" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQAAAAABAAAAgAASAAIAEAAAAigAAABABCCAAAEAAA=</HashCode>
-      <FileName>src\Controller\Game.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Block" Collapsed="true">
     <Position X="8" Y="7.25" Width="1.5" />
     <TypeIdentifier>
@@ -45,7 +38,7 @@
   <Class Name="Player" Collapsed="true">
     <Position X="10.25" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAAUAAIADgAABAAAAAACIAAIAEAAQAJQAAAAQ=</HashCode>
+      <HashCode>AAIAAAAAAUAAIADgAAAAAAAAACIAAIAEAAQAJQAAAAQ=</HashCode>
       <FileName>src\Model\Player.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -150,7 +143,7 @@
   <Class Name="Texture2D" Collapsed="true">
     <Position X="17.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAAERBBAgAAAAAAIAEAAAAAAAAAAAIAAAEAAACA=</HashCode>
+      <HashCode>AAAAgAAEQBBAgAQAQAAIAAAAAAAAAAAAAIAAAEAAACA=</HashCode>
       <FileName>src\View\Texture.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -159,6 +152,13 @@
     <TypeIdentifier>
       <HashCode>QAAAAAAAABgAAAAAAAABAAAAABAEQAAAgAAEIAAUAAA=</HashCode>
       <FileName>src\View\WallAnimator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAQAQAIAACAAAAmAAAIBAAAAAAAUgAA=</HashCode>
+      <FileName>src\Controller\Game.h</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="AudioData" Collapsed="true">
@@ -217,7 +217,7 @@
       <FileName>src\util.h</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="PengoState" Collapsed="true">
+  <Enum Name="pengoState" Collapsed="true">
     <Position X="17.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAAAAAAAAgAAgCAAAAAAAAAAAAAAAAAA=</HashCode>

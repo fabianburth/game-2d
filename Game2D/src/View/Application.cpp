@@ -50,7 +50,7 @@ auto main() -> int {
 
     // initialize game
     // ---------------
-    Pengo.Init();
+    Pengo.init();
 
     // deltaTime variables
     // -------------------
@@ -70,24 +70,24 @@ auto main() -> int {
 
         // manage user input
         // -----------------
-        Pengo.ProcessInput(deltaTime);
+        Pengo.processInput(deltaTime);
 
         // update game state
         // -----------------
-        Pengo.Update(deltaTime);
+        Pengo.update(deltaTime);
 
         // render
         // ------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        Pengo.Render();
+        Pengo.render();
 
         glfwSwapBuffers(window);
     }
 
     // delete all resources as loaded using the resource manager
     // ---------------------------------------------------------
-    ResourceManager::Clear();
+    ResourceManager::clear();
 
     glfwTerminate();
     return 0;
@@ -100,9 +100,9 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
     }
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) {
-            Pengo.Keys[key] = true;
+            Pengo.keys[key] = true;
         } else if (action == GLFW_RELEASE) {
-            Pengo.Keys[key] = false;
+            Pengo.keys[key] = false;
         }
     }
 }

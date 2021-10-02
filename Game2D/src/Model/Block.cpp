@@ -59,10 +59,8 @@ void Block::move(float deltaTime) {
             this->position[0] = this->positionToMoveTo[0];
             this->direction = Direction::NONE;
             this->killedWithOneMove = 0;
-            // return true;
         } else {
             this->position[0] += Block::VELOCITY[0] * deltaTime;
-            // return false;
         }
     }
     // Movement to the left
@@ -71,10 +69,8 @@ void Block::move(float deltaTime) {
             this->position[0] = this->positionToMoveTo[0];
             this->direction = Direction::NONE;
             this->killedWithOneMove = 0;
-            // return true;
         } else {
             this->position[0] -= Block::VELOCITY[0] * deltaTime;
-            // return false;
         }
     }
     // Movement up
@@ -83,10 +79,8 @@ void Block::move(float deltaTime) {
             this->position[1] = this->positionToMoveTo[1];
             this->direction = Direction::NONE;
             this->killedWithOneMove = 0;
-            // return true;
         } else {
             this->position[1] += this->Block::VELOCITY[1] * deltaTime;
-            // return false;
         }
     }
     // Movement down
@@ -95,10 +89,8 @@ void Block::move(float deltaTime) {
             this->position[1] = this->positionToMoveTo[1];
             this->direction = Direction::NONE;
             this->killedWithOneMove = 0;
-            // return true;
         } else {
             this->position[1] -= Block::VELOCITY[1] * deltaTime;
-            // return false;
         }
     }
 }

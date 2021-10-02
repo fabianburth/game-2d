@@ -4,23 +4,22 @@
 
 #include <array>
 #include <iostream>
-// Game-related State data
 
 Game::Game(unsigned int width, unsigned int height) :
-    PengoState(GameState::GAME_ACTIVE), Keys(), Width(width), Height(height) {}
+    pengoState(GameState::GAME_ACTIVE), keys(), width(width), height(height) {}
 
 Game::~Game() {
-    delete this->Renderer;
+    delete this->renderer;
 }
 
-void Game::Init() {
+void Game::init() {
     // load shaders
-    ResourceManager::LoadShader("../Game2D/res/shaders/sprites.vs", "../Game2D/res/shaders/sprites.fs", "sprite");
+    ResourceManager::loadShader("../Game2D/res/shaders/sprites.vs", "../Game2D/res/shaders/sprites.fs", "sprite");
     // configure shaders
-    ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+    ResourceManager::getShader("sprite").use().setInteger("image", 0);
     // set render-specific controls
-    Shader shader = ResourceManager::GetShader("sprite");
-    this->Renderer = new SpriteRenderer(shader);
+    Shader shader = ResourceManager::getShader("sprite");
+    this->renderer = new SpriteRenderer(shader);
     this->soundModule = new SoundModule();
 
     // load levels
@@ -29,97 +28,97 @@ void Game::Init() {
     GameLevel two;
     two.Load("../Game2D/res/levels/level0.lvl");
 
-    this->Levels.push_back(one);
-    this->Levels.push_back(two);
-    this->Level = 0;
+    this->levels.push_back(one);
+    this->levels.push_back(two);
+    this->level = 0;
 
     this->initLevel();
 }
 
-void Game::Update(float dt) {
-    if (this->PengoState == GameState::GAME_ACTIVE) {
+void Game::update(float dt) {
+    if (this->pengoState == GameState::GAME_ACTIVE) {
 
         // Check if pengo died (= no lives left, cause he was touched by enemies)
-        if (this->Levels[this->Level].Pengo.lives <= 0) {
+        if (this->levels[this->level].Pengo.lives <= 0) {
             std::cout << "GAME OVER" << std::endl;
-            PengoState = GameState::GAME_MENU;
+            pengoState = GameState::GAME_MENU;
             return;
         }
 
         // Check if level is completed (= all enemies killed)
-        if (this->Levels[this->Level].IsCompleted()) {
-            if (this->Level < this->Levels.size()) {
+        if (this->levels[this->level].IsCompleted()) {
+            if (this->level < this->levels.size()) {
                 initLevel();
                 return;
             }
         }
 
-        this->Levels[this->Level].updateGameState(dt);
-        this->Renderer->updateView(dt);
+        this->levels[this->level].updateGameState(dt);
+        this->renderer->updateView(dt);
     }
 }
 
-void Game::ProcessInput(float dt) {
-    if (this->PengoState == GameState::GAME_ACTIVE) {
-        if (this->Levels[this->Level].Pengo.ready) {
-            if (this->Keys[GLFW_KEY_LEFT_CONTROL]) {
-                this->Levels[this->Level].processPengoAttack();
+void Game::processInput(float dt) {
+    if (this->pengoState == GameState::GAME_ACTIVE) {
+        if (this->levels[this->level].Pengo.ready) {
+            if (this->keys[GLFW_KEY_LEFT_CONTROL]) {
+                this->levels[this->level].processPengoAttack();
                 return;
             }
-            if (this->Keys[GLFW_KEY_D]) {
-                this->Levels[this->Level].processPengoMovement(Direction::RIGHT);
+            if (this->keys[GLFW_KEY_D]) {
+                this->levels[this->level].processPengoMovement(Direction::RIGHT);
                 return;
             }
-            if (this->Keys[GLFW_KEY_A]) {
-                this->Levels[this->Level].processPengoMovement(Direction::LEFT);
+            if (this->keys[GLFW_KEY_A]) {
+                this->levels[this->level].processPengoMovement(Direction::LEFT);
                 return;
             }
-            if (this->Keys[GLFW_KEY_W]) {
-                this->Levels[this->Level].processPengoMovement(Direction::UP);
+            if (this->keys[GLFW_KEY_W]) {
+                this->levels[this->level].processPengoMovement(Direction::UP);
                 return;
             }
-            if (this->Keys[GLFW_KEY_S]) {
-                this->Levels[this->Level].processPengoMovement(Direction::DOWN);
+            if (this->keys[GLFW_KEY_S]) {
+                this->levels[this->level].processPengoMovement(Direction::DOWN);
                 return;
             }
         }
     }
 }
 
-void Game::Render() {
-    if (this->Levels.size() > this->Level) {
-        this->Renderer->DrawLevel(this->Levels[this->Level]);
+void Game::render() {
+    if (this->levels.size() > this->level) {
+        this->renderer->drawLevel(this->levels[this->level]);
     }
 }
 
 
 void Game::initLevel() {
 
-    if (this->Levels[this->Level].Enemies.empty()) {
-        this->Renderer->blockAnimators.clear();
-        this->Renderer->enemyAnimators.clear();
-        this->Levels[this->Level].removeObserver(this);
-        this->Levels[this->Level].removeObserver(this->Renderer);
-        this->Levels[this->Level].removeObserver(this->soundModule);
+    if (this->levels[this->level].Enemies.empty()) {
+        this->renderer->blockAnimators.clear();
+        this->renderer->enemyAnimators.clear();
+        this->levels[this->level].removeObserver(this);
+        this->levels[this->level].removeObserver(this->renderer);
+        this->levels[this->level].removeObserver(this->soundModule);
 
         this->carryOverScore();
-        ++this->Level;
+        ++this->level;
 
-        if (this->Levels.size() <= this->Level) {
+        if (this->levels.size() <= this->level) {
             std::cout << "GAME WON" << std::endl;
-            PengoState = GameState::GAME_MENU;
+            pengoState = GameState::GAME_MENU;
             return;
         }
     }
-    this->Levels[this->Level].registerObserver(this);
-    this->Levels[this->Level].registerObserver(this->Renderer);
-    this->Levels[this->Level].registerObserver(this->soundModule);
-    this->Renderer->initLevelView(&this->Levels[this->Level]);
-    this->Levels[this->Level].initStates();
+    this->levels[this->level].registerObserver(this);
+    this->levels[this->level].registerObserver(this->renderer);
+    this->levels[this->level].registerObserver(this->soundModule);
+    this->renderer->initLevelView(&this->levels[this->level]);
+    this->levels[this->level].initStates();
 }
 
 void Game::update(GameLevel *s) {}
 
 void Game::carryOverScore() {
-    this->Levels[this->Level + 1].score.score = this->Levels[this->Level].score.score;
+    this->levels[this->level + 1].score.score = this->levels[this->level].score.score;
 }

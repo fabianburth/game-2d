@@ -15,7 +15,7 @@ void Player::setDirection(Direction direction) {
     }
 }
 
-void Player::setState(PengoState state) {
+void Player::setState(pengoState state) {
     if (this->state != state) {
         this->state = state;
         this->notifyObservers();
@@ -26,7 +26,7 @@ void Player::move(float deltaTime) {
     if (this->position[0] < this->positionToMoveTo[0]) {
         if (this->positionToMoveTo[0] - this->position[0] <= (this->velocity[0] * deltaTime)) {
             this->position[0] = this->positionToMoveTo[0];
-            setState(PengoState::STAND);
+            setState(pengoState::STAND);
             this->ready = true;
         } else {
             this->position[0] += this->velocity[0] * deltaTime;
@@ -36,7 +36,7 @@ void Player::move(float deltaTime) {
     else if (this->position[0] > this->positionToMoveTo[0]) {
         if (this->positionToMoveTo[0] - this->position[0] >= -(this->velocity[0] * deltaTime)) {
             this->position[0] = this->positionToMoveTo[0];
-            setState(PengoState::STAND);
+            setState(pengoState::STAND);
             this->ready = true;
         } else
             this->position[0] -= this->velocity[0] * deltaTime;
@@ -45,7 +45,7 @@ void Player::move(float deltaTime) {
     else if (this->position[1] < this->positionToMoveTo[1]) {
         if (this->positionToMoveTo[1] - this->position[1] <= (this->velocity[1] * deltaTime)) {
             this->position[1] = this->positionToMoveTo[1];
-            setState(PengoState::STAND);
+            setState(pengoState::STAND);
             this->ready = true;
         } else
             this->position[1] += this->velocity[1] * deltaTime;
@@ -54,7 +54,7 @@ void Player::move(float deltaTime) {
     else if (this->position[1] > this->positionToMoveTo[1]) {
         if (this->positionToMoveTo[1] - this->position[1] >= -(this->velocity[1] * deltaTime)) {
             this->position[1] = this->positionToMoveTo[1];
-            setState(PengoState::STAND);
+            setState(pengoState::STAND);
             this->ready = true;
         } else {
             this->position[1] -= this->velocity[1] * deltaTime;
