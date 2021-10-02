@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Animator&lt;T&gt;" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Animator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABAAAAgAASAAIAEAAAAigAAABABCCAAAEAAA=</HashCode>
+      <FileName>src\Controller\Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Block" Collapsed="true">
+    <Position X="8" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAIAAAAJACAAAAAAACQAiIAAAAEAAAIBAIAQAQ=</HashCode>
+      <FileName>src\Model\Block.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Enemy" Collapsed="true">
+    <Position X="5.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAIAAgAAAUAAIAKAABBAAAAAADIBAIAEAAQAAAAIAgQ=</HashCode>
+      <FileName>src\Model\Enemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameLevel" Collapsed="true">
+    <Position X="1.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CJgMiJQBCCAAOhCIEAgIIAgAAIkAQRIQQAAASxCRAAA=</HashCode>
+      <FileName>src\Model\GameLevel.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject" Collapsed="true">
+    <Position X="8" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAACAAAIAAAAIAAIAAAAAAAAAAAAAAACAIAAAA=</HashCode>
+      <FileName>src\Model\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="10.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAUAAIADgAABAAAAAACIAAIAEAAQAJQAAAAQ=</HashCode>
+      <FileName>src\Model\Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Score" Collapsed="true">
+    <Position X="17.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAADAIAAAAAAAAAAAAAAAgEAAABAA=</HashCode>
+      <FileName>src\Model\Score.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Wall" Collapsed="true">
+    <Position X="3.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CEAIAAAACAAAIAAAAIABAAAAAAAAAEQEAAAACAAAAAQ=</HashCode>
+      <FileName>src\Model\Wall.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Observer&lt;T&gt;" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>src\Observer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Subject&lt;T&gt;" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAIAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>src\Subject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlockAnimator" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAEEBABAAgAJAIEBAA=</HashCode>
+      <FileName>src\View\BlockAnimator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DisplayBlock" Collapsed="true">
+    <Position X="17.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAIAAAABAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\View\DisplayBlock.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EnemyAnimator" Collapsed="true">
+    <Position X="8.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAABAAAAAAQAAACQEABAEAgAAACAIIAEEAAo=</HashCode>
+      <FileName>src\View\EnemyAnimator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameInformation" Collapsed="true">
+    <Position X="19.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAIAAAAAAAAAAIBgAAAIAAQAA=</HashCode>
+      <FileName>src\View\GameInformation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PengoAnimator" Collapsed="true">
+    <Position X="1.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAQAAAAACCAQBAAAAEABCEAAAAAiAAIAgEAAA=</HashCode>
+      <FileName>src\View\PengoAnimator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ResourceManager" Collapsed="true">
+    <Position X="21" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAEBAACAAAAAABAAACAEAAAAAAAAAAAAABAEAxAAAA=</HashCode>
+      <FileName>src\View\ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Shader" Collapsed="true">
+    <Position X="19.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAYBAAAAAAghAAAAAAAAAAAAAEAAAAAAAAAAAIAEA=</HashCode>
+      <FileName>src\View\Shader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundManager" Collapsed="true">
+    <Position X="21" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAIAAQACAAAABAAChAkSIAAAAAAAAAAA=</HashCode>
+      <FileName>src\View\SoundManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundModule" Collapsed="true">
+    <Position X="15" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAACAAAAAAAAAAIAAAAAAAAAEAAA=</HashCode>
+      <FileName>src\View\SoundModule.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpriteRenderer" Collapsed="true">
+    <Position X="10.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAEAEAAAQgAAAAABQINgACIAEAAEQAAEEAGIEA=</HashCode>
+      <FileName>src\View\SpriteRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Texture2D" Collapsed="true">
+    <Position X="17.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAERBBAgAAAAAAIAEAAAAAAAAAAAIAAAEAAACA=</HashCode>
+      <FileName>src\View\Texture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WallAnimator" Collapsed="true">
+    <Position X="3.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAABgAAAAAAAABAAAAABAEQAAAgAAEIAAUAAA=</HashCode>
+      <FileName>src\View\WallAnimator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="AudioData" Collapsed="true">
+    <Position X="17.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>src\View\AudioData.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="GameState" Collapsed="true">
+    <Position X="21" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIAA=</HashCode>
+      <FileName>src\Controller\Game.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BlockState" Collapsed="true">
+    <Position X="17.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAQIAAAAAAAAAAAAAAAAAAABACAAAA=</HashCode>
+      <FileName>src\Model\Block.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EnemyType" Collapsed="true">
+    <Position X="17.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>src\Model\Enemy.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EnemyState" Collapsed="true">
+    <Position X="21" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEgAgAAAAAAQAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>src\Model\Enemy.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="WallState" Collapsed="true">
+    <Position X="21" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Model\Wall.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="WallSide" Collapsed="true">
+    <Position X="19.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAgAAABAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>src\Model\Wall.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Direction" Collapsed="true">
+    <Position X="19.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAQAAAAAAAAICAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>src\util.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PengoState" Collapsed="true">
+    <Position X="17.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAgAAgCAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\util.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Events" Collapsed="true">
+    <Position X="19.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgAEIAAAAAAIAAAAABABAQAAAAAAAAAAAACAIAAAA=</HashCode>
+      <FileName>src\util.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

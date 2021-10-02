@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\sprites.vs" />
+    <None Include="res\shaders\sprites.fs" />
+    <None Include="res\levels\level0.lvl" />
+    <None Include="res\levels\level1.lvl" />
+    <None Include="packages.config" />
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\sprites\Pengo00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Iceblock.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Diamondblock.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_BT.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_LR.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerDown00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerDown01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerLeft00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerLeft01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerRight00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerRight01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerUp00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyBoxerUp01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveDown00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveDown01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveLeft00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveLeft01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveRight00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveRight01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveUp00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyMoveUp01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemySpawn7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyStunnedLeft.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\EnemyStunnedRight.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\IceblockBreaking0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\IceblockBreaking1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\IceblockBreaking2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\IceblockBreaking3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoDown.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoLeft.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoMoveDown.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoMoveLeft.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoMoveRight.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoMoveUp.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPostPushDown.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPostPushLeft.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPostPushRight.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPostPushUp.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPushDown.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPushLeft.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPushRight.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoPushUp.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoRight.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\PengoUp.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_LR_01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_LR_00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_BT_01.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Wall_BT_00.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\8.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\9.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\P.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\One.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\Placeholder.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sprites\IceblockGreen.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Subject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Observer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\WallAnimator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\SpriteRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\ResourceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\PengoAnimator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\GameInformation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\EnemyAnimator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\DisplayBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\BlockAnimator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\Wall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\Score.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\GameLevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\Block.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controller\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\AudioData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\SoundManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\SoundModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\WallAnimator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\SpriteRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\PengoAnimator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\GameInformation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\EnemyAnimator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\DisplayBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\BlockAnimator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\Wall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\Score.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\GameLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\Block.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controller\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\SoundModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\sounds\PushWall.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\TouchSnowBee.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\SnowBeeStunned.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\SnowBeeSquashed.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\SnowBeeSpawning.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\PushIceBlock.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\IceBlockDestroyed.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\BlockStopped.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\BackgroundTheme.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\PengoDied.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\SuddenDeathTheme.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\sounds\DiamondBlocksLinedUp.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+</Project>

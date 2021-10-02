@@ -1,0 +1,27 @@
+#pragma once
+
+#include "../Animator.h"
+#include "../Model/Player.h"
+#include "ResourceManager.h"
+#include <any>
+
+class PengoAnimator: public Animator<GameObject>
+{
+public:
+	Player* pengo;
+	Texture2D sprite;
+	bool toggleSprite;
+	const float PUSH_DURATION; 
+	const float WALK_ANIMATION_DURATION;
+	void (PengoAnimator::* currentAnimation)();
+
+	PengoAnimator(Player *pengo, float pushDuration, float walkAnimationDuration, Texture2D sprite);
+	~PengoAnimator();
+	void update(GameObject* s) override;
+	void animate(float dt);
+	void stand();
+	void walk();
+	void pushBlock();
+	void breakBlock();
+	void swapSprite();
+};
