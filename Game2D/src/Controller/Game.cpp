@@ -101,7 +101,6 @@ void Game::initLevel() {
         this->levels[this->level].removeObserver(this->renderer);
         this->levels[this->level].removeObserver(this->soundModule);
 
-        this->carryOverScore();
         ++this->level;
 
         if (this->levels.size() <= this->level) {
@@ -109,6 +108,7 @@ void Game::initLevel() {
             pengoState = GameState::GAME_MENU;
             return;
         }
+        this->carryOverScore();
     }
     this->levels[this->level].registerObserver(this);
     this->levels[this->level].registerObserver(this->renderer);
@@ -120,5 +120,5 @@ void Game::initLevel() {
 void Game::update(GameLevel *s) {}
 
 void Game::carryOverScore() {
-    this->levels[this->level + 1].score.score = this->levels[this->level].score.score;
+    this->levels[this->level].score.score = this->levels[this->level - 1].score.score;
 }
