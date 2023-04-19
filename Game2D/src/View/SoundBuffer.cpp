@@ -7,12 +7,12 @@
 //#include <inttypes.h>
 //#include <AL\alext.h>
 //
-//SoundBuffer *SoundBuffer::get() {
+// SoundBuffer *SoundBuffer::get() {
 //    static SoundBuffer *sndbuf = new SoundBuffer();
 //    return sndbuf;
 //}
 //
-//ALuint SoundBuffer::addSoundEffect(const char *filename, std::string name) {
+// ALuint SoundBuffer::addSoundEffect(const char *filename, std::string name) {
 //
 //    ALenum err, format;
 //    ALuint buffer;
@@ -90,7 +90,7 @@
 //    return buffer;
 //}
 //
-//bool SoundBuffer::removeSoundEffect(std::string name) {
+// bool SoundBuffer::removeSoundEffect(std::string name) {
 ////    auto it = p_SoundEffectBuffers.begin();
 ////    while (it != p_SoundEffectBuffers.end()) {
 ////        if (*it == buffer) {
@@ -110,12 +110,12 @@
 //}
 //
 //
-//SoundBuffer::SoundBuffer() {
+// SoundBuffer::SoundBuffer() {
 //    p_SoundEffectBuffers.clear();
 //
 //}
 //
-//SoundBuffer::~SoundBuffer() {
+// SoundBuffer::~SoundBuffer() {
 //    for(auto& buffer : p_SoundEffectBuffers) {
 //        alDeleteBuffers(1, &buffer.second);
 //    }

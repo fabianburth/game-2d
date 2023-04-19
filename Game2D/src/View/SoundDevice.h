@@ -7,11 +7,11 @@
 //
 //#include <AL\alc.h>
 //
-//class SoundDevice {
-//public:
+// class SoundDevice {
+// public:
 //    static SoundDevice *get();
 //
-//private:
+// private:
 //    SoundDevice();
 //
 //    ~SoundDevice();

@@ -10,8 +10,8 @@
 //#include <map>
 //#include <string>
 //
-//class SoundBuffer {
-//public:
+// class SoundBuffer {
+// public:
 //    static SoundBuffer *get();
 //
 //    ALuint addSoundEffect(const char *filename, std::string name);
@@ -19,7 +19,7 @@
 //    bool removeSoundEffect(std::string name);
 //    std::map<std::string, ALuint> p_SoundEffectBuffers;
 //
-//private:
+// private:
 //    SoundBuffer();
 //
 //    ~SoundBuffer();
